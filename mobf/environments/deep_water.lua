@@ -5,29 +5,28 @@
 -- copyright notice. 
 -- And of course you are NOT allow to pretend you have written it.
 --
---! @file shallow_waters.lua
---! @brief shallow waters
+--! @file deep_water.lua
+--! @brief deep water
 --! @copyright Sapier
 --! @author Sapier
---! @date 2012-08-10
+--! @date 2013-10-03
 --
 --! @addtogroup environments
 --! @{
 -- Contact sapier a t gmx net
 -------------------------------------------------------------------------------
 
---! @struct env_shallow_waters
---! @brief shallow waters not deeper than 10 blocks
-env_shallow_waters = {
+--! @struct env_deep_water
+--! @brief deep water is not moving water with a depht up to -50
+env_deep_water = {
 			media = {
 						"default:water_source",
-						"default:water_flowing"
 					},
 			surfaces = nil,
 			--ground is first node above/below not beeing of media type
-			max_height_above_ground		= 1,
-			min_height_above_ground     = -10		
+			max_height_above_ground		= 0,
+			min_height_above_ground     = -50
 		}
 --!@}
 
-environment.register("shallow_waters", env_shallow_waters)
+environment.register("deep_water", env_deep_water)
