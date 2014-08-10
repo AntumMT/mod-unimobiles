@@ -20,8 +20,5 @@ end
 
 --!path of mod
 local modpath = minetest.get_modpath("mobf_settings")
-
---dofile (modpath .. DIR_DELIM .. "settings_v1.lua")
---dofile (modpath .. DIR_DELIM .. "settings_v2.lua")
-dofile (modpath .. DIR_DELIM .. "settings_v3.lua")
+dofile (modpath .. DIR_DELIM .. "settings.lua")
 
