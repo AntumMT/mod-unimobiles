@@ -862,22 +862,3 @@ function spawning.check_activation_overlap(entity,pos,preserved_data)
 	end
 	return true
 end
-
---------------------------------------------------------------------------------
--- LEGACY CODE BELOW subject to be removed!
---------------------------------------------------------------------------------
-
---include legacy spawning functions
-dofile (mobf_modpath .. "/spawning_legacy.lua")
-
---include spawn algorithms
-dofile (mobf_modpath .. "/spawn_algorithms/at_night.lua")
-dofile (mobf_modpath .. "/spawn_algorithms/forrest.lua")
-dofile (mobf_modpath .. "/spawn_algorithms/in_shallow_water.lua")
-dofile (mobf_modpath .. "/spawn_algorithms/shadows.lua")
-dofile (mobf_modpath .. "/spawn_algorithms/willow.lua")
-dofile (mobf_modpath .. "/spawn_algorithms/big_willow.lua")
-dofile (mobf_modpath .. "/spawn_algorithms/in_air1.lua")
-dofile (mobf_modpath .. "/spawn_algorithms/none.lua")
-dofile (mobf_modpath .. "/spawn_algorithms/deep_large_caves.lua")
-dofile (mobf_modpath .. "/spawn_algorithms/deep_water.lua")
