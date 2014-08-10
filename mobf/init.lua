@@ -74,7 +74,6 @@ dofile (mobf_modpath .. "/utils/data_storage.lua")
 dofile (mobf_modpath .. "/utils/tracing.lua")
 dofile (mobf_modpath .. "/utils/geometry.lua")
 dofile (mobf_modpath .. "/utils/permanent_data.lua")
-dofile (mobf_modpath .. "/job_queue.lua")
 dofile (mobf_modpath .. "/lifebar.lua")
 dofile (mobf_modpath .. "/env_constants.lua")
 dofile (mobf_modpath .. "/environment.lua")
@@ -167,9 +166,6 @@ function mobf_init_framework()
 
 	minetest.log(LOGLEVEL_NOTICE,"MOBF: Initialize statistics...")
 	mobf_init_statistics()
-
-	minetest.log(LOGLEVEL_NOTICE,"MOBF: Initialize asynchronous job handling...")
-	mobf_job_queue.initialize()
 
 	minetest.log(LOGLEVEL_NOTICE,"MOBF: Initialize factions support...")
 	mobf_factions.init()

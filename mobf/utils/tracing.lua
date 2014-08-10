@@ -121,8 +121,6 @@ function mobf_statistic_calc(dtime)
 		statistics.data.mobs.current = active_mobs
 		statistics.data.mobs.max = MAX(statistics.data.mobs.max,active_mobs)
 
-		statistics.data.queue.current = #mobf_job_queue.queue
-
 		statistics.data.user_1.current = current_user_1
 		statistics.data.user_1.maxabs = MAX(statistics.data.user_1.maxabs, math.floor(current_user_1*refresh_interval))
 		statistics.data.user_1.max = MAX(statistics.data.user_1.max,current_user_1)
