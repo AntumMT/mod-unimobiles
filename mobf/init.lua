@@ -93,7 +93,6 @@ dofile (mobf_modpath .. "/api.lua")
 dofile (mobf_modpath .. "/debug.lua")
 dofile (mobf_modpath .. "/mob_state.lua")
 dofile (mobf_modpath .. "/inventory.lua")
-dofile (mobf_modpath .. "/mob_preserve.lua")
 dofile (mobf_modpath .. "/path.lua")
 dofile (mobf_modpath .. "/factions.lua")
 dofile (mobf_modpath .. "/step_quota.lua")
@@ -188,7 +187,16 @@ function mobf_init_framework()
 	mobf_debug.init()
 
 	minetest.log(LOGLEVEL_NOTICE,"MOBF: Initializing mob preservation..")
-	mob_preserve.init()
+	local preserved_mobs_raw = mobf_get_world_setting("mobf_preserve_mobs")
+	
+	if preserved_mobs_raw ~= nil then
+		mobf.current_preserve_list =
+			minetest.deserialize(preserved_mobs_raw)
+	end
+
+	if mobf.current_preserve_list == nil then
+		mobf.current_preserve_list = {}
+	end
 
 	minetest.log(LOGLEVEL_NOTICE,"MOBF: Initialize path handling subsystem..")
 	mobf_path.init()

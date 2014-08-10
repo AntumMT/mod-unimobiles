@@ -1003,3 +1003,48 @@ function mobf.blacklisthandling(mob)
 			":"..mob.name .. " already known not registering mob with same name!")
 	end
 end
+
+-------------------------------------------------------------------------------
+--- @function [parent=#mobf] preserve_removed(entity,reason)
+---
+---! @brief check if a mob needs to be preserved
+---! @memberof mobf
+---! @public
+---
+---! @param entity entity to check
+---! @param reason reason for removal
+--------------------------------------------------------------------------------
+function mobf.preserve_removed(entity,reason)
+
+	if reason ~= "cought" and
+		reason ~= "killed" and
+		reason ~= "died by sun" and
+		reason ~= "replaced" then
+
+		if entity.dynamic_data.spawning.player_spawned then
+			local toset = {}
+
+			toset.modname = entity.data.modname
+			toset.name    = entity.data.name
+			toset.owner   = entity.dynamic_data.spawning.spawner
+			toset.reason  = reason
+
+			if toset.owner ~= nil then
+				dbg_mobf.mobf_core_lvl2("MOBF: preserving " .. toset.modname ..
+					":" .. toset.name .. " for player " .. toset.owner )
+				table.insert(mobf.current_preserve_list,toset)
+
+				mobf_set_world_setting("mobf_preserve_mobs",
+					minetest.serialize(mobf.current_preserve_list))
+			else
+				dbg_mobf.mobf_core_lvl1("MOBF: unable to preserve mob")
+			end
+		else
+			dbg_mobf.mobf_core_lvl2("MOBF: not preserving " .. entity.data.name
+				.. " it's not playerspawned: " .. dump(entity.dynamic_data.spawning) )
+		end
+	else
+		dbg_mobf.mobf_core_lvl2("MOBF: not preserving " .. entity.data.name
+			.. " removed by valid reason" )
+	end
+end

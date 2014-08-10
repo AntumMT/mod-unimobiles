@@ -24,16 +24,16 @@ local function get_formspec(tabview, name, tabdata)
 
 	local content = ""
 
-	for n=1,#mob_preserve.current_preserve_list, 1 do
-		if mob_preserve.current_preserve_list[n].owner == tabdata.playername or
+	for n=1,#mobf.current_preserve_list, 1 do
+		if mobf.current_preserve_list[n].owner == tabdata.playername or
 			tabdata.is_admin then
 			content = content ..
-				mob_preserve.current_preserve_list[n].modname .. ":" ..
-				mob_preserve.current_preserve_list[n].name .. "," ..
-				mob_preserve.current_preserve_list[n].reason .. "," ..
-				mob_preserve.current_preserve_list[n].owner
+				mobf.current_preserve_list[n].modname .. ":" ..
+				mobf.current_preserve_list[n].name .. "," ..
+				mobf.current_preserve_list[n].reason .. "," ..
+				mobf.current_preserve_list[n].owner
 
-			if n ~= #mob_preserve.current_preserve_list then
+			if n ~= #mobf.current_preserve_list then
 				content = content .. ","
 			end
 		end
@@ -75,11 +75,11 @@ local function handle_settings_buttons(self, fields, tabname, tabdata)
 			return true
 		end
 
-		for i=1,#mob_preserve.current_preserve_list,1 do
+		for i=1,#mobf.current_preserve_list,1 do
 			mobf_assert_backtrace(tabdata ~= nil)
-			mobf_assert_backtrace(mob_preserve.current_preserve_list[i] ~= nil)
+			mobf_assert_backtrace(mobf.current_preserve_list[i] ~= nil)
 
-			if mob_preserve.current_preserve_list[i].owner == tabdata.playername or
+			if mobf.current_preserve_list[i].owner == tabdata.playername or
 				tabdata.isadmin then
 				elementcount = elementcount +1
 			end
@@ -87,14 +87,14 @@ local function handle_settings_buttons(self, fields, tabname, tabdata)
 			if elementcount == (tabdata.selected_entry-1) then
 				--ADD to inventory
 				local inventory_add_result = player:get_inventory():add_item("main",
-						mob_preserve.current_preserve_list[i].modname ..":"..
-						mob_preserve.current_preserve_list[i].name.." 1")
+						mobf.current_preserve_list[i].modname ..":"..
+						mobf.current_preserve_list[i].name.." 1")
 
 				--remove from list
 				if inventory_add_result:is_empty() then
-					table.remove(mob_preserve.current_preserve_list,i)
+					table.remove(mobf.current_preserve_list,i)
 					mobf_set_world_setting("mobf_preserve_mobs",
-							core.serialize(mob_preserve.current_preserve_list))
+							core.serialize(mobf.current_preserve_list))
 				end
 				return true
 			end

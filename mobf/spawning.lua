@@ -242,7 +242,7 @@ function spawning.remove(entity,reason)
 			minetest.log(LOGLEVEL_NOTICE,"MOBF: removing " .. entity.data.name ..
 				" at " .. printpos(pos) .. " due to: " .. reason)
 		end
-		mob_preserve.handle_remove(entity,reason)
+		mobf.preserve_removed(entity,reason)
 		if entity.lifebar ~= nil then
 			mobf_lifebar.del(entity.lifebar)
 		end
