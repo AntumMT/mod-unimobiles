@@ -31,7 +31,7 @@ mobf_rtd = {
 	--!do we have luatrace
 	luatrace_enabled		= false,
 	--!do we have inventory plus support
-	inventory_plus_enabled	= false,
+	have_adv_spawning		= false,
 	--!do we have factions support
 	factions_available		= false,
 	--!registry for movement patterns
@@ -193,9 +193,9 @@ function mobf_init_mod_deps()
 		if modlist[i] == "fire" then
 			mobf_rtd.fire_enabled = true
 		end
-
-		if modlist[i] == "inventory_plus" then
-			mobf_rtd.inventory_plus_enabled = true
+		
+		if modlist[i] == "adv_spawning" then
+			mobf_rtd.have_adv_spawning = true
 		end
 	end
 end

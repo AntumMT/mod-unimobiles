@@ -16,17 +16,25 @@
 
 -------------------------------------------------------------------------------
 local function get_formspec(tabview, name, tabdata)
-	local adv_stats    = adv_spawning.get_statistics()
+
+	local adv_stats    = nil
+	if mobf_rtd.have_adv_spawning then
+		adv_stats = adv_spawning.get_statistics()
+	end
 	local mobs_offline = spawning.total_offline_mobs()
 	local statistics   = mobf_get_statistics()
 
 	local retval =
 		"label[0.75,1.25;Timesource:]" ..
-		"label[2.75,1.25;" .. mobf_fixed_size_string(mobf_rtd.timesource,30) .. "]" ..
-		"label[0.75,1.75;Mobs spawned by internal mapgen this session:]" ..
-		"label[6,1.75;" .. string.format("%10d",mobf_rtd.total_spawned) .. "]" ..
-		"label[0.75,2.25;Mobs spawned by adv_spawning this session:]" ..
-		"label[6,2.25;" .. string.format("%10d",adv_stats.session.entities_created) .. "]" ..
+		"label[2.75,1.25;" .. mobf_fixed_size_string(mobf_rtd.timesource,30) .. "]"
+		
+		
+	if mobf_rtd.have_adv_spawning then
+		retval = retval ..
+			"label[0.75,2.25;Mobs spawned by adv_spawning this session:]" ..
+			"label[6,2.25;" .. string.format("%10d",adv_stats.session.entities_created) .. "]"
+	end
+	retval = retval ..
 		mobf_settings.printfac("Type",{current="cur count",maxabs="",max="max count"},3,"%s") ..
 		"box[0.75,3.5;6.75,0.05;#FFFFFF]" ..
 		mobf_settings.printfac("Active mobs",statistics.data.mobs,3.5,"%6d") ..
@@ -47,7 +55,10 @@ mobf_settings_tab_info_sub = {
 	
 ---------------------------------------------------------------------------------
 local function get_formspec(tabview, name, tabdata)
-	local adv_stats  = adv_spawning.get_statistics()
+	local adv_stats  = nil
+	if mobf_rtd.have_adv_spawning then
+		adv_stats = adv_spawning.get_statistics()
+	end
 	local statistics = mobf_get_statistics()
 
 	local retval =
@@ -68,14 +79,18 @@ local function get_formspec(tabview, name, tabdata)
 		mobf_settings.printfac("Activate",       statistics.data.activate,    "4", "%2.2f%%") ..
 		mobf_settings.printfac("User 1",         statistics.data.user_1,      "7", "%2.2f%%") ..
 		mobf_settings.printfac("User 2",         statistics.data.user_2,      "7.5",   "%2.2f%%") ..
-		mobf_settings.printfac("User 3",         statistics.data.user_3,      "8", "%2.2f%%") ..
-		mobf_settings.printfac("Adv.Spawning",
-			{
-				current = adv_stats.load.cur,
-				maxabs  = adv_stats.step.max,
-				max     = adv_stats.load.max
-			},
-			"4.5","%2.2f%%")
+		mobf_settings.printfac("User 3",         statistics.data.user_3,      "8", "%2.2f%%")
+		
+	if mobf_rtd.have_adv_spawning then
+		retval = retval ..
+			mobf_settings.printfac("Adv.Spawning",
+				{
+					current = adv_stats.load.cur,
+					maxabs  = adv_stats.step.max,
+					max     = adv_stats.load.max
+				},
+				"4.5","%2.2f%%")
+	end
 
 	return retval
 end

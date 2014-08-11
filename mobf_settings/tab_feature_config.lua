@@ -23,66 +23,73 @@ local function get_formspec(tabview, name, tabdata)
 	end
 
 	local retval = ""
+	local ypos = 0.5
 
-	retval = retval .. "checkbox[1,0.5;" ..
+	retval = retval .. "checkbox[1," .. ypos .. ";" ..
 				"cb_features_disable_animal_spawning;" ..
 				"Disable mob spawning;" ..
 				mobf_settings.setting_gettext("mobf_disable_animal_spawning") .."]"
+	ypos = ypos + 0.5
 
-	retval = retval .. "checkbox[1,1;" ..
+	retval = retval .. "checkbox[1," .. ypos .. ";" ..
 				"cb_features_disable_3d_mode;" ..
 				"Disable 3D mobs;" ..
 				mobf_settings.setting_gettext("mobf_disable_3d_mode") .."]"
+	ypos = ypos + 0.5
 
-	retval = retval .. "checkbox[1,1.5;" ..
+	retval = retval .. "checkbox[1," .. ypos .. ";" ..
 				"cb_features_animal_spawning_secondary;" ..
 				"Enable secondary spawning;" ..
 				mobf_settings.setting_gettext("mobf_animal_spawning_secondary") .."]"
+	ypos = ypos + 0.5
 
-	retval = retval .. "checkbox[1,2;" ..
+	retval = retval .. "checkbox[1," .. ypos .. ";" ..
 				"cb_features_delete_disabled_mobs;" ..
 				"Delete disabled mobs+spawners;" ..
 				mobf_settings.setting_gettext("mobf_delete_disabled_mobs") .."]"
+	ypos = ypos + 0.5
 
-	retval = retval .. "checkbox[1,2.5;" ..
+	retval = retval .. "checkbox[1," .. ypos .. ";" ..
 				"cb_features_log_bug_warnings;" ..
 				"Log MOBF bug warnings;" ..
 				mobf_settings.setting_gettext("mobf_log_bug_warnings") .."]"
+	ypos = ypos + 0.5
 
-	retval = retval .. "checkbox[1,3;" ..
+	retval = retval .. "checkbox[1," .. ypos .. ";" ..
 				"cb_features_vombie_3d_burn_animation_enabled;" ..
 				"Vombie 3D burn animation;" ..
 				mobf_settings.setting_gettext("vombie_3d_burn_animation_enabled") .."]"
+	ypos = ypos + 0.5
 
-	retval = retval .. "checkbox[1,3.5;" ..
+	retval = retval .. "checkbox[1," .. ypos .. ";" ..
 				"cb_features_log_removed_entities;" ..
 				"Log all removed mobs;" ..
 				mobf_settings.setting_gettext("mobf_log_removed_entities") .."]"
+	ypos = ypos + 0.5
 
-	retval = retval .. "checkbox[1,4;" ..
+	retval = retval .. "checkbox[1," .. ypos .. ";" ..
 				"cb_features_grief_protection;" ..
 				"Enable grief protection;" ..
 				mobf_settings.setting_gettext("mobf_grief_protection") .."]"
+	ypos = ypos + 0.5
 
-	retval = retval .. "checkbox[1,4.5;" ..
+	retval = retval .. "checkbox[1," .. ypos .. ";" ..
 				"cb_features_lifebar;" ..
 				"Show mob lifebar;" ..
 				mobf_settings.setting_gettext("mobf_lifebar") .."]"
+	ypos = ypos + 0.5
 
-	retval = retval .. "checkbox[1,5;" ..
+	retval = retval .. "checkbox[1," .. ypos .. ";" ..
 				"cb_features_enable_statistics;" ..
 				"Enable statistics;" ..
 				mobf_settings.setting_gettext("mobf_enable_statistics") .."]"
+	ypos = ypos + 0.5
 
-	retval = retval .. "checkbox[1,5.5;" ..
-				"cb_features_delayed_spawning;" ..
-				"Delay spawning at mapgen;" ..
-				mobf_settings.setting_gettext("mobf_delayed_spawning") .."]"
-
-	retval = retval .. "checkbox[1,6;" ..
+	retval = retval .. "checkbox[1," .. ypos .. ";" ..
 				"cb_features_disable_pathfinding;" ..
 				"Disable core pathfinding support;" ..
 				mobf_settings.setting_gettext("mobf_disable_pathfinding") .."]"
+	ypos = ypos + 0.5
 
 
 	local showspawner = core.setting_get("adv_spawning.debug")
@@ -91,9 +98,10 @@ local function get_formspec(tabview, name, tabdata)
 		spawner_setting_text = "true"
 	end
 
-	retval = retval .. "checkbox[1,6.5;" ..
+	retval = retval .. "checkbox[1," .. ypos .. ";" ..
 				"cb_features_show_spawners;" ..
 				"Show spawner entities;" .. spawner_setting_text .."]"
+	ypos = ypos + 0.5
 
 	return retval
 end
