@@ -82,7 +82,6 @@ dofile (mobf_modpath .. "/movement_generic.lua")
 dofile (mobf_modpath .. "/graphics.lua")
 dofile (mobf_modpath .. "/movement_gen_registry.lua")
 dofile (mobf_modpath .. "/harvesting.lua")
-dofile (mobf_modpath .. "/weapons.lua")
 dofile (mobf_modpath .. "/fighting.lua")
 dofile (mobf_modpath .. "/random_drop.lua")
 dofile (mobf_modpath .. "/sound.lua")
@@ -110,44 +109,11 @@ dofile (mobf_modpath .. "/mov_gen_none.lua")
 
 mobf_version = "2.4.1"
 
---! @brief define tools used for more than one mob
-function mobf_init_basic_tools()
-	minetest.register_craft({
-		output = "animalmaterials:lasso 5",
-		recipe = {
-			{'', "wool:white",''},
-			{"wool:white",'', "wool:white"},
-			{'',"wool:white",''},
-		}
-	})
-
-	minetest.register_craft({
-		output = "animalmaterials:net 1",
-		recipe = {
-			{"wool:white",'',"wool:white"},
-			{'', "wool:white",''},
-			{"wool:white",'',"wool:white"},
-		}
-	})
-
-	minetest.register_craft({
-	output = 'animalmaterials:sword_deamondeath',
-	recipe = {
-		{'animalmaterials:bone'},
-		{'animalmaterials:bone'},
-		{'default:stick'},
-	}
-	})
-
-end
-
 
 --! @brief main initialization function
 function mobf_init_framework()
 
 	minetest.log(LOGLEVEL_NOTICE,"MOBF: Initializing mob framework")
-
-	mobf_init_basic_tools()
 
 	minetest.log(LOGLEVEL_NOTICE,"MOBF: Reading mob blacklist")
 	local mobf_mob_blacklist_string = minetest.world_setting_get("mobf_blacklist")
@@ -175,9 +141,6 @@ function mobf_init_framework()
 
 	minetest.log(LOGLEVEL_NOTICE,"MOBF: Initializing probabilistic movement generator")
 	movement_gen.initialize()
-
-	minetest.log(LOGLEVEL_NOTICE,"MOBF: Initializing weaponry..")
-	mobf_init_weapons()
 
 	minetest.log(LOGLEVEL_NOTICE,"MOBF: Initializing debug hooks..")
 	mobf_debug.init()

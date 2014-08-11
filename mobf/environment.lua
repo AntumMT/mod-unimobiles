@@ -1128,12 +1128,3 @@ end
 
 --!@}
 
-dofile (mobf_modpath .. "/environments/general_env_sets.lua")
-dofile (mobf_modpath .. "/environments/flight_1.lua")
-dofile (mobf_modpath .. "/environments/meadow.lua")
-dofile (mobf_modpath .. "/environments/on_ground_1.lua")
-dofile (mobf_modpath .. "/environments/on_ground_2.lua")
-dofile (mobf_modpath .. "/environments/open_waters.lua")
-dofile (mobf_modpath .. "/environments/shallow_waters.lua")
-dofile (mobf_modpath .. "/environments/deep_water.lua")
-dofile (mobf_modpath .. "/environments/simple_air.lua")
