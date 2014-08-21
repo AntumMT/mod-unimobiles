@@ -214,17 +214,40 @@ local mob_template = {
 	sound = {
 		--! @brief [OPTIONAL] random sound to be played
 		random = {
-			--! @brief [MANDATORY] basename of file
-			name="random_1",
-			--! @brief [MANDATORY] minimum time between playing sounds
-			min_delta = 10,
-			--! @brief [MANDATORY] chance per second to play sound after minimum time
-			chance = 0.5,
-			--! @brief [MANDATORY] amplify the sound by this value
-			gain = 1,
-			--! @brief [MANDATORY] maximum distance sound is heared
-			max_hear_distance = 75,
+			--! @brief [MANDATORY] default interval between random sounds
+			interval = 60,
+			
+			--! @brief [MANDATORY] maximum deviation from default interval
+			max_interval_deviation = 10,
+			
+			--! @brief [MANDATORY] list of random sounds to play
+			list = {
+				{
+					--! @brief [MANDATORY] basename of file
+					name="random_1",
+					--! @brief [MANDATORY] amplify the sound by this value
+					gain = 1,
+					--! @brief [MANDATORY] maximum distance sound is heared
+					max_hear_distance = 75,
+				},
+				{
+					--! @brief [MANDATORY] basename of file
+					name="random_2",
+					--! @brief [MANDATORY] amplify the sound by this value
+					gain = 1,
+					--! @brief [MANDATORY] maximum distance sound is heared
+					max_hear_distance = 75,
+				},
+				{
+					--! @brief [MANDATORY] basename of file
+					name="random_x",
+					--! @brief [MANDATORY] amplify the sound by this value
+					gain = 1,
+					--! @brief [MANDATORY] maximum distance sound is heared
+					max_hear_distance = 75,
+				},
 			},
+		},
 		--! @brief [OPTIONAL] sound played on self destruction
 		self_destruct = {
 			--! @brief [MANDATORY] basename of file

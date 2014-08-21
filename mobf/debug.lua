@@ -458,6 +458,10 @@ function mobf_debug.rightclick_callback(entity,player)
 	print("MOBF: \tCurrent pos:                 " .. printpos(basepos))
 	print("MOBF: \tPredicted pos:               " .. printpos(predicted_pos))
 	print("MOBF: \tPredicted state:             " .. pos_state)
+	if entity.dynamic_data.sound ~= nil and entity.dynamic_data.sound.random_next ~= nil then
+	print("MOBF: \tNext random sound:             " ..
+		(entity.dynamic_data.sound.random_next - mobf_get_current_time()))
+	end
 	if mobf_rtd.detailed_state then
 	print("MOBF: \tPredicted detail:            " .. predicted_quality:shortstring())
 	end
