@@ -30,16 +30,26 @@ sound =  {}
 --! @brief play a sound at a specified position
 --! @memberof sound
 --
---! @param pos position to play sound at
+--! @param param1 position to play sound at or playername to play sound for
 --! @param soundspec sound to play
 -------------------------------------------------------------------------------
-function sound.play(pos,soundspec)
+function sound.play(param1, soundspec)
+
+	local pos = nil
+	local playername = nil
+	
+	if type(param1) == "string" then
+		playername = param1
+	else
+		pos = param1
+	end
 
 	if (soundspec ~= nil) then
 
 		local toplay =  {
 						gain = soundspec.gain,
 						pos = pos,
+						to_player = playername,
 						max_hear_distance = soundspec.max_hear_distance,
 						loop = false,
 						}

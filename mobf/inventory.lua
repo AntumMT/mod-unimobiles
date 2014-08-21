@@ -482,6 +482,11 @@ function mob_inventory.trader_callback(entity, player)
 	local unique_entity_id = string.gsub(tostring(entity),"table: ","")
 	--local unique_entity_id = "testinv"
 	local playername = player.get_player_name(player)
+	
+	if entity.data.sound ~= nil and
+		entity.data.sound.inventory_open ~= nil then
+		sound.play(playername, entity.data.sound.inventory_open)
+	end
 
 	if mob_inventory.formspecs["formspec_" .. unique_entity_id] ~= nil then
 	
