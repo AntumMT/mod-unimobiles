@@ -804,6 +804,103 @@ function fighting.self_destruct_trigger(entity,distance,now)
 		end
 	end
 end
+
+-------------------------------------------------------------------------------
+-- @function [parent=#fighting] do_area_damage(pos,immune,damage_groups,range)
+--
+--! @brief damage all objects within a certain range
+--! @memberof fighting
+--! @private
+--
+--! @param pos cennter of damage area
+--! @param immune object immune to damage
+--! @param damage_groups list of damage groups to do damage to
+--! @param range range around pos
+-------------------------------------------------------------------------------
+function fighting.do_area_damage(pos,immune,damage_groups,range)
+	--damage objects within inner blast radius
+	mobf_assert_backtrace(type(range) ~= "table")
+
+	local objs = minetest.get_objects_inside_radius(pos, range)
+	for k, obj in pairs(objs) do
+
+		--don't do damage to issuer
+		if obj ~= immune and obj ~= nil then
+
+			--TODO as long as minetest still crashes without puncher use this workaround
+
+			local worst_damage = 0
+			if type(damage_groups) == "table" then
+				for k,v in pairs(damage_groups) do
+					if v > worst_damage then
+						worst_damage = v
+					end
+				end
+			elseif type(damage_groups) == "number" then
+				worst_damage =  damage_groups
+			else
+				mobf_assert_backtrace("invalid damage_groups" == "selected")
+			end
+
+
+			local current_hp = obj:get_hp()
+			obj:set_hp(current_hp - worst_damage)
+
+			--punch
+			--obj:punch(nil, 1.0, {
+			--	full_punch_interval=1.0,
+			--	damage_groups = damage_groups,
+			--}, nil)
+		end
+	end
+end
+
+
+-------------------------------------------------------------------------------
+-- @function [parent=#fighting] do_node_damage(pos,immune_list,range,chance)
+--
+--! @brief damage all objects within a certain range
+--! @memberof fighting
+--! @private
+--
+--! @brief damage all nodes within a certain range
+--
+--! @param pos center of area
+--! @param immune_list list of nodes immune to damage
+--! @param range range to do damage
+--! @param chance chance damage is done to a node
+-------------------------------------------------------------------------------
+function fighting.do_node_damage(pos,immune_list,range,chance)
+	--do node damage
+	for i=pos.x-range, pos.x+range, 1 do
+		for j=pos.y-range, pos.y+range, 1 do
+			for k=pos.z-range,pos.z+range,1 do
+				--TODO create a little bit more sophisticated blast resistance
+				if math.random() < chance then
+					local toremove = minetest.get_node({x=i,y=j,z=k})
+
+					if toremove ~= nil then
+						local immune = false
+
+						if immune_list ~= nil then
+							for i,v in ipairs(immune_list) do
+								if (torremove.name == v) then
+									immune = true
+								end
+							end
+						end
+
+
+						if immune ~= true then
+							minetest.remove_node({x=i,y=j,z=k})
+						end
+					end
+				end
+			end
+		end
+	end
+end
+
 -------------------------------------------------------------------------------
 -- @function [parent=#fighting] self_destruct_handler(entity)
 --
@@ -835,12 +932,12 @@ function fighting.self_destruct_handler(entity,now)
 				sound.play(pos,entity.data.sound.self_destruct);
 			end
 
-			mobf_do_area_damage(pos,nil,
+			fighting.do_area_damage(pos,nil,
 									entity.data.combat.self_destruct.damage,
 									entity.data.combat.self_destruct.range)
 
 			--TODO determine block removal by damage and remove blocks
-			mobf_do_node_damage(pos,{},
+			fighting.do_node_damage(pos,{},
 							entity.data.combat.self_destruct.node_damage_range,
 							1 - 1/entity.data.combat.self_destruct.node_damage_range)
 
@@ -1203,9 +1300,16 @@ function fighting.set_target(entity,target)
 
 	if entity.dynamic_data.combat.target ~= nil then
 		dbg_mobf.fighting_lvl2("MOBF: switching attack target")
+		
+		local target_distance = nil
+		if entity.data.combat.melee ~= nil and
+			entity.data.combat.melee.range ~= nil then
+			target_distance = 0.75 * entity.data.combat.melee.range
+		end
 
 		--set movement target
-		entity.dynamic_data.current_movement_gen.set_target(entity,target,true)
+		entity.dynamic_data.current_movement_gen.set_target(entity,
+				target, true, target_distance)
 
 		--set attack target
 		entity.dynamic_data.combat.target = target
