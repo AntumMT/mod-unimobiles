@@ -437,3 +437,27 @@ function graphics.setyaw(entity, value)
 	end
 	entity.object:setyaw(value)
 end
+
+------------------------------------------------------------------------------
+-- @function [parent=#graphics] getyaw(entity,value)
+--
+--! @brief read yaw for this object, fix model offset
+--! @memberof graphics
+--
+--! @param entity entity to set yaw for
+--! @param value yaw value to set
+-------------------------------------------------------------------------------
+function graphics.getyaw(entity)
+
+	local retval = 0
+	local current_graphics = graphics.graphics_by_statename(entity.data,
+			entity.dynamic_data.state.current.name)
+	
+	if current_graphics.model_orientation_fix ~= nil then
+		retval = retval - current_graphics.model_orientation_fix
+	end
+	
+	retval = retval + entity.object:getyaw()
+	
+	return retval
+end

@@ -179,7 +179,7 @@ function attention.callback(entity,now)
 
 				--does own view angle matter
 				if entity.data.attention.view_angle  ~= nil then
-					local own_view = entity.object:getyaw()
+					local own_view = graphics.getyaw(entity)
 
 					local min_yaw = own_view - entity.data.attention.view_angle/2
 					local max_yaw = own_view + entity.data.attention.view_angle/2
@@ -193,6 +193,8 @@ function attention.callback(entity,now)
 						own_view_addon = true
 					end
 				end
+
+				local table_id = tostring(objectlist[i])
 
 				--does remote view angle matter
 				if entity.data.attention.remote_view == true then
@@ -214,14 +216,13 @@ function attention.callback(entity,now)
 						end
 					else
 						dbg_mobf.attention_lvl2(
-							"MOBF: unable to get yaw for obeject: "  ..table_id)
+							"MOBF: unable to get yaw for object: "  ..table_id)
 					end
 				end
 
 				--calculate new value
 
 				local sum_values = 0;
-				table_id = tostring(objectlist[i])
 
 				if hear_addon then
 					dbg_mobf.attention_lvl3("MOBF: " .. table_id .. " within hear distance")

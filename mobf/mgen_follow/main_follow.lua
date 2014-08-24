@@ -317,9 +317,14 @@ function mgen_follow.callback(entity,now)
 		end
 
 		local distance = nil
+		local height_distance = nil
 
 		if entity.data.movement.canfly then
-			distance = mobf_calc_distance(basepos,targetpos)
+			--real pos is relevant not basepos for flying mobs
+			--target for flying mobs is always slightly above it's target
+			distance = mobf_calc_distance(entity.object:getpos(),
+				{x=targetpos.x, y=(targetpos.y+1), z=targetpos.z })
+			height_distance = entity.object:getpos().y - (targetpos.y+1)
 		else
 			distance = mobf_calc_distance_2d(basepos,targetpos)
 		end
@@ -425,6 +430,11 @@ function mgen_follow.callback(entity,now)
 				entity.object:setacceleration({x=0,y=yaccel,z=0})
 			end
 		--nothing to do
+		elseif height_distance ~= nil and math.abs(height_distance) > 0.1 then
+			mgen_follow.set_acceleration(entity,
+										{ x=0,y=(height_distance*-0.2),z=0},
+										follow_speedup,
+										basepos)
 		else
 			local yaccel = environment.get_default_gravity(basepos,
 							entity.environment.media,

@@ -521,28 +521,36 @@ end
 --! @param graphics graphics to use for entity
 --! @param mob data to use
 -------------------------------------------------------------------------------
-function mobf.register_entity(name, graphics, mob)
+function mobf.register_entity(name, cur_graphics, mob)
 	dbg_mobf.mobf_core_lvl1("MOBF: registering new entity: " .. name)
 	minetest.log(LOGLEVEL_NOTICE,"MOBF: registering new entity: \"" .. name .. "\"")
 
 	mobf_assert_backtrace(environment_list[mob.generic.envid] ~= nil)
+	
+	local face_movement_dir = true
+	
+	if cur_graphics.model_orientation_fix ~= nil then
+		print("Default orientation fix for movement: " .. cur_graphics.model_orientation_fix)
+		face_movement_dir = (cur_graphics.model_orientation_fix / math.pi) * 360 + 90
+	end
+	
 	minetest.register_entity(name,
 			 {
 				physical        = true,
-				collisionbox    = graphics.collisionbox,
-				visual          = graphics.visual,
-				textures        = graphics.textures,
-				visual_size     = graphics.visual_size,
-				spritediv       = graphics.spritediv,
-				mesh            = graphics.mesh,
-				mode            = graphics.mode,
-				initial_sprite_basepos 	= {x=0, y=0},
-				makes_footstep_sound = true,
-				automatic_rotate = true,
+				collisionbox    = cur_graphics.collisionbox,
+				visual          = cur_graphics.visual,
+				textures        = cur_graphics.textures,
+				visual_size     = cur_graphics.visual_size,
+				spritediv       = cur_graphics.spritediv,
+				mesh            = cur_graphics.mesh,
+				mode            = cur_graphics.mode,
+				initial_sprite_basepos = {x=0, y=0},
+				makes_footstep_sound   = true,
+				automatic_rotate       = true,
 				groups          = mob.generic.groups,
 				hp_max          = mob.generic.base_health,
 				stepheight      = mob.generic.stepheight,
-				automatic_face_movement_dir = true,
+				automatic_face_movement_dir = face_movement_dir,
 
 
 

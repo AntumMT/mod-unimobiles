@@ -474,8 +474,20 @@ end
 --! @param entity to switch model
 --! @param state to change to
 -------------------------------------------------------------------------------
-function mob_state.switch_model(entity,state)
-	--TODO set object propertys to new model
+function mob_state.switch_model(entity, state)
+
+	local new_graphics = graphics.graphics_by_statename(entity.data, state.name)
+	
+	local new_props = { automatic_face_movement_dir = true }
+	
+	if new_graphics.model_orientation_fix ~= nil then
+		new_props.automatic_face_movement_dir =
+			(new_graphics.model_orientation_fix / math.pi) * 360  + 90
+	end
+	
+	--TODO apply new model and textures too
+	
+	entity.object:set_properties(new_props)
 end
 
 -------------------------------------------------------------------------------

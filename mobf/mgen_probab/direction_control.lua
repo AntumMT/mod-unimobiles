@@ -41,7 +41,7 @@ function direction_control.changeaccel(pos,entity,current_velocity)
 	local new_accel =
 		direction_control.get_random_acceleration(
 			entity.data.movement.min_accel,
-			entity.data.movement.max_accel,entity.object:getyaw(),0)
+			entity.data.movement.max_accel,graphics.getyaw(entity),0)
 	local pos_predicted =
 		movement_generic.predict_next_block(pos,current_velocity,new_accel)
 
@@ -120,7 +120,7 @@ function direction_control.changeaccel(pos,entity,current_velocity)
 			direction_control.get_random_acceleration(
 				entity.data.movement.min_accel,
 				entity.data.movement.max_accel,
-				entity.object:getyaw(),1.57)
+				graphics.getyaw(entity),1.57)
 		pos_predicted =
 			movement_generic.predict_next_block(pos,current_velocity,new_accel)
 

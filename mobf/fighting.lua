@@ -206,7 +206,7 @@ function fighting.hit(entity,attacker)
 				local tool = attacker:get_wielded_item()
 				-- rotation is only done if player punches using hand
 				if tool:get_name() == "" then
-					local current_yaw = entity.object:getyaw()
+					local current_yaw = graphics.getyaw(entity)
 					graphics.setyaw(entity, current_yaw + math.pi/4)
 					return
 				end
@@ -228,11 +228,13 @@ function fighting.hit(entity,attacker)
 		end
 		
 		local new_props = {
-			textures = { entity.dynamic_data.combat.old_textures[0] .. "^" ..
+			textures = { entity.dynamic_data.combat.old_textures[1] .. "^" ..
 				entity.data.combat.on_hit_overlay.texture }
 		}
 		
-		core.after(entity.data.combat.on_hit_overlay.timer,function(entity)
+		
+		
+		core.after(entity.data.combat.on_hit_overlay.timer,function()
 			local restore_probs = {
 				textures = entity.dynamic_data.combat.old_textures
 			}

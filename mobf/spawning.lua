@@ -407,7 +407,7 @@ function spawning.replace_entity(entity,name,preserve)
 	local pos             = mobf.get_basepos(entity)
 	local health          = entity.object:get_hp()
 	local temporary_dynamic_data = entity.dynamic_data
-	local entity_orientation = entity.object:getyaw()
+	local entity_orientation = graphics.getyaw(entity)
 
 	if preserve == nil or preserve == false then
 		temporary_dynamic_data.spawning.original_spawntime = mobf_get_current_time()
