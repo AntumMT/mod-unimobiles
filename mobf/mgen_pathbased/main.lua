@@ -270,7 +270,7 @@ function p_mov_gen.set_end_of_path_handler(entity,handler)
 end
 
 -------------------------------------------------------------------------------
--- name: set_target(entity,target)
+-- name: set_target(entity, target, follow_speedup, max_distance)
 --
 --! @brief set target for movgen
 --! @memberof p_mov_gen
@@ -279,8 +279,9 @@ end
 --! @param entity mob to apply to
 --! @param target to set
 --! @param follow_speedup use follow speedup to reach target
+--! @param max_distance --unused here
 -------------------------------------------------------------------------------
-function p_mov_gen.set_target(entity, target, follow_speedup)
+function p_mov_gen.set_target(entity, target, follow_speedup, max_distance)
 	mobf_assert_backtrace(target ~= nil)
 
 	local current_pos = entity.getbasepos(entity)
@@ -333,7 +334,7 @@ function p_mov_gen.set_target(entity, target, follow_speedup)
 		mobf_assert_backtrace(#entity.dynamic_data.p_movement.path > 1)
 		entity.dynamic_data.movement.target =
 				entity.dynamic_data.p_movement.path[2]
-		entity.dynamic_data.movement.follow_speedup = true
+		entity.dynamic_data.movement.follow_speedup = follow_speedup
 		return true
 	end
 
@@ -347,7 +348,7 @@ function p_mov_gen.set_target(entity, target, follow_speedup)
 		table.insert(entity.dynamic_data.p_movement.path,targetpos)
 		entity.dynamic_data.movement.target =
 				entity.dynamic_data.p_movement.path[1]
-		entity.dynamic_data.movement.follow_speedup = true
+		entity.dynamic_data.movement.follow_speedup = follow_speedup
 		return true
 	end
 

@@ -607,16 +607,19 @@ function mgen_follow.set_acceleration(entity,accel,speedup,pos)
 end
 
 -------------------------------------------------------------------------------
--- name: set_target(entity,target)
+-- name: set_target(entity, target, follow_speedup, max_distance)
 --
 --! @brief set target for movgen
 --! @memberof mgen_follow
 --
 --! @param entity mob to apply to
 --! @param target to set
+--! @param follow_speedup --unused here
+--! @param max_distance maximum distance to target to be tried to reach
 -------------------------------------------------------------------------------
-function mgen_follow.set_target(entity,target)
+function mgen_follow.set_target(entity,target, follow_speedup, max_distance)
 	entity.dynamic_data.movement.target = target
+	entity.dynamic_data.movement.max_distance = max_distance
 	return true
 end
 

@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
 -- Mob Framework Mod by Sapier
--- 
+--
 -- You may copy, use, modify or do nearly anything except removing this
--- copyright notice. 
+-- copyright notice.
 -- And of course you are NOT allow to pretend you have written it.
 --
 --! @file main_follow.lua
@@ -14,7 +14,7 @@
 --! @defgroup mgen_jordan4ibanez MGEN: a velocity based movement generator
 --! @brief A movement generator creating simple random movement
 --! @ingroup framework_int
---! @{ 
+--! @{
 -- Contact sapier a t gmx net
 -------------------------------------------------------------------------------
 
@@ -61,8 +61,8 @@ function mgen_jordan4ibanez.callback(entity,now)
         entity.dynamic_data.movement.yaw = 360 * math.random()
         entity.object:setyaw(entity.dynamic_data.movement.yaw)
         entity.dynamic_data.movement.turn_timer = 0
-        entity.dynamic_data.movement.direction = {x = math.sin(entity.dynamic_data.movement.yaw)*-1, 
-        											y = -10, 
+        entity.dynamic_data.movement.direction = {x = math.sin(entity.dynamic_data.movement.yaw)*-1,
+        											y = -10,
         											z = math.cos(entity.dynamic_data.movement.yaw)}
         --entity.object:setvelocity({x=entity.dynamic_data.movement.direction.x,y=entity.object:getvelocity().y,z=entity.dynamic_data.movement.direction.z})
         --entity.object:setacceleration(entity.dynamic_data.movement.direction)
@@ -140,13 +140,15 @@ function mgen_jordan4ibanez.init_dynamic_data(entity,now)
 end
 
 -------------------------------------------------------------------------------
--- name: set_target(entity,target)
+-- name: set_target(entity, target, follow_speedup, max_distance)
 --
 --! @brief set target for movgen
 --! @memberof mgen_jordan4ibanez
 --
---! @param entity mob to apply to
---! @param target to set
+--! @param entity mob to apply to --unused here
+--! @param target to set --unused here
+--! @param follow_speedup --unused here
+--! @param max_distance --unused here
 -------------------------------------------------------------------------------
 function mgen_jordan4ibanez.set_target(entity,target)
 	return false

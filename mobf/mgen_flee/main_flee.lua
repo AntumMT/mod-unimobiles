@@ -430,15 +430,17 @@ function mgen_flee.set_acceleration(entity,accel,speedup,pos)
 end
 
 -------------------------------------------------------------------------------
--- name: set_target(entity,target)
+-- name: set_target(entity, target, follow_speedup, max_distance)
 --
 --! @brief set target for movgen
 --! @memberof mgen_flee
 --
 --! @param entity mob to apply to
 --! @param target to set
+--! @param follow_speedup --unused here
+--! @param max_distance --unused here
 -------------------------------------------------------------------------------
-function mgen_flee.set_target(entity,target)
+function mgen_flee.set_target(entity, target, follow_speedup, max_distance)
 	mobf_assert_backtrace(entity ~= nil)
 	mobf_assert_backtrace(target ~= nil)
 	entity.dynamic_data.movement.target = target
