@@ -910,7 +910,7 @@ function fighting.do_node_damage(pos,immune_list,range,chance)
 
 						if immune_list ~= nil then
 							for i,v in ipairs(immune_list) do
-								if (torremove.name == v) then
+								if (toremove.name == v) then
 									immune = true
 								end
 							end
