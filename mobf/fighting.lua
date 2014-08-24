@@ -219,7 +219,8 @@ function fighting.hit(entity,attacker)
 		sound.play(mob_pos,entity.data.sound.hit);
 	end
 	
-	if entity.data.combat.on_hit_overlay ~= nil then
+	if entity.data.combat ~= nil and
+		entity.data.combat.on_hit_overlay ~= nil then
 		mobf_assert_backtrace( entity.data.combat.on_hit_overlay.texture ~= nil)
 		mobf_assert_backtrace( entity.data.combat.on_hit_overlay.timer ~= nil)
 		
