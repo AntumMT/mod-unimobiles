@@ -60,7 +60,7 @@ movement_gen.name = "probab_mov_gen"
 --! @return true/false
 -------------------------------------------------------------------------------
 function movement_gen.register_pattern(pattern)
-		print ("\tregistering pattern "..pattern.name)
+		core.log("action","\tregistering pattern "..pattern.name)
 		if mobf_rtd.movement_patterns[pattern.name] == nil then
 			mobf_rtd.movement_patterns[pattern.name] = pattern
 			return true

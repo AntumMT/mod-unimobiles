@@ -267,11 +267,17 @@ function mobf_spawner_register(name,mobname,spawndef)
 
 						if entities_around[i].type == "MIN" and
 							count < entities_around[i].threshold then
+							dbg_mobf.mobf_core_lvl3(
+								"MOBF: MIN around not met: already: " .. count ..
+								" relevant entities around")
 							return false
 						end
 
 						if entities_around[i].type == "MAX" and
 							count > entities_around[i].threshold then
+							dbg_mobf.mobf_core_lvl3(
+								"MOBF: MAX around not met: already: " .. count ..
+								" relevant entities around")
 							return false
 						end
 					end

@@ -22,7 +22,7 @@
 -- Contact sapier a t gmx net
 -------------------------------------------------------------------------------
 
-print("MOD: mobf loading ...")
+core.log("action","MOD: mobf loading ...")
 
 --! @brief runtime data required to be setup once on start
 mobf_rtd = {
@@ -107,7 +107,7 @@ dofile (mobf_modpath .. "/mgen_pathbased/main.lua")
 dofile (mobf_modpath .. "/mgen_flee/main_flee.lua")
 dofile (mobf_modpath .. "/mov_gen_none.lua")
 
-mobf_version = "2.4.1"
+mobf_version = "2.4.90"
 
 
 --! @brief main initialization function
@@ -182,7 +182,7 @@ function mobf_init_framework()
 		give_to_singleplayer = true
 	})
 
-	print("MOD: mob framework mod "..mobf_version.." loaded")
+	core.log("action","MOD: mob framework mod "..mobf_version.." loaded")
 end
 
 --! @brief initialize mod dependencys

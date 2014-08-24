@@ -530,7 +530,6 @@ function mobf.register_entity(name, cur_graphics, mob)
 	local face_movement_dir = true
 	
 	if cur_graphics.model_orientation_fix ~= nil then
-		print("Default orientation fix for movement: " .. cur_graphics.model_orientation_fix)
 		face_movement_dir = (cur_graphics.model_orientation_fix / math.pi) * 360 + 90
 	end
 	
