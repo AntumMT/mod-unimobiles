@@ -66,8 +66,6 @@ end
 --! @param param parameters received
 ------------------------------------------------------------------------------
 function mobf_debug.spawn_mob(name,param)
-	print("name: " .. name .. " param: " .. dump(param))
-
 	local parameters = param:split(" ")
 
 	if #parameters ~= 1 and
