@@ -59,7 +59,7 @@ function mgen_jordan4ibanez.callback(entity,now)
     
     if entity.dynamic_data.movement.turn_timer > math.random(1,4) then
         entity.dynamic_data.movement.yaw = 360 * math.random()
-        entity.object:setyaw(entity.dynamic_data.movement.yaw)
+        graphics.setyaw(entity, entity.dynamic_data.movement.yaw)
         entity.dynamic_data.movement.turn_timer = 0
         entity.dynamic_data.movement.direction = {x = math.sin(entity.dynamic_data.movement.yaw)*-1,
         											y = -10,

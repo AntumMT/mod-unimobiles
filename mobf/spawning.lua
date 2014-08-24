@@ -439,7 +439,7 @@ function spawning.replace_entity(entity,name,preserve)
 			dbg_mobf.spawning_lvl2("MOBF: replace_entity: " ..  name)
 			newentity.dynamic_data = temporary_dynamic_data
 			newentity.object:set_hp(health)
-			newentity.object:setyaw(entity_orientation)
+			graphics.setyaw(newentity, entity_orientation)
 		else
 			minetest.log(LOGLEVEL_ERROR,
 				"MOBF: replace_entity: dynamic data not set for "..name..

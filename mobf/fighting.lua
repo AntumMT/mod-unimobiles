@@ -207,7 +207,7 @@ function fighting.hit(entity,attacker)
 				-- rotation is only done if player punches using hand
 				if tool:get_name() == "" then
 					local current_yaw = entity.object:getyaw()
-					entity.object:setyaw(current_yaw + math.pi/4)
+					graphics.setyaw(entity, current_yaw + math.pi/4)
 					return
 				end
 			end
@@ -217,6 +217,30 @@ function fighting.hit(entity,attacker)
 	--play hit sound
 	if entity.data.sound ~= nil then
 		sound.play(mob_pos,entity.data.sound.hit);
+	end
+	
+	if entity.data.combat.on_hit_overlay ~= nil then
+		mobf_assert_backtrace( entity.data.combat.on_hit_overlay.texture ~= nil)
+		mobf_assert_backtrace( entity.data.combat.on_hit_overlay.timer ~= nil)
+		
+		if entity.dynamic_data.combat.old_textures == nil then
+			entity.dynamic_data.combat.old_textures = entity.textures
+		end
+		
+		local new_props = {
+			textures = { entity.dynamic_data.combat.old_textures[0] .. "^" ..
+				entity.data.combat.on_hit_overlay.texture }
+		}
+		
+		core.after(entity.data.combat.on_hit_overlay.timer,function(entity)
+			local restore_probs = {
+				textures = entity.dynamic_data.combat.old_textures
+			}
+			entity.dynamic_data.combat.old_textures = nil
+			entity.object:set_properties(restore_probs)
+		end)
+		
+		entity.object:set_properties(new_props)
 	end
 
 	--push mob back
@@ -235,9 +259,8 @@ function fighting.hit(entity,attacker)
 		entity.object:get_hp() > (entity.data.generic.base_health/3) then
 
 		--face attacker
-		--TODO this may be wrong for 2d mode too
 		if entity.mode ~= "3d" then
-			entity.object:setyaw(mobf_calc_yaw(dir.x,dir.z)-math.pi)
+			graphics.setyaw(entity, mobf_calc_yaw(dir.x,dir.z)-math.pi)
 		end
 
 		dbg_mobf.fighting_lvl2("MOBF: mob with chance of fighting back attacked")
@@ -576,9 +599,9 @@ function fighting.combat(entity,now,dtime)
 
 		--look towards target
 		if entity.mode == "3d" then
-			entity.object:setyaw(mobf_calc_yaw(dir.x,dir.z)+math.pi)
+			graphics.setyaw(entity, mobf_calc_yaw(dir.x,dir.z)+math.pi)
 		else
-			entity.object:setyaw(mobf_calc_yaw(dir.x,dir.z)-math.pi)
+			graphics.setyaw(entity, mobf_calc_yaw(dir.x,dir.z)-math.pi)
 		end
 
 		--initiate self destruct

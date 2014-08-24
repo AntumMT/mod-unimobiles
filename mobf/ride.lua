@@ -196,7 +196,7 @@ function mobf_ride.on_step_callback(entity)
 				entity.object:setvelocity(speed_to_set)
 
 				--fix switched model orientation
-				entity.object:setyaw(dir)
+				graphics.setyaw(entity,dir)
 			end
 
 

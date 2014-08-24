@@ -344,7 +344,7 @@ function mobf.activate_handler(self,staticdata)
 			.."This shouldn't happen at all but if we can fix it")
 		self.dynamic_data = dyndata_delayed.data
 		self.object:set_hp(dyndata_delayed.health)
-		self.object:setyaw(dyndata_delayed.entity_orientation)
+		graphics.setyaw(self, dyndata_delayed.entity_orientation)
 		self.dyndata_delayed = nil
 		self.dynamic_data.initialized = true
 		mobf_step_quota.consume(starttime)

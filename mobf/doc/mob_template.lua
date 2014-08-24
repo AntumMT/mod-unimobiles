@@ -405,6 +405,8 @@ local mob_template = {
 					collisionbox = { "<selectionbox declatation>" },
 					--! @brief [MANDATORY] xyz scale factors for the model
 					visual_size = {x=1,y=1,z=1},
+					--! @brief [OPTIONAL] additional yaw offset used to fix models with broken orientation
+					model_orientation_fix = -math.pi/2,
 					},
 				--! @brief [2D MANDATORY] a special sprite to be used for this state
 				graphics_2d = {

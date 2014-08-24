@@ -50,15 +50,15 @@ function graphics.update_orientation_simple(entity,current_velocity)
 	local z_abs = math.abs(current_velocity.z)
 	if x_abs > z_abs then
 		if current_velocity.x > 0 then
-			entity.object:setyaw(0)
+			graphics.setyaw(entity, 0)
 		else
-			entity.object:setyaw(math.pi)
+			graphics.setyaw(entity, math.pi)
 		end
 	else
 		if current_velocity.z >0 then
-			entity.object:setyaw(math.pi/2)
+			graphics.setyaw(entity, math.pi/2)
 		else
-			entity.object:setyaw(math.pi * (3/2))
+			graphics.setyaw(entity, math.pi * (3/2))
 		end
 	end
 end
@@ -91,10 +91,10 @@ function graphics.update(entity,now,dtime)
 		local direction = mobf_get_direction(entity.object:getpos(),
 								entity.dynamic_data.attention.most_relevant_target:getpos())
 		if entity.mode == "3d" then
-			entity.object:setyaw(
+			graphics.setyaw(entity,
 				mobf_calc_yaw(direction.x,direction.z))
 		else
-			entity.object:setyaw(
+			graphics.setyaw(entity,
 				mobf_calc_yaw(direction.x,direction.z)+math.pi/2)
 		end
 	end
@@ -194,7 +194,7 @@ function graphics.update_orientation(entity,now,dtime)
 				(delta_z ~= 0) then
 				dbg_mobf.graphics_lvl3("MOBF: x-delta: " .. delta_x
 					.. " z-delta: " .. delta_z)
-				entity.object:setyaw(mobf_calc_yaw(delta_x,delta_z))
+				graphics.setyaw(entity,mobf_calc_yaw(delta_x,delta_z))
 
 
 			elseif (delta_x ~= 0) or
@@ -350,7 +350,8 @@ function graphics.graphics_by_statename(mob,statename)
 		setgraphics.visual          = selected_state.graphics_3d.visual
 		setgraphics.visual_size     = selected_state.graphics_3d.visual_size
 		setgraphics.textures        = selected_state.graphics_3d.textures
-		setgraphics.mode 			= "3d"
+		setgraphics.mode            = "3d"
+		setgraphics.model_orientation_fix = selected_state.graphics_3d.model_orientation_fix
 	end
 
 	return setgraphics
@@ -415,4 +416,24 @@ function graphics.prepare_info(graphics2d,graphics3d,modname,name,statename)
 	end
 
 	return setgraphics
+end
+
+------------------------------------------------------------------------------
+-- @function [parent=#graphics] setyaw(entity,value)
+--
+--! @brief update yaw for a specific entity (overlay to workaround model bugs)
+--! @memberof graphics
+--
+--! @param entity entity to set yaw for
+--! @param value yaw value to set
+-------------------------------------------------------------------------------
+function graphics.setyaw(entity, value)
+
+	local current_graphics = graphics.graphics_by_statename(entity.data,
+			entity.dynamic_data.state.current.name)
+	
+	if current_graphics.model_orientation_fix ~= nil then
+		value = value + current_graphics.model_orientation_fix
+	end
+	entity.object:setyaw(value)
 end

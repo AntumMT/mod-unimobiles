@@ -502,10 +502,10 @@ function mob_inventory.trader_callback(entity, player)
 		local direction = mobf_get_direction(pos, player:getpos())
 
 		if entity.mode == "3d" then
-			entity.object:setyaw(
+			graphics.setyaw(entity,
 				mobf_calc_yaw(direction.x,direction.z))
 		else
-			entity.object:setyaw(
+			graphics.setyaw(entity,
 				mobf_calc_yaw(direction.x,direction.z)+math.pi/2)
 		end
 
