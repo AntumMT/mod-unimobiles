@@ -1512,7 +1512,9 @@ function fighting.update_healdb(hp_change, replace_with_item, itemstack, player,
 	
 	local replacement = nil
 	if replace_with_item ~= nil then
-		replacement = replace_with_item:get_name()
+		if type(replace_with_item) ~= "string" then
+			replacement = replace_with_item:get_name()
+		end
 	end
 	
 	if fighting.healdb == nil then
