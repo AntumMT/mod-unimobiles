@@ -33,7 +33,7 @@ movement_generic = {}
 --! @return { x,y,z } random speed directed to new_pos
 -------------------------------------------------------------------------------
 --
-function movement_generic.get_accel_to(new_pos,entity,ymovement)
+function movement_generic.get_accel_to(new_pos, entity, ymovement, accel)
 
 	if new_pos == nil or entity == nil then
 		minetest.log(LOGLEVEL_CRITICAL,
@@ -56,7 +56,7 @@ function movement_generic.get_accel_to(new_pos,entity,ymovement)
 
 	local absolute_accel = nil
 	--find a new speed
-	if accel == nil then
+	if not accel then
 		absolute_accel = minaccel + (maxaccel - minaccel) * math.random()
 	else
 		absolute_accel = accel
