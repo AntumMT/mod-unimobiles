@@ -24,7 +24,7 @@ else
 end
 
 minetest.log("action","MOD: barn mod loading ...")
-local version = "0.0.12"
+local version = "0.0.13"
 
 local modpath = minetest.get_modpath("barn")
 
@@ -168,6 +168,12 @@ function breed(breedpairs,self,now)
 			breeded_lua.dynamic_data.spawning = {}
 		end
 		breeded_lua.dynamic_data.spawning.player_spawned = true
+		
+		if le_animal1.dynamic_data.spawning.spawner ~= nil then
+			breeded_lua.dynamic_data.spawning.spawner = le_animal1.dynamic_data.spawning.spawner
+		elseif le_animal2.dynamic_data.spawning.spawner ~= nil then
+			breeded_lua.dynamic_data.spawning.spawner = le_animal2.dynamic_data.spawning.spawner
+		end
 
 		return true
 	end
