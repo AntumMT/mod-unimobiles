@@ -270,7 +270,7 @@ function mobf_spawner_register(name,mobname,spawndef)
 							dbg_mobf.mobf_core_lvl3(
 								"MOBF: MIN around not met: already: " .. count ..
 								" relevant entities around")
-							return false
+							return false, "not enough entities around, only: " .. count .. " < " .. entities_around[i].threshold
 						end
 
 						if entities_around[i].type == "MAX" and
@@ -278,17 +278,18 @@ function mobf_spawner_register(name,mobname,spawndef)
 							dbg_mobf.mobf_core_lvl3(
 								"MOBF: MAX around not met: already: " .. count ..
 								" relevant entities around")
-							return false
+								
+							return false, "too many entities around, " .. count .. " > " .. entities_around[i].threshold
 						end
 					end
 				end
 			end
 
 			if type(customcheck) == "function" and not customcheck(pos,spawndef) then
-				return false
+				return false, "customcheck failed"
 			end
 
-			return true
+			return true, "entities around and customcheck ok"
 		end
 
 	--register
