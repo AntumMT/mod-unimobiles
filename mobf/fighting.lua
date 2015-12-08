@@ -1250,7 +1250,7 @@ function fighting.sun_damage_handler(entity,now)
 				mobf_lifebar.set(entity.lifebar,entity.object:get_hp()/entity.hp_max)
 
 				if entity.data.sound ~= nil then
-					sound.play(mob_pos,entity.data.sound.sun_damage);
+					sound.play(pos,entity.data.sound.sun_damage);
 				end
 
 				if entity.object:get_hp() <= 0 then
