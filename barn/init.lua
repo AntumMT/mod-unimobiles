@@ -249,6 +249,14 @@ minetest.register_entity(":barn:barn_empty_ent",
 
 
 		on_punch = function(self,player)
+		
+		  if player == nil then
+		      return
+		  end
+		  
+		  if not player:is_player() then
+		      return
+		  end
 
 			--if player is wearing food replace by full barn
 			local tool = player:get_wielded_item()
