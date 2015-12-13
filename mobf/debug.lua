@@ -486,6 +486,13 @@ function mobf_debug.rightclick_callback(entity,player)
 	if entity.dynamic_data.graphics.last_fps ~= nil then
 		print("MOBF: Animating with: " .. entity.dynamic_data.graphics.last_fps .. " fps")
 	end
+	
+	if entity.data.states ~= nil then
+	    print("MOBF: \tStatecount: " .. #entity.data.states)
+	    for i,v in ipairs(entity.data.states) do
+	       print("MOBF: \t\t" .. i .. ": " .. v.name .. " chance=" .. v.chance)
+	    end
+	end
 	return false
 end
 
