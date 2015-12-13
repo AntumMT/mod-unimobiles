@@ -406,7 +406,7 @@ function mgen_flee.set_acceleration(entity,accel,speedup,pos)
 		entity.object:setacceleration(accel)
 		return true
 	elseif mgen_flee.next_block_ok(entity,pos,{x=0,y=0,z=0}) then
-		accel_to_set = {x=0,y=0,z=0}
+		accel = {x=0,y=0,z=0}
 		dbg_mobf.flmovement_lvl3("MOBF:   flee setting acceleration to: " .. printpos(accel));
 		entity.object:setacceleration(accel)
 		return true
@@ -415,7 +415,7 @@ function mgen_flee.set_acceleration(entity,accel,speedup,pos)
 		current_velocity.y = 0
 
 		if mgen_flee.next_block_ok(entity,pos,{x=0,y=0,z=0},current_velocity) then
-			accel_to_set = {x=0,y=0,z=0}
+			accel = {x=0,y=0,z=0}
 			entity.object:setvelocity(current_velocity)
 			entity.object:setacceleration(accel)
 			return true
