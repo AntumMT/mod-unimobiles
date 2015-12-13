@@ -27,6 +27,57 @@ mobf_assert_backtrace(mobf_path == nil)
 mobf_path = {}
 
 -------------------------------------------------------------------------------
+-- @function [parent=#mobf_path] find_path()
+--
+--! @brief workaround for broken mintest find_path function
+--! @ingroup mobf_path
+-------------------------------------------------------------------------------
+function mobf_path.find_path(pos1,pos2,searchdistance,max_jump,max_drop,algorithm)
+
+    local interim_path = minetest.find_path(pos1, pos2, searchdistance,
+                                            max_jump, max_drop, algorithm)
+    if interim_path == nil then
+      return nil
+    end
+
+    local pos_n_minor_1 = nil
+    local pos_n_minor_2 = nil
+    
+    local path_optimized = {}
+    
+    table.insert(path_optimized, interim_path[1])
+
+    for i,v in ipairs(interim_path) do
+          if ( pos_n_minor_1 ~= nil ) and ( pos_n_minor_2 ~= nil) then
+              
+              local x_pitch = pos_n_minor_2.x - v.x
+              local y_pitch = pos_n_minor_2.y - v.y
+              local z_pitch = pos_n_minor_2.z - v.z
+              
+              local x_delta = (pos_n_minor_1.x - pos_n_minor_2.x) / x_pitch;
+              local y_delta = (pos_n_minor_1.y - pos_n_minor_2.y) / y_pitch;
+              local z_delta = (pos_n_minor_1.z - pos_n_minor_2.z) / z_pitch;
+              
+              if (x_pitch ~= 0) and (y_pitch ~= 0) and (x_delta ~= y_delta ) then
+                  table.insert(path_optimized, pos_n_minor_1)
+              elseif (y_pitch ~= 0) and (z_pitch ~= 0) and (y_delta ~= z_delta) then
+                  table.insert(path_optimized, pos_n_minor_1)
+              elseif (x_pitch ~= 0) and (z_pitch ~= 0) and (y_delta ~= z_delta) then
+                  table.insert(path_optimized, pos_n_minor_1)
+              end
+          end
+
+    
+          pos_n_minor_2 = pos_n_minor_1
+          pos_n_minor_1 = v
+    end
+    
+    table.insert(path_optimized, interim_path[#interim_path])
+
+    return path_optimized
+end
+
+-------------------------------------------------------------------------------
 -- @function [parent=#mobf_path] init()
 --
 --! @brief initialize path subsystem
