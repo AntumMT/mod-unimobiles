@@ -150,7 +150,6 @@ function mgen_raster.init_dynamic_data(entity,now)
 	local data = {
 			target = nil,
 			guardspawnpoint = true,
-			orientation_fix_needed = true,
 			time_travelled = 0,
 			helper_mgen = getMovementGen(follow_mov_gen),
 			max_distance = 0.1,

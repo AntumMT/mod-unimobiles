@@ -291,6 +291,8 @@ function movement_gen.apply_movement_changes(entity,movement_state)
 
 		dbg_mobf.pmovement_lvl2("MOBF: setting acceleration to "
 										..printpos(movement_state.accel_to_set))
+										
+		-- todo check for harsh direction changes
 		entity.dynamic_data.movement.acceleration = movement_state.accel_to_set
 		entity.object:setacceleration(movement_state.accel_to_set)
 	end
@@ -324,7 +326,6 @@ function movement_gen.init_dynamic_data(entity,now)
 			ts_random_jump		= now,
 			ts_orientation_upd  = now,
 			mpattern            = mobf_rtd.movement_patterns[entity.data.movement.pattern],
-			orientation_fix_needed              = true,
 			ts_last_slowcheck   = now,
 			}
 

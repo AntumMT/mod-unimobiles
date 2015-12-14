@@ -133,7 +133,6 @@ function mgen_jordan4ibanez.init_dynamic_data(entity,now)
 			door_timer = 0,
 			direction = nil,
 			yaw = nil,
-			orientation_fix_needed = false,
 			}
 	
 	entity.dynamic_data.movement = data
