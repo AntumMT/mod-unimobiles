@@ -65,6 +65,15 @@ local mob_template = {
 
 		--! @brief [OPTIONAL] custom on_step(entity) callback called after normal on_step handling is done
 		custom_on_step_handler = nil,
+		
+		--! @brief [OPTIONAL] list of callbacks 
+		on_rightclick_callbacks = {
+        {
+          handler = function(entity, player)  end,
+          name = "internal name shown in debug info",
+          visiblename = function(entity) end OR "some label of rightclick button"
+        }
+		},
 
 		},
 

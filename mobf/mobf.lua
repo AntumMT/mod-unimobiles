@@ -227,6 +227,24 @@ function mobf.init_on_rightclick_callbacks(entity,now)
 				.. " disabled due to config check")
 		end
 	end
+	
+	if entity.data.generic.on_rightclick_callbacks ~= nil then
+	
+  	for i = 1, #entity.data.generic.on_rightclick_callbacks, 1 do
+  	    if type(entity.data.generic.on_rightclick_callbacks[i].handler) == "function" and
+  	       type(entity.data.generic.on_rightclick_callbacks[i].name) == "string" and
+  	       (type(entity.data.generic.on_rightclick_callbacks[i].visiblename) == "string" or 
+  	       type(entity.data.generic.on_rightclick_callbacks[i].visiblename) == "function") then
+  	    
+  	       table.insert(entity.on_rightclick_hooks, entity.data.generic.on_rightclick_callbacks[i])
+  	    
+  	       if type(entity.data.generic.on_rightclick_callbacks[i].init) == "function" then
+  	           entity.data.generic.on_rightclick_callbacks[i].init(entity)
+  	       end
+  	    end
+  	end
+
+	end
 end
 
 ------------------------------------------------------------------------------
