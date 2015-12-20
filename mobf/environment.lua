@@ -18,10 +18,10 @@
 --! @{
 -- Contact sapier a t gmx net
 -------------------------------------------------------------------------------
-mobf_assert_backtrace(environment == nil)
+mobf_assert_backtrace(not core.global_exists("environment"))
 environment = {}
 
-mobf_assert_backtrace(environment_list == nil)
+mobf_assert_backtrace(not core.global_exists("environment_list"))
 --! @brief list of known environments
 --! @memberof environment
 environment_list = {}

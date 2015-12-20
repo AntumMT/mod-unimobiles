@@ -14,7 +14,7 @@
 -- Contact sapier a t gmx net
 -------------------------------------------------------------------------------
 
-mobf_assert_backtrace(mgen_none == nil)
+mobf_assert_backtrace(not core.global_exists("mgen_none"))
 --! @class mgen_none
 --! @brief a movement generator doing nothing
 mgen_none = {}

@@ -14,7 +14,7 @@
 -- Contact sapier a t gmx net
 -------------------------------------------------------------------------------
 
-mobf_assert_backtrace(graphics == nil)
+mobf_assert_backtrace(not core.global_exists("graphics"))
 --! @class graphics
 --! @brief graphic features
 graphics = {}

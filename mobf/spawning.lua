@@ -24,14 +24,14 @@
 --
 -- Contact sapier a t gmx net
 -------------------------------------------------------------------------------
-mobf_assert_backtrace(spawning == nil)
+mobf_assert_backtrace(not core.global_exists("spawning"))
 --! @class spawning
 --! @brief spawning features
 spawning = {}
 
 --!@}
 
-mobf_assert_backtrace(mobf_spawn_algorithms == nil)
+mobf_assert_backtrace(not core.global_exists("mobf_spawn_algorithms"))
 --! @brief registry for spawn algorithms
 --! @memberof spawning
 --! @private

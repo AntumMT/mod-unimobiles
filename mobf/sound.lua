@@ -17,7 +17,7 @@
 --! @{
 -- Contact sapier a t gmx net
 -------------------------------------------------------------------------------
-mobf_assert_backtrace(sound == nil)
+mobf_assert_backtrace(not core.global_exists("sound"))
 
 --! @class sound
 --! @brief sound selection and play functions

@@ -14,7 +14,7 @@
 -- Contact sapier a t gmx net
 -------------------------------------------------------------------------------
 
-mobf_assert_backtrace(mobf_debug == nil)
+mobf_assert_backtrace(not core.global_exists("mobf_debug"))
 --! @defgroup debug_in_game In game debugging functions
 --! @brief debugging functions to be called from in game
 --! @ingroup framework_int

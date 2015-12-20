@@ -86,7 +86,7 @@ minetest.register_entity(":trap:undead_ent",
 
 minetest.register_node("trap:cought_vombie", {
 		description = S("Trap containing vombie"),
-		tile_images = {"trap_cought_vombie.png"},
+		tiles = {"trap_cought_vombie.png"},
 		drawtype = "normal",
 		groups = { snappy=3 },
 		drop = "animal_vombie:vombie",

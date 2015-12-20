@@ -18,7 +18,7 @@
 --
 -- Contact sapier a t gmx net
 -------------------------------------------------------------------------------
-mobf_assert_backtrace(mob_state == nil)
+mobf_assert_backtrace(not core.global_exists("mob_state"))
 --! @class mob_state
 --! @brief state handling class
 --! @}

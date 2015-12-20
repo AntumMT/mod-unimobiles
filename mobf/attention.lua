@@ -23,7 +23,7 @@
 
 --!@}
 
-mobf_assert_backtrace(attention == nil)
+mobf_assert_backtrace(not core.global_exists("attention"))
 --! @brief attention handling class reference
 --TODO rename to fix documentation issues
 attention = {}

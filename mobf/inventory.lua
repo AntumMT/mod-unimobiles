@@ -18,7 +18,7 @@
 --
 -- Contact sapier a t gmx net
 -------------------------------------------------------------------------------
-mobf_assert_backtrace(mob_inventory == nil)
+mobf_assert_backtrace(not core.global_exists("mob_inventory"))
 --! @class mob_inventory
 --! @brief inventory handling for trader like mobs
 --! @}
@@ -26,7 +26,7 @@ mob_inventory = {}
 
 -- Boilerplate to support localized strings if intllib mod is installed.
 local S
-if intllib then
+if core.global_exists("intllib") then
 	S = intllib.Getter()
 else
 	S = function(s) return s end

@@ -14,7 +14,7 @@
 -- Contact sapier a t gmx net
 -------------------------------------------------------------------------------
 
-mobf_assert_backtrace(mobf_step_quota == nil)
+mobf_assert_backtrace(not core.global_exists("mobf_step_quota"))
 
 --! @class mobf_step_quota
 --! @brief step_quota handling

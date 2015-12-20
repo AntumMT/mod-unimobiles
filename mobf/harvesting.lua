@@ -18,7 +18,7 @@
 -- Contact sapier a t gmx net
 -------------------------------------------------------------------------------
 
-mobf_assert_backtrace(harvesting == nil)
+mobf_assert_backtrace(not core.global_exists("harvesting"))
 --! @class harvesting
 --! @brief harvesting features
 harvesting = {}

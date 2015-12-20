@@ -19,7 +19,7 @@
 --
 -- Contact sapier a t gmx net
 -------------------------------------------------------------------------------
-mobf_assert_backtrace(mobf_ride == nil)
+mobf_assert_backtrace(not core.global_exists("mobf_ride"))
 --! @class mobf_ride
 --! @brief contains all riding specific functions
 --! @}

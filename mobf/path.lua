@@ -23,7 +23,7 @@ else
 end
 
 -------------------------------------------------------------------------------
-mobf_assert_backtrace(mobf_path == nil)
+mobf_assert_backtrace(not core.global_exists("mobf_path"))
 mobf_path = {}
 
 -------------------------------------------------------------------------------

@@ -18,7 +18,7 @@
 --! @{
 -- Contact: sapier a t gmx net
 -------------------------------------------------------------------------------
-mobf_assert_backtrace(mobf_lifebar == nil)
+mobf_assert_backtrace(not core.global_exists("mobf_lifebar"))
 --! @class mobf_lifebar
 --! @brief a simple lifebar implementation
 --!@}

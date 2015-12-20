@@ -14,7 +14,7 @@
 -- Contact sapier a t gmx net
 --------------------------------------------------------------------------------
 
-assert(mobf_settings == nil)
+assert(not core.global_exists("mobf_settings"))
 mobf_settings = {}
 
 COLOR_RED   = "#FF0000"

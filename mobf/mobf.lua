@@ -19,7 +19,7 @@
 --
 -- Contact sapier a t gmx net
 -------------------------------------------------------------------------------
-mobf_assert_backtrace(mobf == nil)
+mobf_assert_backtrace(not core.global_exists("mobf"))
 --! @class mobf
 --! @brief basic management component of mob functions
 --!@}
@@ -550,6 +550,7 @@ function mobf.register_entity(name, cur_graphics, mob)
 				hp_max          = mob.generic.base_health,
 				stepheight      = mob.generic.stepheight,
 				automatic_face_movement_dir = face_movement_dir,
+				automatic_face_movement_max_rotation_per_sec = 180,
 
 
 

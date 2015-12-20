@@ -17,7 +17,7 @@
 --! @{
 -- Contact sapier a t gmx net
 -------------------------------------------------------------------------------
-mobf_assert_backtrace(random_drop == nil)
+mobf_assert_backtrace(not core.global_exists("random_drop"))
 --! @class random_drop
 --! @brief random drop features e.g lay eggs
 --!@}
@@ -95,7 +95,7 @@ function random_drop.register(random_drop)
 			return
 		end
 
-		minetest.log("LOGLEVEL_INFO","MOBF:\tregistering random drop entity: "..":"..random_drop.result.."_ent"..
+		minetest.log(LOGLEVEL_INFO,"MOBF:\tregistering random drop entity: "..":"..random_drop.result.."_ent"..
 				" item="..drop_itemname .. " basename=" .. drop_basename)
 
 		local ent_graphics = {}

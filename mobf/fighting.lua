@@ -25,7 +25,7 @@ MOBF_AGRESSION_FACTOR = 5
 
 --!@}
 
-mobf_assert_backtrace(fighting == nil)
+mobf_assert_backtrace(not core.global_exists("fighting"))
 --! @brief fighting class reference
 fighting = {}
 fighting.healdb = minetest.world_setting_get("fighting.healdb")

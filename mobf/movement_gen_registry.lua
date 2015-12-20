@@ -13,7 +13,7 @@
 --
 -- Contact sapier a t gmx net
 -------------------------------------------------------------------------------
-mobf_assert_backtrace(movement_generators == nil)
+mobf_assert_backtrace(not core.global_exists("movement_generators"))
 movement_generators = {}
 
 

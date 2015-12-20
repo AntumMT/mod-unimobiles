@@ -17,7 +17,7 @@
 --! @{
 -- Contact sapier a t gmx net
 -------------------------------------------------------------------------------
-mobf_assert_backtrace(movement_generic == nil)
+mobf_assert_backtrace(not core.global_exists("movement_generic"))
 movement_generic = {}
 
 --!@}

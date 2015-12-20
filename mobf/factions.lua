@@ -14,7 +14,7 @@
 -- Contact sapier a t gmx net
 -------------------------------------------------------------------------------
 
-mobf_assert_backtrace(mobf_factions == nil)
+mobf_assert_backtrace(not core.global_exists("mobf_factions"))
 --! @class mobf_factions
 --! @brief faction mod support for mobf
 mobf_factions = {}
