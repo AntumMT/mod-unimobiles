@@ -279,6 +279,23 @@ function mobf.get_basepos(entity)
 	return pos
 end
 
+-------------------------------------------------------------------------------
+-- @function [parent=#mobf] get_persistent_data(entity)
+--
+--! @brief get persistent data of a particular entity
+--! @memberof mobf
+--! @private
+--
+--! @return persistent entity data
+-------------------------------------------------------------------------------
+function mobf.get_persistent_data(entity)
+  if (entity.dynamic_data.custom_persistent == nil) then
+      entity.dynamic_data.custom_persistent = {}
+  end
+
+  return entity.dynamic_data.custom_persistent
+end
+
 ------------------------------------------------------------------------------
 -- @function [parent=#mobf] mobf_activate_handler(self,staticdata)
 --
@@ -739,6 +756,25 @@ function mobf.register_entity(name, cur_graphics, mob)
 				end,
 
 			getbasepos       = mobf.get_basepos,
+			get_persistent_data   = mobf.get_persistent_data,
+			owner            = function(entity) 
+			   if (entity.dynamic_data.spawning.spawner) then
+			      return entity.dynamic_data.spawning.spawner
+			   else
+			      return nil
+			   end
+			end,
+			
+      set_state = function(entity, statename)
+          local state = mob_state.get_state_by_name(entity,statename)
+          
+          if (state == nil) then
+              return false
+          end
+
+          mob_state.change_state(entity,state)
+          return true
+      end,
 			is_on_ground     = function(entity)
 
 				local basepos = entity.getbasepos(entity)

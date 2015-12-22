@@ -61,7 +61,7 @@ local mob_template = {
 		custom_on_place_handler = nil,
 
 		--! @brief [OPTIONAL] custom on_activate(entity) callback called after normal on_activate handling is done
-		custom_on_activate_handler = nil,
+		custom_on_activate_handler = function(entity) end,
 
 		--! @brief [OPTIONAL] custom on_step(entity) callback called after normal on_step handling is done
 		custom_on_step_handler = nil,
@@ -129,6 +129,8 @@ local mob_template = {
 		tool = "some item",
 		--! @brief [MANDATORY] is tool consumed by catching
 		consumed = true,
+		--! @brief [OPTIONAL] function to be called to check if a mob can be cought in current state
+		can_be_cought = function(entity) end,
 		},
 
 	--! @brief [OPTIONAL] does this mob do random drops

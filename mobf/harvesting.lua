@@ -77,6 +77,13 @@ function harvesting.callback(entity,player,now)
 			dbg_mobf.harvesting_lvl1("MOBF: anti gief triggered catching aborted")
 			return true
 		end
+		
+		if type(entity.data.catching.can_be_cought) == "function" then
+		    if (not entity.data.catching.can_be_cought(entity)) then
+		        dbg_mobf.harvesting_lvl1("MOBF: entity denied catching")
+		        return true
+		    end
+		end
 
 		-- what's wielded by player
 		local tool = player:get_wielded_item()
