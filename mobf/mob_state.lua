@@ -319,7 +319,6 @@ function mob_state.change_state(entity,state)
 		dbg_mobf.mob_state_lvl2("MOBF: " .. entity.data.name
 			.. " different states now really changeing to " .. state.name)
 
-		mob_state.switch_model(entity,state)
 		mob_state.switch_movgen(entity,state)
 
 		entity.dynamic_data.state.time_to_next_change =
@@ -341,8 +340,10 @@ function mob_state.change_state(entity,state)
 			type(state.HANDLER_enter_state) == "function" then
 			state.HANDLER_enter_state(entity)
 		end
-
 	end
+	
+	--update model on each state change
+	mob_state.switch_model(entity,state)
 
 	dbg_mobf.mob_state_lvl2("MOBF:  time to next change = "
 			.. entity.dynamic_data.state.time_to_next_change)
