@@ -17,6 +17,10 @@ https://github.com/sapier/animals_modpack/wiki/Frequently-asked-questions
 
 Changelog:
 -------------------------------------------------------------------------------
+Changes 2.4.93
+-Fix custom oncatch handler triggered to early
+-Fix facedir offset fix not applied to initial state after activation
+
 Changes 2.4.92
 -add owner() member function to mobf entities
 -add get_persistent_data() member fucntion to mobf entities

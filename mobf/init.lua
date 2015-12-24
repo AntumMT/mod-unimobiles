@@ -107,7 +107,7 @@ dofile (mobf_modpath .. "/mgen_pathbased/main.lua")
 dofile (mobf_modpath .. "/mgen_flee/main_flee.lua")
 dofile (mobf_modpath .. "/mov_gen_none.lua")
 
-mobf_version = "2.4.92"
+mobf_version = "2.4.93"
 
 
 --! @brief main initialization function
