@@ -91,7 +91,6 @@ local function get_formspec(tabview, name, tabdata)
 				mobf_settings.setting_gettext("mobf_disable_pathfinding") .."]"
 	ypos = ypos + 0.5
 
-
 	local showspawner = core.setting_get("adv_spawning.debug")
 	local spawner_setting_text = "false"
 	if (showspawner) then
@@ -102,6 +101,14 @@ local function get_formspec(tabview, name, tabdata)
 				"cb_features_show_spawners;" ..
 				"Show spawner entities;" .. spawner_setting_text .."]"
 	ypos = ypos + 0.5
+	
+		retval = retval .. "checkbox[1," .. ypos .. ";" ..
+				"cb_adv_spawning_refresh_spawners;" ..
+				"Refresh spawners (spawn mobs in old maps);" ..
+				(core.setting_get("adv_spawning_validate_spawners") or "false") .."]"
+	ypos = ypos + 0.5
+	
+	
 
 	return retval
 end
@@ -189,6 +196,12 @@ local function handle_settings_buttons(self, fields, tabname, tabdata)
 	if fields["cb_features_show_spawners"] then
 		core.setting_set("adv_spawning.debug",
 			fields["cb_features_show_spawners"])
+		return true
+	end
+	
+	if fields["cb_adv_spawning_refresh_spawners"] then
+		core.setting_set("adv_spawning_validate_spawners",
+			fields["cb_adv_spawning_refresh_spawners"])
 		return true
 	end
 
