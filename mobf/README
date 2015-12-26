@@ -17,6 +17,9 @@ https://github.com/sapier/animals_modpack/wiki/Frequently-asked-questions
 
 Changelog:
 -------------------------------------------------------------------------------
+Changes 2.4.94
+-Add support for enabling spawner regeneration
+
 Changes 2.4.93
 -Fix custom oncatch handler triggered to early
 -Fix facedir offset fix not applied to initial state after activation
