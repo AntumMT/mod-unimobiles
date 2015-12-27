@@ -68,14 +68,13 @@ local mob_template = {
 		
 		--! @brief [OPTIONAL] list of callbacks 
 		on_rightclick_callbacks = {
-        {
-          handler = function(entity, player)  end,
-          name = "internal name shown in debug info",
-          visiblename = function(entity) end OR "some label of rightclick button"
-        }
+			{
+				handler = function(entity, player)  end,
+				name = "internal name shown in debug info",
+				visiblename = function(entity) end or "some label of rightclick button"
+			}
 		},
-
-		},
+	},
 
 	--! @brief [MANDATORY] configuration of movement generator
 	movement =  {
@@ -363,10 +362,10 @@ local mob_template = {
 				--! @brief [UPPER_VALUE_DEPENDENT | MANDATORY] value to add if remote target looks at mob
 				remote_view_value = 0,
 
-				--! @brief [OPTIONAL] value to add if within attention distance
+				--! @brief [MANDATORY] value to add if within attention distance
 				attention_distance_value = 0.2,
 
-				--! @brief [OPTIONAL] threshold to issue watch callback
+				--! @brief [MANDATORY] threshold to issue watch callback
 				watch_threshold = 2,
 
 				--! @brief [OPTIONAL] threshold to issue attack callback
@@ -440,7 +439,7 @@ local mob_template = {
 				--! @brief [MANDATORY] chance of state to be selected (SUM may not be > 1)
 				chance = 0.5,
 				--! @brief [OPTIONAL] a function to check before switching to this state
-				custom_preconhandler = nil,
+				HANDLER_precondition = nil,
 				--! @brief [OPTIONAL] a special movement handler for this state
 				movgen = "none",
 				--! @brief [OPTIONAL] a special model to be used for this state
