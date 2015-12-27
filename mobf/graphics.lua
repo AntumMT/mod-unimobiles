@@ -58,8 +58,9 @@ function graphics.update(entity,now,dtime)
 		entity.dynamic_data.attention ~= nil and
 		entity.data.attention ~= nil and
 		entity.dynamic_data.attention.most_relevant_target ~= nil and
-		entity.dynamic_data.attention.current_value >
-		entity.data.attention.watch_threshold then
+		entity.data.attention.watch_threshold ~= nil and 
+			(entity.dynamic_data.attention.current_value >
+			entity.data.attention.watch_threshold) then
 		dbg_mobf.graphics_lvl3("MOBF: attention mode orientation update")
 		local direction = mobf_get_direction(entity.object:getpos(),
 								entity.dynamic_data.attention.most_relevant_target:getpos())
