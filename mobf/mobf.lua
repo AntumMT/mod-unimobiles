@@ -230,19 +230,19 @@ function mobf.init_on_rightclick_callbacks(entity,now)
 	
 	if entity.data.generic.on_rightclick_callbacks ~= nil then
 	
-  	for i = 1, #entity.data.generic.on_rightclick_callbacks, 1 do
-  	    if type(entity.data.generic.on_rightclick_callbacks[i].handler) == "function" and
-  	       type(entity.data.generic.on_rightclick_callbacks[i].name) == "string" and
-  	       (type(entity.data.generic.on_rightclick_callbacks[i].visiblename) == "string" or 
-  	       type(entity.data.generic.on_rightclick_callbacks[i].visiblename) == "function") then
-  	    
-  	       table.insert(entity.on_rightclick_hooks, entity.data.generic.on_rightclick_callbacks[i])
-  	    
-  	       if type(entity.data.generic.on_rightclick_callbacks[i].init) == "function" then
-  	           entity.data.generic.on_rightclick_callbacks[i].init(entity)
-  	       end
-  	    end
-  	end
+		for i = 1, #entity.data.generic.on_rightclick_callbacks, 1 do
+			if type(entity.data.generic.on_rightclick_callbacks[i].handler) == "function" and
+				type(entity.data.generic.on_rightclick_callbacks[i].name) == "string" and
+				(type(entity.data.generic.on_rightclick_callbacks[i].visiblename) == "string" or 
+				type(entity.data.generic.on_rightclick_callbacks[i].visiblename) == "function") then
+			
+				table.insert(entity.on_rightclick_hooks, entity.data.generic.on_rightclick_callbacks[i])
+			
+				if type(entity.data.generic.on_rightclick_callbacks[i].init) == "function" then
+					entity.data.generic.on_rightclick_callbacks[i].init(entity)
+				end
+			end
+		end
 
 	end
 end
@@ -289,11 +289,11 @@ end
 --! @return persistent entity data
 -------------------------------------------------------------------------------
 function mobf.get_persistent_data(entity)
-  if (entity.dynamic_data.custom_persistent == nil) then
-      entity.dynamic_data.custom_persistent = {}
-  end
+	if (entity.dynamic_data.custom_persistent == nil) then
+		entity.dynamic_data.custom_persistent = {}
+	end
 
-  return entity.dynamic_data.custom_persistent
+	return entity.dynamic_data.custom_persistent
 end
 
 ------------------------------------------------------------------------------
@@ -415,6 +415,8 @@ function mobf.activate_handler(self,staticdata)
 			self.dynamic_data.state.current =
 				mob_state.get_state_by_name(self,preserved_data.state)
 		end
+		
+		self.dynamic_data.textureidx = preserved_data.textureidx
 	end
 
 	self.dynamic_data.custom_persistent = preserved_data.custom_persistent
@@ -441,6 +443,15 @@ function mobf.activate_handler(self,staticdata)
 
 	dbg_mobf.mobf_core_lvl2("MOBF: " .. self.data.name .. " restoring state: "
 								.. self.dynamic_data.state.current.name)
+								
+			
+	-- if there is a texturelist specified for this mob select one and stay there
+	if default_state.graphics_3d.texturelist ~= nil then
+		if self.dynamic_data.textureidx == nil then
+			self.dynamic_data.textureidx = math.random(1, #default_state.graphics_3d.texturelist)
+		end
+		mob_state.switch_model(self, self.dynamic_data.state.current)
+	end
 
 	----------------------------------------------------------------------------
 	-- initializing movement engine

@@ -231,6 +231,7 @@ function mobf_serialize_permanent_entity_data(entity)
 								pathname = pathname,
 								custom_persistent = entity.dynamic_data.custom_persistent,
 								factions = factions,
+								textureidx = entity.dynamic_data.textureidx
 							}
 		local serialized = minetest.serialize(toserialize)
 		--mobf_print("DEBUG: serialized -> " .. serialized)

@@ -256,6 +256,7 @@ function graphics.graphics_by_statename(mob,statename)
 		setgraphics.visual          = selected_state.graphics_3d.visual
 		setgraphics.visual_size     = selected_state.graphics_3d.visual_size
 		setgraphics.textures        = selected_state.graphics_3d.textures
+		setgraphics.texturelist     = selected_state.graphics_3d.texturelist
 		setgraphics.mode            = "3d"
 		setgraphics.model_orientation_fix = selected_state.graphics_3d.model_orientation_fix
 	end
