@@ -84,12 +84,12 @@ function harvesting.callback(entity,player,now)
 		if tool:get_name() == entity.data.catching.tool then
 			dbg_mobf.harvesting_lvl1("MOBF: player wearing ".. entity.data.catching.tool)
 			
-      if type(entity.data.catching.can_be_cought) == "function" then
-        if (not entity.data.catching.can_be_cought(entity)) then
-            dbg_mobf.harvesting_lvl1("MOBF: entity denied catching")
-            return true
-        end
-      end
+			if type(entity.data.catching.can_be_cought) == "function" then
+				if (not entity.data.catching.can_be_cought(entity)) then
+					dbg_mobf.harvesting_lvl1("MOBF: entity denied catching")
+					return true
+				end
+			end
 
 			--check if player has enough room
 			local inventory_add_result = nil
@@ -211,7 +211,8 @@ function harvesting.callback(entity,player,now)
 		end
 
 		-- check if mob is transformed by harvest
-		if entity.data.harvest.transforms_to ~= "" then
+		if entity.data.harvest.transforms_to ~= nil and
+			entity.data.harvest.transforms_to ~= "" then
 			local transformed = spawning.replace_entity(entity,
 											entity.data.harvest.transforms_to)
 		else
