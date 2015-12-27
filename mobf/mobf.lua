@@ -854,7 +854,7 @@ function mobf.rightclick_handler(entity,clicker)
 
 					if type(entity.on_rightclick_hooks[i].visiblename) == "function" then
 						buttons = buttons ..
-							entity.on_rightclick_hooks[i].visiblename(entity) .. "]"
+							entity.on_rightclick_hooks[i].visiblename(entity, clicker) .. "]"
 					else
 						buttons = buttons ..
 							entity.on_rightclick_hooks[i].visiblename .. "]"
