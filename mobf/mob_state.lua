@@ -442,7 +442,7 @@ function mob_state.prepare_states(mob)
 		table.insert(mob.states,
 				{
 				name = "combat",
-				custom_preconhandler = nil,
+				HANDLER_precondition = nil,
 				movgen = "follow_mov_gen",
 				typical_state_time = -1,
 				chance = 0,
