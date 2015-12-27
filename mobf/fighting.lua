@@ -130,7 +130,7 @@ function fighting.dodamage(entity,attacker, kill_reason)
 
 		local result = entity.data.generic.kill_result
 		if type(entity.data.generic.kill_result) == "function" then
-			result = entity.data.generic.kill_result()
+			result = entity.data.generic.kill_result(entity, attacker)
 		end
 
 
@@ -1435,8 +1435,8 @@ function fighting.heal(entity,player)
 	
 	tool = tool:get_name()
 	
-	if not fighting.healdb[tool] then
-		print("unknown heal item: " .. tool)
+	if not fighting.healdb or not fighting.healdb[tool] then
+		dbg_mobf.fighting_lvl1("MOBF: unknown heal item: " .. tool)
 		return
 	end
 	
