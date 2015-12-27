@@ -958,11 +958,12 @@ end
 --! @param name name of mob
 --! @param modname name of mod mob is defined in
 --! @param description description to use for mob
+--! @param imagename name of itemimage to use
 -------------------------------------------------------------------------------
-function mobf.register_mob_item(name,modname,description)
+function mobf.register_mob_item(name,modname,description, imagename)
 	minetest.register_craftitem(modname..":"..name, {
 		description = description,
-		image = modname.."_"..name.."_item.png",
+		image = imagename or modname.."_"..name.."_item.png",
 		on_place = function(item, placer, pointed_thing)
 			if pointed_thing.type == "node" then
 				local pos = pointed_thing.above
