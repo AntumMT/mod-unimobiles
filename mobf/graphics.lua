@@ -162,7 +162,7 @@ function graphics.set_animation(entity,name)
 											x=entity.data.animation[name].start_frame,
 											y=entity.data.animation[name].end_frame
 										},
-										nil,
+										entity.data.animation[name].anim_speed,
 										nil,
 										entity.data.animation[name].basevelocity)
 			entity.dynamic_data.animation = name
