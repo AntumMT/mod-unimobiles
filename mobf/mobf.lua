@@ -579,6 +579,12 @@ function mobf.register_entity(name, cur_graphics, mob)
 		face_movement_dir = (cur_graphics.model_orientation_fix / math.pi) * 360 + 90
 	end
 	
+	local footstep_sounds = true
+	
+	if mob.generic.makes_footstep_sound ~= nil then
+		footstep_sounds = mob.generic.makes_footstep_sound
+	end
+	
 	minetest.register_entity(name,
 			 {
 				physical        = true,
@@ -590,7 +596,7 @@ function mobf.register_entity(name, cur_graphics, mob)
 				mesh            = cur_graphics.mesh,
 				mode            = cur_graphics.mode,
 				initial_sprite_basepos = {x=0, y=0},
-				makes_footstep_sound   = true,
+				makes_footstep_sound   = footstep_sounds,
 				automatic_rotate       = true,
 				groups          = mob.generic.groups,
 				hp_max          = mob.generic.base_health,
