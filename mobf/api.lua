@@ -66,10 +66,9 @@ end
 -------------------------------------------------------------------------------
 function mobf_add_mob(mob)
 
-	if mob.name == nil or
-		mob.modname == nil then
-		minetest.log(LOGLEVEL_ERROR,"MOBF: name and modname are mandatory for ALL mobs!")
-		return false
+	if not mobf.check_definition(mob) then
+		minetest.log(LOGLEVEL_ERROR,"MOBF: mob definition is invalid!")
+		return
 	end
 
 	--check if mob is blacklisted

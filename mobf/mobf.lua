@@ -1115,3 +1115,96 @@ function mobf.preserve_removed(entity,reason)
 			.. " removed by valid reason" )
 	end
 end
+
+-------------------------------------------------------------------------------
+--- @function [parent=#mobf] check_definition(definition)
+--
+--! @brief check if a mob definition contains obvious errors
+--! @memberof mobf
+--! @public
+--
+--! @param entity entity to check
+--! @return true/false
+--------------------------------------------------------------------------------
+function mobf.check_definition(definition)
+
+	if definition.name == nil or
+		definition.modname == nil then
+		minetest.log(LOGLEVEL_ERROR,"MOBF: name and modname are mandatory for ALL mobs!")
+		return false
+	end
+
+	local default_state = nil
+	for i,v in ipairs(definition.states) do
+		if v.name == "default" then
+			default_state = v
+			break
+		end
+	end
+
+	if default_state == nil then
+		minetest.log(LOGLEVEL_ERROR,"MOBF: default state is mandatory for ALL mobs!")
+		return false
+	end
+	
+	if default_state.movgen == nil then
+		minetest.log(LOGLEVEL_ERROR,"MOBF: movgen has to be specified for default state!")
+		return false
+	end
+	
+	if definition.attention then
+		
+		if not definition.attention.attention_distance then
+			minetest.log(LOGLEVEL_ERROR,"MOBF: \"attention\" requires " ..
+							"\"attention.attention_distance\" to be present.")
+			return false
+		end
+		
+		if not definition.attention.attention_max then
+			minetest.log(LOGLEVEL_ERROR,"MOBF: \"attention\" requires " ..
+							"\"attention.attention_max\" to be present.")
+			return false
+		end
+		
+		if not definition.attention.attention_distance_value then
+			minetest.log(LOGLEVEL_ERROR,"MOBF: \"attention\" requires " ..
+							"\"attention.attention_distance_value\" to be present.")
+			return false
+		end
+	
+		if definition.attention.hear_distance and
+			not definition.attention.hear_distance_value then
+			minetest.log(LOGLEVEL_ERROR,"MOBF: \"attention.hear_distance\" requires " ..
+							"\"attention.hear_distance_value\" to be present.")
+			return false
+		end
+	end
+	
+	if definition.combat then
+	
+		if definition.combat.melee then
+			if not definition.combat.melee.range then
+				minetest.log(LOGLEVEL_ERROR,"MOBF: \"combat.melee\" requires " ..
+							"\"combat.melee.range\" to be present.")
+				return false
+			end
+			
+			if not definition.combat.melee.maxdamage then
+				minetest.log(LOGLEVEL_ERROR,"MOBF: \"combat.melee\" requires " ..
+							"\"combat.melee.maxdamage\" to be present.")
+				return false
+			end
+			
+			if not definition.combat.melee.speed then
+				minetest.log(LOGLEVEL_ERROR,"MOBF: \"combat.melee\" requires " ..
+							"\"combat.melee.speed\" to be present.")
+				return false
+			end
+		end
+	
+	end
+	
+	-- TODO check all mandatory definition elements!
+	
+	return true
+end
