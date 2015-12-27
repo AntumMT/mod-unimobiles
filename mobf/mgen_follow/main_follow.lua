@@ -288,6 +288,7 @@ function mgen_follow.callback(entity,now)
 
 	if entity.dynamic_data.movement.target ~= nil or
 		entity.dynamic_data.movement.guardspawnpoint then
+		
 		dbg_mobf.fmovement_lvl3("MOBF:   Target available")
 		--calculate distance to target
 		local targetpos = nil
@@ -429,12 +430,15 @@ function mgen_follow.callback(entity,now)
 				--entity.object:setvelocity({x=0,y=0,z=0})
 				entity.object:setacceleration({x=0,y=yaccel,z=0})
 			end
+			mgen_follow.update_animation(entity, "following")
 		--nothing to do
 		elseif height_distance ~= nil and math.abs(height_distance) > 0.1 then
 			mgen_follow.set_acceleration(entity,
 										{ x=0,y=(height_distance*-0.2),z=0},
 										follow_speedup,
 										basepos)
+			mgen_follow.update_animation(entity, "following")
+		--we're next to target stop movement
 		else
 			local yaccel = environment.get_default_gravity(basepos,
 							entity.environment.media,
@@ -447,11 +451,46 @@ function mgen_follow.callback(entity,now)
 				entity.object:setvelocity({x=0,y=0,z=0})
 				entity.object:setacceleration({x=0,y=yaccel,z=0})
 				entity.dynamic_data.movement.last_next_to_target = now
+				mgen_follow.update_animation(entity, "ntt")
 			end
 		end
 
 	else
 		--TODO evaluate if this is an error case
+	end
+end
+
+-------------------------------------------------------------------------------
+-- name: update_animation()
+--
+--! @brief update animation according to the follow movegen substate
+--! @memberof mgen_follow
+--! @public
+-------------------------------------------------------------------------------
+function mgen_follow.update_animation(entity, anim_state)
+
+	-- no need to change
+	if anim_state == entity.dynamic_data.movement.anim_selected then
+		return
+	end
+
+	-- check if there's a animation specified for stand in this state
+	local statename, state = entity:get_state()
+	
+	if anim_state == "following" then
+		entity.dynamic_data.movement.anim_selected = "following"
+		
+		if state.animation_walk ~= nil  then
+			graphics.set_animation(entity, state.animation_walk)
+		elseif state.animation ~= nil then
+			graphics.set_animation(entity, state.animation)
+		end
+	elseif anim_state == "ntt" then
+		entity.dynamic_data.movement.anim_selected = "ntt"
+		
+		if state.animation_next_to_target ~= nil then
+			graphics.set_animation(entity, state.animation_next_to_target)
+		end
 	end
 end
 

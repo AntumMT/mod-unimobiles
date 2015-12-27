@@ -765,16 +765,21 @@ function mobf.register_entity(name, cur_graphics, mob)
 			   end
 			end,
 			
-      set_state = function(entity, statename)
-          local state = mob_state.get_state_by_name(entity,statename)
-          
-          if (state == nil) then
-              return false
-          end
+			set_state = function(entity, statename)
+				local state = mob_state.get_state_by_name(entity,statename)
+				
+				if (state == nil) then
+					return false
+				end
 
-          mob_state.change_state(entity,state)
-          return true
-      end,
+				mob_state.change_state(entity,state)
+				return true
+			end,
+			get_state = function(entity)
+				local statename = entity.dynamic_data.state.current.name
+				local state = mob_state.get_state_by_name(entity,statename)
+				return statename, state
+			end,
 			is_on_ground     = function(entity)
 
 				local basepos = entity.getbasepos(entity)
