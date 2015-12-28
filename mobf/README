@@ -17,6 +17,15 @@ https://github.com/sapier/animals_modpack/wiki/Frequently-asked-questions
 
 Changelog:
 -------------------------------------------------------------------------------
+Changes 2.5.0
+-Pass clicker to rightlick button name handlers
+-Implement usage of different animations in mgen_follow for walking and waiting
+-Fixed some bugs detected on writing mobs_redo compat layer
+-Add multitexture mob support
+-Add support for manually specifying item image
+-Add support for manual animation speed
+-Add support for configurable footstep sounds
+
 Changes 2.4.94
 -Add support for enabling spawner regeneration
 
