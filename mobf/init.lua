@@ -62,6 +62,15 @@ if mobf_rtd.luatrace_enabled then
 	luatrace = require("luatrace")
 end
 
+-- minetest workarounds
+
+if not type(core.global_exists) ~= "function" then
+	core.global_exists = function(name)
+		return core[name] ~= nil
+	end
+end
+
+
 --include debug trace functions
 dofile (mobf_modpath .. "/utils/text.lua")
 dofile (mobf_modpath .. "/debug_trace.lua")
@@ -107,7 +116,7 @@ dofile (mobf_modpath .. "/mgen_pathbased/main.lua")
 dofile (mobf_modpath .. "/mgen_flee/main_flee.lua")
 dofile (mobf_modpath .. "/mov_gen_none.lua")
 
-mobf_version = "2.5.0"
+mobf_version = "2.5.1"
 
 
 --! @brief main initialization function

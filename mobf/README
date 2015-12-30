@@ -17,6 +17,9 @@ https://github.com/sapier/animals_modpack/wiki/Frequently-asked-questions
 
 Changelog:
 -------------------------------------------------------------------------------
+Changes 2.5.1
+-Add compatibility fix for old minetest versions
+
 Changes 2.5.0
 -Pass clicker to rightlick button name handlers
 -Implement usage of different animations in mgen_follow for walking and waiting
