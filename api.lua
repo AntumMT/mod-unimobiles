@@ -8,82 +8,130 @@ local check = {
   {'looks_for', 'table', false},
   {'name', 'string', true},
   {'nodebox', 'table', true},
+  {'run_speed', 'number', false},
   {'size', 'number', false},
   {'textures', 'table', false},
+  {'walk_speed', 'number', false},
 }
 
 
 local liquids = {}
+local nonliquids = {}
 for _, n in pairs(minetest.registered_nodes) do
   if n.groups and n.groups.liquid then
     liquids[n.name] = true
+  else
+    nonliquids[#nonliquids+1] = n.name
   end
 end
 
 
 function nmobs_mod.step(self, dtime)
+  self:_fall()
+
   self._last_step = self._last_step + dtime
   if self._last_step < 1 then
     return
   end
   self._last_step = 0
 
-  self:_walk()
-  self:_fall()
+  if self._state == 'traveling' then
+    self:_travel(self._walk_speed)
+  else -- standing
+    self:_stand()
+  end
 end
 
 
-function nmobs_mod.walk(self)
-  local v = {x=0, y=0, z=0}
-  local dir = 0
-  local spd = 1
+function nmobs_mod.stand(self)
+  self.object:set_velocity({x=0,y=0,z=0})
+  self._destination = nil
 
-  if self._looks_for then
-    local pos = self.object:get_pos()
-    pos.y = pos.y + self.collisionbox[2]
+  if math.random(10) == 1 then
+    self._destination = self:_new_destination('looks_for')
+    if self._destination then
+      self._state = 'traveling'
+    else
+      print('Nmobs: Error finding destination')
+    end
+  end
+end
+
+
+function nmobs_mod.travel(self, speed)
+  if not self._destination or math.random(20) == 1 then
+    self._state = 'standing'
+    return
+  end
+
+  local pos = self.object:get_pos()
+  pos.y = pos.y + self.collisionbox[2]
+  if vector.distance(pos, self._destination) < 2 then
+    self._state = 'standing'
+    return
+  end
+
+  local target
+
+  -- Why doesn't this ever work?
+  local path -- = minetest.find_path(pos,self._destination,10,2,2,'A*_noprefetch')
+  if path then
+    print('pathing')
+    target = path[1]
+  else
+    target = self._destination
+  end
+
+  local dir = nmobs_mod.dir_to_target(pos, target) + math.random() * 0.5 - 0.25
+  --print(vector.distance(pos, self._destination))
+
+  local v = {x=0, y=0, z=0}
+  self.object:set_yaw(dir)
+  v.x = - speed * math.sin(dir)
+  v.z = speed * math.cos(dir)
+  self.object:set_velocity(v)
+end
+
+
+function nmobs_mod.dir_to_target(pos, target)
+  local direction = vector.direction(pos, target)
+  --print(dump(direction))
+
+  local dir = (math.atan(direction.z / direction.x) + math.pi / 2)
+  if target.x > pos.x then
+    dir = dir + math.pi
+  end
+  --print(dir)
+
+  return dir
+end
+
+
+function nmobs_mod.new_destination(self, dtype)
+  local dest
+  local pos = self.object:get_pos()
+  pos.y = pos.y + self.collisionbox[2]
+
+  if dtype == 'looks_for' and self._looks_for then
     local minp = vector.subtract(pos, 10)
     local maxp = vector.add(pos, 10)
-    if self._destination and (math.random(20) == 1 or vector.distance(pos, self._destination) < 2) then
-      self._destination = nil
-    end
-    if not self._destination then
-      local nodes = minetest.find_nodes_in_area(minp, maxp, self._looks_for)
-      if nodes and #nodes > 0 then
-        self._destination = nodes[math.random(#nodes)]
-      end
-    end
-    if self._destination then
-      local target
-      local path -- = minetest.find_path(pos,self._destination,10,2,2,'A*_noprefetch')
-      if path then
-        print('pathing')
-        target = path[1]
-      else
-        target = self._destination
-      end
 
-      if target then
-        local direction = vector.direction(pos, target)
-        --print(dump(direction))
-        dir = (math.atan(direction.z / direction.x) + math.pi / 2)
-        if target.x > pos.x then
-          dir = dir + math.pi
-        end
-        --print(dir)
-        dir = dir + math.random() * 0.5 - 0.25
-      end
-      --print(vector.distance(pos, self._destination))
+    local nodes = minetest.find_nodes_in_area(minp, maxp, self._looks_for)
+    if nodes and #nodes > 0 then
+      dest = nodes[math.random(#nodes)]
     end
   end
 
-  if dir == 0 then
-    dir = math.random() * 2 * math.pi
+  if (not dest or math.random(10) == 1) and not self._aquatic then
+    local minp = vector.subtract(pos, 15)
+    local maxp = vector.add(pos, 15)
+    local nodes = minetest.find_nodes_in_area_under_air(minp, maxp, nonliquids)
+    if nodes and #nodes > 0 then
+      dest = nodes[math.random(#nodes)]
+    end
   end
 
-  self.object:set_yaw(dir)
-  v.x = - spd * math.sin(dir)
-  v.z = spd * math.cos(dir)
-  self.object:set_velocity(v)
+  return dest
 end
 
 
@@ -182,7 +230,12 @@ function nmobs_mod.register_mob(def)
     visual = 'wielditem',
     visual_size = sz,
     _fall = nmobs_mod.fall,
-    _walk = nmobs_mod.walk,
+    _new_destination = nmobs_mod.new_destination,
+    _run_speed = (good_def.run_speed or 1),
+    _stand = nmobs_mod.stand,
+    _state = 'standing',
+    _travel = nmobs_mod.travel,
+    _walk_speed = (good_def.walk_speed or 1),
   }
 
   minetest.register_node(proto.textures[1], node)
