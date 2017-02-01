@@ -11,9 +11,10 @@ local check = {
   {'environment', 'table', false},
   {'hit_dice', 'number', false},
   {'looks_for', 'table', false},
+  {'lifespan', 'number', false},
   {'name', 'string', true},
   {'nodebox', 'table', true},
-  {'rarity', 'number', true},
+  {'rarity', 'number', false},
   {'run_speed', 'number', false},
   {'size', 'number', false},
   {'textures', 'table', false},
@@ -39,6 +40,12 @@ function nmobs_mod.step(self, dtime)
 
   self._last_step = self._last_step + dtime
   if self._last_step < 1 then
+    return
+  end
+
+  if not self._born or ((minetest.get_gametime() - self._born) > (self._lifespan or 300)) then
+    print('Nmobs: removing a '..self._name..'.')
+    self.object:remove()
     return
   end
 
@@ -354,6 +361,7 @@ function nmobs_mod.activate(self, staticdata, dtime_s)
 
   if not self._born then
     self._born = minetest.get_gametime()
+    self._lifespan = self._lifespan - dtime_s
     local pos = vector.round(self.object:get_pos())
 
     local hp = 0
@@ -361,7 +369,7 @@ function nmobs_mod.activate(self, staticdata, dtime_s)
       hp = hp + math.random(8)
     end
     self.object:set_hp(hp)
-    print('Nmobs: created a '..self._name..' with '..hp..' HP at ('..pos.x..','..pos.y..','..pos.z..').')
+    print('Nmobs: activated a '..self._name..' with '..hp..' HP at ('..pos.x..','..pos.y..','..pos.z..'). Duration: '..self._lifespan)
   end
 end
 
@@ -483,10 +491,11 @@ function nmobs_mod.register_mob(def)
     _flee = nmobs_mod.flee,
     _hit_dice = (good_def.hit_dice or 1),
     _last_step = 0,
+    _lifespan = (good_def.lifespan or 300),
     _looks_for = good_def.looks_for,
     _name = name,
     _new_destination = nmobs_mod.new_destination,
-    _rarity = good_def.rarity or 10000,
+    _rarity = (good_def.rarity or 10000),
     _run_speed = (good_def.run_speed or 3),
     _stand = nmobs_mod.stand,
     _state = 'standing',
@@ -509,6 +518,7 @@ function nmobs_mod.register_mob(def)
       neighbors = {'air'},
       interval = 30,
       chance = proto._rarity,
+      catch_up = false,
       action = function(...)
         nmobs_mod.abm_callback(name, ...)
       end,
