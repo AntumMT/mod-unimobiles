@@ -4,7 +4,7 @@
 
 
 local check = {
-  {'armor', 'table', false},
+  {'armor_class', 'number', false},
   {'attacks_player', 'number', false},
   {'collisionbox', 'table', false},
   {'damage', 'number', false},
@@ -12,6 +12,7 @@ local check = {
   {'hit_dice', 'number', false},
   {'looks_for', 'table', false},
   {'lifespan', 'number', false},
+  {'media_prefix', 'string', false},
   {'name', 'string', true},
   {'nodebox', 'table', true},
   {'rarity', 'number', false},
@@ -357,11 +358,20 @@ end
 
 
 function nmobs_mod.activate(self, staticdata, dtime_s)
+  if staticdata then
+    local data = minetest.deserialize(staticdata)
+    if data and type(data) == 'table' then
+      for k, d in pairs(data) do
+        self[k] = d
+      end
+    end
+  end
+
   self.object:set_armor_groups(self._armor_groups)
 
   if not self._born then
     self._born = minetest.get_gametime()
-    self._lifespan = self._lifespan - dtime_s
+    --self._lifespan = self._lifespan - dtime_s
     local pos = vector.round(self.object:get_pos())
 
     local hp = 0
@@ -369,8 +379,21 @@ function nmobs_mod.activate(self, staticdata, dtime_s)
       hp = hp + math.random(8)
     end
     self.object:set_hp(hp)
-    print('Nmobs: activated a '..self._name..' with '..hp..' HP at ('..pos.x..','..pos.y..','..pos.z..'). Duration: '..self._lifespan)
+    print('Nmobs: activated a '..self._name..' with '..hp..' HP at ('..pos.x..','..pos.y..','..pos.z..'). Game time: '..self._born)
   end
+end
+
+function nmobs_mod.get_staticdata(self)
+  local data = {}
+
+  for k, d in pairs(self) do
+    if k:find('^_') and not nmobs_mod.mobs[self._name][k] then
+      data[k] = d
+    end
+  end
+
+  --print('serialized data length: '..minetest.serialize(data):len())
+  return minetest.serialize(data)
 end
 
 
@@ -401,14 +424,17 @@ function nmobs_mod.register_mob(def)
   local name = good_def.name:gsub('^.*:', '')
   good_def.size = good_def.size or 1
 
+  if not good_def.media_prefix then
+    good_def.media_prefix = 'nmobs'
+  end
   if not good_def.textures then
     local t = {
-      'nmobs_'..name..'_top.png',
-      'nmobs_'..name..'_bottom.png',
-      'nmobs_'..name..'_right.png',
-      'nmobs_'..name..'_left.png',
-      'nmobs_'..name..'_front.png',
-      'nmobs_'..name..'_back.png',
+      good_def.media_prefix..'_'..name..'_top.png',
+      good_def.media_prefix..'_'..name..'_bottom.png',
+      good_def.media_prefix..'_'..name..'_right.png',
+      good_def.media_prefix..'_'..name..'_left.png',
+      good_def.media_prefix..'_'..name..'_front.png',
+      good_def.media_prefix..'_'..name..'_back.png',
     }
 
     good_def.textures = t
@@ -473,6 +499,9 @@ function nmobs_mod.register_mob(def)
   local proto = {
     collide_with_objects = true,
     collisionbox = cbox,
+    get_staticdata = nmobs_mod.get_staticdata,
+    hp_max = 2,
+    hp_min = 1,
     on_activate = nmobs_mod.activate,
     on_step = nmobs_mod.step,
     on_punch = nmobs_mod.take_punch,
@@ -495,7 +524,7 @@ function nmobs_mod.register_mob(def)
     _looks_for = good_def.looks_for,
     _name = name,
     _new_destination = nmobs_mod.new_destination,
-    _rarity = (good_def.rarity or 10000),
+    _rarity = (good_def.rarity or 40000),
     _run_speed = (good_def.run_speed or 3),
     _stand = nmobs_mod.stand,
     _state = 'standing',

@@ -18,3 +18,6 @@ end
 
 dofile(nmobs_mod.path .. "/api.lua")
 dofile(nmobs_mod.path .. "/cow.lua")
+dofile(nmobs_mod.path .. "/goat.lua")
+dofile(nmobs_mod.path .. "/pig.lua")
+dofile(nmobs_mod.path .. "/sheep.lua")
