@@ -8,6 +8,12 @@ nmobs = nmobs_mod
 nmobs_mod.version = "1.0"
 nmobs_mod.path = minetest.get_modpath(minetest.get_current_modname())
 nmobs_mod.world = minetest.get_worldpath()
+nmobs_mod.mobs = {}
+
+
+function math.limit(n, l, h)
+  return math.max(math.min(n, h), l)
+end
 
 
 dofile(nmobs_mod.path .. "/api.lua")

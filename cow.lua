@@ -2,8 +2,14 @@
 -- Copyright Duane Robertson (duane@duanerobertson.com), 2017
 -- Distributed under the LGPLv2.1 (https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html)
 
+-- The nodebox and textures are copied from Cute Cubic Mobs
+-- https://github.com/Napiophelios/ccmobs
+-- and are distributed as Public Domain (WTFPL).
+
 
 nmobs.register_mob({
+  --attacks_player = 1,
+  hit_dice = 3,
   looks_for = {'default:dirt_with_grass'},
   name = 'cow',
   nodebox = {
