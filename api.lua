@@ -486,9 +486,10 @@ function nmobs_mod.abm_callback(name, pos, node, active_object_count, active_obj
     end
   end
 
-  local pos_above = {x=pos.x, y=pos.y+3, z=pos.z}
+  local pos_above = {x=pos.x, y=pos.y+1, z=pos.z}
   local node_above = minetest.get_node_or_nil(pos_above)
   if node_above and node_above.name == 'air' and active_object_count < 3 then
+    pos_above.y = pos_above.y + 2
     minetest.add_entity(pos_above, 'nmobs:'..name)
   end
 end

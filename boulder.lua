@@ -20,5 +20,6 @@ nmobs.register_mob({
     {-0.25, -0.25, -0.45, 0.25, 0.25, -0.35},
     {-0.25, -0.25, 0.35, 0.25, 0.25, 0.45},
   },
+  sound = 'ccmobs_rockmonster',
   textures = {'default_stone'},
 })
