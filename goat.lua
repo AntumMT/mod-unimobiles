@@ -32,4 +32,5 @@ nmobs.register_mob({
     {-0.0573379, -0.114049, 0.25, 0.0549488, -0.0137408, 0.3125},
   },
   media_prefix = 'ccmobs',
+  tames = {'farming:wheat'},
 })

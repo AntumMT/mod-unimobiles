@@ -28,4 +28,5 @@ nmobs.register_mob({
   },
   size = 1.5,
   sound = 'ccmobs_cow',
+  tames = {'farming:wheat'},
 })

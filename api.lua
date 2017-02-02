@@ -22,6 +22,7 @@ local check = {
   {'run_speed', 'number', false},
   {'sound', 'string', false},
   {'size', 'number', false},
+  {'tames', 'table', false},
   {'textures', 'table', false},
   {'vision', 'number', false},
   {'walk_speed', 'number', false},
@@ -61,10 +62,12 @@ function nmobs_mod.step(self, dtime)
     return
   end
 
-  if not self._born or ((minetest.get_gametime() - self._born) > (self._lifespan or 300)) then
-    --print('Nmobs: removing a '..self._name..'.')
-    self.object:remove()
-    return
+  if not self._owner then
+    if not self._born or ((minetest.get_gametime() - self._born) > (self._lifespan or 300)) then
+      --print('Nmobs: removing a '..self._name..'.')
+      self.object:remove()
+      return
+    end
   end
 
   self._last_step = 0
@@ -76,6 +79,8 @@ function nmobs_mod.step(self, dtime)
     self:_flee()
   elseif self._state == 'fighting' then
     self:_fight()
+  elseif self._state == 'following' then
+    self:_follow()
   else -- standing
     self:_stand()
   end
@@ -153,6 +158,31 @@ function nmobs_mod.aggressive_behavior(self)  -- self._aggressive_behavior
       return true
     end
   end
+end
+
+
+function nmobs_mod.follow(self)  -- self._follow
+  if not self._owner then
+    self._state = 'standing'
+    return
+  end
+
+  local player = minetest.get_player_by_name(self._owner)
+  if not player then
+    self._state = 'standing'
+    return
+  end
+
+  self._destination = player:getpos()
+
+  local pos = self._last_pos
+  pos.y = pos.y + self.collisionbox[2]
+  if vector.distance(pos, self._destination) < 1 + self._walk_speed then
+    self.object:set_velocity(null_vector)
+    return
+  end
+
+  self:_travel(self._walk_speed)
 end
 
 
@@ -277,12 +307,22 @@ end
 
 function nmobs_mod.new_destination(self, dtype, object)  -- self._new_destination
   local dest
+  local minp
+  local maxp
   local pos = self._last_pos
+
+  if self._owner and self._tether then
+    minp = vector.subtract(self._tether, 5)
+    maxp = vector.add(self._tether, 5)
+  end
+
   pos.y = pos.y + self.collisionbox[2]
 
   if dtype == 'looks_for' and self._looks_for then
-    local minp = vector.subtract(pos, 10)
-    local maxp = vector.add(pos, 10)
+    if not minp then
+      minp = vector.subtract(pos, 10)
+      maxp = vector.add(pos, 10)
+    end
 
     local nodes = minetest.find_nodes_in_area(minp, maxp, self._looks_for)
     if nodes and #nodes > 0 then
@@ -294,9 +334,13 @@ function nmobs_mod.new_destination(self, dtype, object)  -- self._new_destinatio
 
   if dtype == 'flee' and object then
     local opos = object:get_pos()
-    local toward = vector.add(pos, vector.direction(opos, pos))
-    local minp = vector.subtract(toward, 15)
-    local maxp = vector.add(toward, 15)
+
+    if not minp then
+      local toward = vector.add(pos, vector.direction(opos, pos))
+      minp = vector.subtract(toward, 15)
+      maxp = vector.add(toward, 15)
+    end
+
     local nodes = minetest.find_nodes_in_area_under_air(minp, maxp, nonliquids)
     if nodes and #nodes > 0 then
       dest = nodes[math.random(#nodes)]
@@ -306,8 +350,11 @@ function nmobs_mod.new_destination(self, dtype, object)  -- self._new_destinatio
   end
 
   if (not dest or math.random(10) == 1) and not self._aquatic then
-    local minp = vector.subtract(pos, 15)
-    local maxp = vector.add(pos, 15)
+    if not minp then
+      minp = vector.subtract(pos, 15)
+      maxp = vector.add(pos, 15)
+    end
+
     local nodes = minetest.find_nodes_in_area_under_air(minp, maxp, nonliquids)
     if nodes and #nodes > 0 then
       dest = nodes[math.random(#nodes)]
@@ -495,6 +542,39 @@ function nmobs_mod.abm_callback(name, pos, node, active_object_count, active_obj
 end
 
 
+function nmobs_mod.on_rightclick(self, clicker)
+  if not self._tames then
+    print('no tames')
+    return
+  end
+
+  -- check item
+  --local hand = clicker:get_wielded_item()
+
+  print('right-clicking')
+  local player_name = clicker:get_player_name()
+  if not self._owner then
+    self._state = 'following'
+    self._owner = clicker:get_player_name()
+    minetest.chat_send_player(player_name, 'You have tamed the '..self._name..'.')
+    return
+  elseif self._owner == player_name then
+    if self._state == 'following' then
+      self._tether = self.object:getpos()
+      self._state = 'standing'
+      minetest.chat_send_player(player_name, 'Your '..self._name..' is tethered here.')
+      return
+    else
+      minetest.chat_send_player(player_name, 'Your '..self._name..' is following you.')
+      self._state = 'following'
+      return
+    end
+  elseif self._sound then
+    minetest.sound_play(self._sound, {object = self.object})
+  end
+end
+
+
 function nmobs_mod.register_mob(def)
   local good_def = {}
 
@@ -603,6 +683,7 @@ function nmobs_mod.register_mob(def)
     on_activate = nmobs_mod.activate,
     on_step = nmobs_mod.step,
     on_punch = nmobs_mod.take_punch,
+    on_rightclick = nmobs_mod.on_rightclick,
     physical = true,
     stepheight = 1.1,
     textures = {'nmobs:'..name..'_block',},
@@ -617,6 +698,7 @@ function nmobs_mod.register_mob(def)
     _fight = nmobs_mod.fight,
     _find_prey = nmobs_mod.find_prey,
     _flee = nmobs_mod.flee,
+    _follow = nmobs_mod.follow,
     _hit_dice = (good_def.hit_dice or 1),
     _last_step = 0,
     _lifespan = (good_def.lifespan or 300),
@@ -629,6 +711,7 @@ function nmobs_mod.register_mob(def)
     _sound = good_def.sound,
     _stand = nmobs_mod.stand,
     _state = 'standing',
+    _tames = good_def.tames,
     _target = nil,
     _travel = nmobs_mod.travel,
     _vision = (good_def.vision or 15),

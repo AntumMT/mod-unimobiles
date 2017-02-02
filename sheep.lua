@@ -24,4 +24,5 @@ nmobs.register_mob({
     {-0.0625, -0.1875, -0.5, 0.0625, 0.0625, -0.4375},
   },
   sound = 'ccmobs_sheep',
+  tames = {'farming:wheat'},
 })
