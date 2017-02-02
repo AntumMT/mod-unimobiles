@@ -78,7 +78,7 @@ nodebox = [table]      specifies the mob's nodebox shapee. (Required)
 
 rarity = [number]      is a measure of how rare the mob is. A lower
                        value will make the mob appear more often.
-                       Default: 40000.
+                       Default: 20000.
 
 run_speed = [number]   indicates how fast the mob runs. Default: 3.
 

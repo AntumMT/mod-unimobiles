@@ -28,6 +28,7 @@ local check = {
 local skip_serializing = {}
 skip_serializing['_last_pos'] = true
 skip_serializing['_destination'] = true
+skip_serializing['_target'] = true
 
 local null_vector = {x=0,y=0,z=0}
 
@@ -40,6 +41,12 @@ for _, n in pairs(minetest.registered_nodes) do
   else
     nonliquids[#nonliquids+1] = n.name
   end
+end
+
+
+local damage_multiplier = {}
+if elixirs_mod and elixirs_mod.damage_multiplier then
+  damage_multiplier = elixirs_mod.damage_multiplier
 end
 
 
@@ -88,7 +95,7 @@ function nmobs_mod.find_prey(self)
 end
 
 
-function nmobs_mod.noise(self)
+function nmobs_mod.noise(self)  -- self._noise
   local odds = 100
   local sound
 
@@ -113,7 +120,7 @@ function nmobs_mod.noise(self)
 end
 
 
-function nmobs_mod.fight(self)
+function nmobs_mod.fight(self)  -- self._fight
   if not self._target then
     self._state = 'standing'
     return
@@ -134,7 +141,7 @@ function nmobs_mod.fight(self)
 end
 
 
-function nmobs_mod.aggressive_behavior(self)
+function nmobs_mod.aggressive_behavior(self)  -- self._aggressive_behavior
   if self._attacks_player then
     local prey = self:_find_prey()
     if prey then
@@ -146,7 +153,7 @@ function nmobs_mod.aggressive_behavior(self)
 end
 
 
-function nmobs_mod.walk(self)
+function nmobs_mod.walk(self)  -- self._walk
   if self:_aggressive_behavior() then
     return
   end
@@ -167,7 +174,7 @@ function nmobs_mod.walk(self)
 end
 
 
-function nmobs_mod.flee(self)
+function nmobs_mod.flee(self)  -- self._flee
   if not self._target then
     self._state = 'standing'
     return
@@ -202,7 +209,7 @@ function nmobs_mod.flee(self)
 end
 
 
-function nmobs_mod.stand(self)
+function nmobs_mod.stand(self)  -- self._stand
   if self:_aggressive_behavior() then
     return
   end
@@ -228,7 +235,7 @@ function nmobs_mod.stand(self)
 end
 
 
-function nmobs_mod.travel(self, speed)
+function nmobs_mod.travel(self, speed)  -- self._travel
   local target
 
   -- Why doesn't this ever work?
@@ -265,7 +272,7 @@ function nmobs_mod.dir_to_target(pos, target)
 end
 
 
-function nmobs_mod.new_destination(self, dtype, object)
+function nmobs_mod.new_destination(self, dtype, object)  -- self._new_destination
   local dest
   local pos = self._last_pos
   pos.y = pos.y + self.collisionbox[2]
@@ -308,7 +315,7 @@ function nmobs_mod.new_destination(self, dtype, object)
 end
 
 
-function nmobs_mod.fall(self)
+function nmobs_mod.fall(self)  -- self._fall
   --local acc = self.object:get_acceleration()
   local acc = null_vector
   local pos = self.object:get_pos()
@@ -344,7 +351,14 @@ function nmobs_mod.take_punch(self, puncher, time_from_last_punch, tool_capabili
   local hp = self.object:get_hp()
   local bug = true -- bug in minetest code prevents damage calculation
 
-  if bug then
+  local e_mult = 1
+  local player_name
+  if puncher and puncher.get_player_name then
+    player_name = puncher:get_player_name()
+    e_mult = damage_multiplier[player_name] or 1
+  end
+
+  if bug or e_mult ~= 1 then
     local armor = self.object:get_armor_groups()
     local time_frac = 1
     local adj_damage
@@ -355,7 +369,7 @@ function nmobs_mod.take_punch(self, puncher, time_from_last_punch, tool_capabili
           adj_damage = 0
         end
 
-        adj_damage = adj_damage + dmg * time_frac * (armor[grp] or 0) / 100
+        adj_damage = adj_damage + dmg * time_frac * e_mult * (armor[grp] or 0) / 100
         --print('Nmobs: adj_damage ('..grp..') -- '..adj_damage)
       end
     end
@@ -366,6 +380,10 @@ function nmobs_mod.take_punch(self, puncher, time_from_last_punch, tool_capabili
 
     --print('Nmobs: adj_damage -- '..adj_damage)
     -- * display damage *
+
+    if player_name then
+      minetest.chat_send_player(player_name, 'You did '..adj_damage..' damage.')
+    end
 
     hp = math.max(0, math.ceil(hp - adj_damage))
     self.object:set_hp(hp)
@@ -543,7 +561,7 @@ function nmobs_mod.register_mob(def)
   end
 
   if good_def.looks_for and not good_def.environment then
-    environment = table.copy(good_def.looks_for)
+    good_def.environment = table.copy(good_def.looks_for)
   elseif good_def.environment and not good_def.looks_for then
     good_def.looks_for = table.copy(good_def.environment)
   end
@@ -566,6 +584,7 @@ function nmobs_mod.register_mob(def)
     _armor_groups = good_def.armor,
     _attacks_player = good_def.attacks_player,
     _damage = good_def.damage,
+    _environment = good_def.environment,
     _fall = nmobs_mod.fall,
     _fight = nmobs_mod.fight,
     _find_prey = nmobs_mod.find_prey,
@@ -577,7 +596,7 @@ function nmobs_mod.register_mob(def)
     _name = name,
     _new_destination = nmobs_mod.new_destination,
     _noise = nmobs_mod.noise,
-    _rarity = (good_def.rarity or 40000),
+    _rarity = (good_def.rarity or 20000),
     _run_speed = (good_def.run_speed or 3),
     _sound = good_def.sound,
     _stand = nmobs_mod.stand,
@@ -595,9 +614,9 @@ function nmobs_mod.register_mob(def)
   minetest.register_node(proto.textures[1], node)
   minetest.register_entity('nmobs:'..name, proto)
 
-  if environment then
+  if proto._environment then
     minetest.register_abm({
-      nodenames = proto.environment,
+      nodenames = proto._environment,
       neighbors = {'air'},
       interval = 30,
       chance = proto._rarity,
