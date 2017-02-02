@@ -1,0 +1,12 @@
+Most sounds are copied from Cute Cubic Mobs
+-- https://github.com/Napiophelios/ccmobs
+-- and are distributed as Public Domain (WTFPL).
+
+--------------------------------------------
+file name:  nbea_sheep.ogg / nbea_sheep_hurt.ogg
+original file name: sheepHit.flac / sheepBleet.flac
+Author: Blender Foundation
+http://opengameart.org/content/sheep-sound-bleats-yo-frankie
+License:CC-BY-3.0
+https://creativecommons.org/licenses/by/3.0/
+---------------------------------------------- 
