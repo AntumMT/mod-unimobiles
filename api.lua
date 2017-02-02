@@ -17,12 +17,19 @@ local check = {
   {'nodebox', 'table', true},
   {'rarity', 'number', false},
   {'run_speed', 'number', false},
+  {'sound', 'string', false},
   {'size', 'number', false},
   {'textures', 'table', false},
   {'vision', 'number', false},
   {'walk_speed', 'number', false},
   {'weapon_capabilities', 'table', false},
 }
+
+local skip_serializing = {}
+skip_serializing['_last_pos'] = true
+skip_serializing['_destination'] = true
+
+local null_vector = {x=0,y=0,z=0}
 
 
 local liquids = {}
@@ -45,7 +52,7 @@ function nmobs_mod.step(self, dtime)
   end
 
   if not self._born or ((minetest.get_gametime() - self._born) > (self._lifespan or 300)) then
-    print('Nmobs: removing a '..self._name..'.')
+    --print('Nmobs: removing a '..self._name..'.')
     self.object:remove()
     return
   end
@@ -62,6 +69,8 @@ function nmobs_mod.step(self, dtime)
   else -- standing
     self:_stand()
   end
+
+  self:_noise()
 end
 
 
@@ -79,6 +88,31 @@ function nmobs_mod.find_prey(self)
 end
 
 
+function nmobs_mod.noise(self)
+  local odds = 100
+  local sound
+
+  if self._sound then
+    sound = self._sound
+  end
+
+  if self._state == 'fleeing' then
+    odds = 5
+    sound = self._sound_scared or sound
+  elseif self._state == 'fighting' then
+    odds = 10
+    sound = self._sound_angry or sound
+  elseif self._state == 'standing' then
+    odds = 50
+  end
+
+  if sound and math.random(odds) == 1 then
+    --print('noise: '..sound)
+    minetest.sound_play(sound, {object = self.object})
+  end
+end
+
+
 function nmobs_mod.fight(self)
   if not self._target then
     self._state = 'standing'
@@ -91,7 +125,7 @@ function nmobs_mod.fight(self)
     self._state = 'standing'
     return
   elseif vector.distance(self._last_pos, opos) < self._run_speed then
-    self.object:set_velocity({x=0,y=0,z=0})
+    self.object:set_velocity(null_vector)
     self._target:punch(self.object, 1, self._weapon_capabilities, nil)
   else
     self._destination = self._target:get_pos()
@@ -162,7 +196,7 @@ function nmobs_mod.flee(self)
 
     self:_travel(self._run_speed)
   else
-    print('turning to fight')
+    --print('turning to fight')
     self._state = 'fighting'
   end
 end
@@ -173,7 +207,7 @@ function nmobs_mod.stand(self)
     return
   end
 
-  self.object:set_velocity({x=0,y=0,z=0})
+  self.object:set_velocity(null_vector)
   self._destination = nil
 
   if math.random(10) == 1 then
@@ -276,7 +310,7 @@ end
 
 function nmobs_mod.fall(self)
   --local acc = self.object:get_acceleration()
-  local acc = {x=0,y=0,z=0}
+  local acc = null_vector
   local pos = self.object:get_pos()
   local node = minetest.get_node_or_nil(pos)
   local gravity = 10
@@ -322,12 +356,16 @@ function nmobs_mod.take_punch(self, puncher, time_from_last_punch, tool_capabili
         end
 
         adj_damage = adj_damage + dmg * time_frac * (armor[grp] or 0) / 100
+        --print('Nmobs: adj_damage ('..grp..') -- '..adj_damage)
       end
     end
 
     if not adj_damage then
       adj_damage = damage
     end
+
+    --print('Nmobs: adj_damage -- '..adj_damage)
+    -- * display damage *
 
     hp = math.max(0, math.ceil(hp - adj_damage))
     self.object:set_hp(hp)
@@ -368,6 +406,11 @@ function nmobs_mod.activate(self, staticdata, dtime_s)
   end
 
   self.object:set_armor_groups(self._armor_groups)
+  self._state = 'standing'
+  self.object:set_velocity(null_vector)
+  if self._hp then
+    self.object:set_hp(self._hp)
+  end
 
   if not self._born then
     self._born = minetest.get_gametime()
@@ -378,16 +421,24 @@ function nmobs_mod.activate(self, staticdata, dtime_s)
     for i = 1, self._hit_dice do
       hp = hp + math.random(8)
     end
+    self._hp = hp
     self.object:set_hp(hp)
     print('Nmobs: activated a '..self._name..' with '..hp..' HP at ('..pos.x..','..pos.y..','..pos.z..'). Game time: '..self._born)
+  end
+
+  if self._sound then
+    minetest.sound_play(self._sound, {object = self.object})
   end
 end
 
 function nmobs_mod.get_staticdata(self)
   local data = {}
 
+  self._hp = self.object:get_hp()
+
   for k, d in pairs(self) do
-    if k:find('^_') and not nmobs_mod.mobs[self._name][k] then
+    if k:find('^_') and not skip_serializing[k] and not nmobs_mod.mobs[self._name][k] then
+      --print('serializing '..k)
       data[k] = d
     end
   end
@@ -412,7 +463,7 @@ function nmobs_mod.register_mob(def)
 
   for _, att in pairs(check) do
     if att[3] and not def[att[1]] then
-      print('Nmobs: missing '..att[1])
+      print('Nmobs: registration missing '..att[1])
       return
     end
 
@@ -524,8 +575,10 @@ function nmobs_mod.register_mob(def)
     _looks_for = good_def.looks_for,
     _name = name,
     _new_destination = nmobs_mod.new_destination,
+    _noise = nmobs_mod.noise,
     _rarity = (good_def.rarity or 40000),
     _run_speed = (good_def.run_speed or 3),
+    _sound = good_def.sound,
     _stand = nmobs_mod.stand,
     _state = 'standing',
     _target = nil,

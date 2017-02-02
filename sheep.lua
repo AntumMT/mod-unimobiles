@@ -10,6 +10,7 @@
 nmobs.register_mob({
   hit_dice = 1,
   looks_for = {'default:dirt_with_grass'},
+  media_prefix = 'ccmobs',
   name = 'sheep',
   nodebox = {
     {-0.3125, -0.375, -0.4375, 0.3125, 0.1875, 0.1875},
@@ -22,5 +23,5 @@ nmobs.register_mob({
     {-0.25, -0.5, -0.375, -0.0625, -0.3125, -0.1875},
     {-0.0625, -0.1875, -0.5, 0.0625, 0.0625, -0.4375},
   },
-  media_prefix = 'ccmobs',
+  sound = 'ccmobs_sheep',
 })
