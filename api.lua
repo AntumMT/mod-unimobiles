@@ -542,9 +542,10 @@ function nmobs_mod.register_mob(def)
     good_def.armor = {fleshy = 100}
   end
 
-  local environment
-  if good_def.looks_for and not environment then
+  if good_def.looks_for and not good_def.environment then
     environment = table.copy(good_def.looks_for)
+  elseif good_def.environment and not good_def.looks_for then
+    good_def.looks_for = table.copy(good_def.environment)
   end
 
   local proto = {
@@ -596,7 +597,7 @@ function nmobs_mod.register_mob(def)
 
   if environment then
     minetest.register_abm({
-      nodenames = environment,
+      nodenames = proto.environment,
       neighbors = {'air'},
       interval = 30,
       chance = proto._rarity,
