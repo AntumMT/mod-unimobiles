@@ -5,16 +5,19 @@
 
 local check = {
   {'armor_class', 'number', false},
-  {'attacks_player', 'number', false},
+  {'attacks_player', 'boolean', false},
   {'collisionbox', 'table', false},
   {'damage', 'number', false},
   {'environment', 'table', false},
+  {'higher_than', 'number', false},
   {'hit_dice', 'number', false},
   {'looks_for', 'table', false},
+  {'lower_than', 'number', false},
   {'lifespan', 'number', false},
   {'media_prefix', 'string', false},
   {'name', 'string', true},
   {'nodebox', 'table', true},
+  {'nocturnal', 'boolean', false},
   {'rarity', 'number', false},
   {'run_speed', 'number', false},
   {'sound', 'string', false},
@@ -381,11 +384,13 @@ function nmobs_mod.take_punch(self, puncher, time_from_last_punch, tool_capabili
     --print('Nmobs: adj_damage -- '..adj_damage)
     -- * display damage *
 
+    adj_damage = math.floor(adj_damage + 0.5)
+
     if player_name then
       minetest.chat_send_player(player_name, 'You did '..adj_damage..' damage.')
     end
 
-    hp = math.max(0, math.ceil(hp - adj_damage))
+    hp = math.max(0, hp - adj_damage)
     self.object:set_hp(hp)
   else
     hp = hp - damage
@@ -468,6 +473,19 @@ end
 
 function nmobs_mod.abm_callback(name, pos, node, active_object_count, active_object_count_wider)
   local proto = nmobs_mod.mobs[name]
+  if proto.lower_than and pos.y >= proto.lower_than then
+    return
+  end
+  if proto.higher_than and pos.y <= proto.higher_than then
+    return
+  end
+  if proto.nocturnal then
+    local time = minetest.get_timeofday()
+    if time > 0.15 and time < 0.65 then
+      return
+    end
+  end
+
   local pos_above = {x=pos.x, y=pos.y+3, z=pos.z}
   local node_above = minetest.get_node_or_nil(pos_above)
   if node_above and node_above.name == 'air' and active_object_count < 3 then
@@ -556,8 +574,17 @@ function nmobs_mod.register_mob(def)
     }
   end
 
-  if not good_def.armor then
+  if not good_def.armor_class then
     good_def.armor = {fleshy = 100}
+  elseif good_def.armor_class > 0 then
+    good_def.armor = {fleshy = good_def.armor_class * 10}
+  else
+    good_def.armor_class = math.max(good_def.armor_class, -8)
+    good_def.armor = {fleshy = 9 + good_def.armor_class}
+  end
+
+  if good_def.armor_class then
+    print(name..' AC: '..good_def.armor_class..', armor: '..good_def.armor['fleshy'])
   end
 
   if good_def.looks_for and not good_def.environment then

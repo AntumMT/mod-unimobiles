@@ -59,6 +59,8 @@ damage = [number]      specifies the amount of damage the mob does in
 environment = [table]  specifies the nodes that a mob can spawn on.
                        This defaults to the same nodes in looks_for.
 
+higher_than = [number] prevents the mob from spawning this low.
+
 hit_dice = [number]    is the number of eight-sided dice rolled for
                        the creature's hit points. Default: 1.
 
@@ -68,11 +70,15 @@ looks_for = [table]    specifies nodes the mob likes and will walk
 lifespan = [number]    is the number of seconds the mob will live.
                        Default: 300.
 
+lower_than = [number]  prevents the mob from spawning this high up.
+
 media_prefix = [string] specifies a different prefix for texture and
                         sound files copied from another mod. The
                         default prefix is 'nmobs'.
 
 name = [string]        shows the mob's name. (Required)
+
+nocturnal = [boolean]  says the mob only appears at night.
 
 nodebox = [table]      specifies the mob's nodebox shapee. (Required)
 
