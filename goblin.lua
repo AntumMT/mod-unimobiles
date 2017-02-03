@@ -44,6 +44,7 @@ nmobs.register_mob({
 
 
 nmobs.register_mob({
+  armor_class = 8,
   attacks_player = true,
   hit_dice = 4,
   environment = {'fun_caves:stone_with_algae', 'fun_caves:stone_with_lichen'},

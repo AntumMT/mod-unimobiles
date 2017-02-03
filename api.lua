@@ -150,7 +150,7 @@ end
 
 
 function nmobs_mod.aggressive_behavior(self)  -- self._aggressive_behavior
-  if self._attacks_player and not nmobs_mod.nice_mobs then
+  if self._attacks_player and not self._owner and not nmobs_mod.nice_mobs then
     local prey = self:_find_prey()
     if prey then
       self._target = prey
@@ -395,15 +395,15 @@ function nmobs_mod.take_punch(self, puncher, time_from_last_punch, tool_capabili
   local hp = self.object:get_hp()
   local bug = true -- bug in minetest code prevents damage calculation
 
-  if nmobs_mod.nice_mobs then
-    return true
-  end
-
   local e_mult = 1
   local player_name
   if puncher and puncher.get_player_name then
     player_name = puncher:get_player_name()
     e_mult = damage_multiplier[player_name] or 1
+  end
+
+  if nmobs_mod.nice_mobs or self._owner then
+    return true
   end
 
   if bug or e_mult ~= 1 then
@@ -452,7 +452,7 @@ function nmobs_mod.take_punch(self, puncher, time_from_last_punch, tool_capabili
   self._target = puncher
   if puncher and puncher:is_player() and vector.distance(self._last_pos, puncher:get_pos()) > self._vision then
     self._state = 'fleeing'
-  elseif hp < 10 then
+  elseif hp < damage * 2 then
     --print('should flee')
     self._state = 'fleeing'
   else
