@@ -11,6 +11,17 @@ nmobs_mod.world = minetest.get_worldpath()
 nmobs_mod.mobs = {}
 
 
+nmobs_mod.nice_mobs = minetest.setting_getbool('nmobs_nice_mobs')
+if nmobs_mod.nice_mobs == nil then
+	nmobs_mod.nice_mobs = true
+end
+
+
+if nmobs_mod.nice_mobs then
+  print('Nmobs: All mobs will play nicely.')
+end
+
+
 function math.limit(n, l, h)
   return math.max(math.min(n, h), l)
 end
@@ -22,3 +33,4 @@ dofile(nmobs_mod.path .. "/goat.lua")
 dofile(nmobs_mod.path .. "/pig.lua")
 dofile(nmobs_mod.path .. "/sheep.lua")
 dofile(nmobs_mod.path .. "/boulder.lua")
+dofile(nmobs_mod.path .. "/goblin.lua")

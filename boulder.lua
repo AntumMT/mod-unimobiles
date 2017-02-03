@@ -9,7 +9,7 @@ nmobs.register_mob({
   armor_class = 2,
   attacks_player = true,
   hit_dice = 4,
-  looks_for = {'default:stone', 'fun_caves:stone_with_algae', 'fun_caves:stone_with_lichen', 'fun_caves:stone_with_moss'},
+  looks_for = {'default:stone', 'fun_caves:stone_with_moss'},
   name = 'boulder',
   nodebox = {
     {-0.35, -0.35, -0.35, 0.35, 0.35, 0.35},

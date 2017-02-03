@@ -49,7 +49,7 @@ end
 
 
 local damage_multiplier = {}
-if elixirs_mod and elixirs_mod.damage_multiplier then
+if minetest.get_modpath('elixirs') and elixirs_mod and elixirs_mod.damage_multiplier then
   damage_multiplier = elixirs_mod.damage_multiplier
 end
 
@@ -64,7 +64,7 @@ function nmobs_mod.step(self, dtime)
 
   if not self._owner then
     if not self._born or ((minetest.get_gametime() - self._born) > (self._lifespan or 300)) then
-      --print('Nmobs: removing a '..self._name..'.')
+      --print('Nmobs: removing a '..self._printed_name..'.')
       self.object:remove()
       return
     end
@@ -150,7 +150,7 @@ end
 
 
 function nmobs_mod.aggressive_behavior(self)  -- self._aggressive_behavior
-  if self._attacks_player then
+  if self._attacks_player and not nmobs_mod.nice_mobs then
     local prey = self:_find_prey()
     if prey then
       self._target = prey
@@ -311,7 +311,7 @@ function nmobs_mod.new_destination(self, dtype, object)  -- self._new_destinatio
   local maxp
   local pos = self._last_pos
 
-  if self._owner and self._tether then
+  if self._tether then
     minp = vector.subtract(self._tether, 5)
     maxp = vector.add(self._tether, 5)
   end
@@ -319,7 +319,7 @@ function nmobs_mod.new_destination(self, dtype, object)  -- self._new_destinatio
   pos.y = pos.y + self.collisionbox[2]
 
   if dtype == 'looks_for' and self._looks_for then
-    if not minp then
+    if not self._tether then
       minp = vector.subtract(pos, 10)
       maxp = vector.add(pos, 10)
     end
@@ -328,14 +328,10 @@ function nmobs_mod.new_destination(self, dtype, object)  -- self._new_destinatio
     if nodes and #nodes > 0 then
       dest = nodes[math.random(#nodes)]
     end
-
-    return dest
-  end
-
-  if dtype == 'flee' and object then
+  elseif dtype == 'flee' and object then
     local opos = object:get_pos()
 
-    if not minp then
+    if not self._tether then
       local toward = vector.add(pos, vector.direction(opos, pos))
       minp = vector.subtract(toward, 15)
       maxp = vector.add(toward, 15)
@@ -345,12 +341,10 @@ function nmobs_mod.new_destination(self, dtype, object)  -- self._new_destinatio
     if nodes and #nodes > 0 then
       dest = nodes[math.random(#nodes)]
     end
-
-    return dest
   end
 
   if (not dest or math.random(10) == 1) and not self._aquatic then
-    if not minp then
+    if not self._tether then
       minp = vector.subtract(pos, 15)
       maxp = vector.add(pos, 15)
     end
@@ -359,9 +353,9 @@ function nmobs_mod.new_destination(self, dtype, object)  -- self._new_destinatio
     if nodes and #nodes > 0 then
       dest = nodes[math.random(#nodes)]
     end
-
-    return dest
   end
+
+  return dest
 end
 
 
@@ -493,7 +487,7 @@ function nmobs_mod.activate(self, staticdata, dtime_s)
     end
     self._hp = hp
     self.object:set_hp(hp)
-    print('Nmobs: activated a '..self._name..' with '..hp..' HP at ('..pos.x..','..pos.y..','..pos.z..'). Game time: '..self._born)
+    print('Nmobs: activated a '..self._printed_name..' with '..hp..' HP at ('..pos.x..','..pos.y..','..pos.z..'). Game time: '..self._born)
   end
 
   if self._sound then
@@ -556,16 +550,16 @@ function nmobs_mod.on_rightclick(self, clicker)
   if not self._owner then
     self._state = 'following'
     self._owner = clicker:get_player_name()
-    minetest.chat_send_player(player_name, 'You have tamed the '..self._name..'.')
+    minetest.chat_send_player(player_name, 'You have tamed the '..self._printed_name..'.')
     return
   elseif self._owner == player_name then
     if self._state == 'following' then
       self._tether = self.object:getpos()
       self._state = 'standing'
-      minetest.chat_send_player(player_name, 'Your '..self._name..' is tethered here.')
+      minetest.chat_send_player(player_name, 'Your '..self._printed_name..' is tethered here.')
       return
     else
-      minetest.chat_send_player(player_name, 'Your '..self._name..' is following you.')
+      minetest.chat_send_player(player_name, 'Your '..self._printed_name..' is following you.')
       self._state = 'following'
       return
     end
@@ -590,6 +584,10 @@ function nmobs_mod.register_mob(def)
   end
 
   local name = good_def.name:gsub('^.*:', '')
+  name = name:lower()
+  name = name:gsub('[^a-z0-9]', '_')
+  name = name:gsub('^_+', '')
+  name = name:gsub('_+$', '')
   good_def.size = good_def.size or 1
 
   if not good_def.media_prefix then
@@ -664,10 +662,6 @@ function nmobs_mod.register_mob(def)
     good_def.armor = {fleshy = 9 + good_def.armor_class}
   end
 
-  if good_def.armor_class then
-    print(name..' AC: '..good_def.armor_class..', armor: '..good_def.armor['fleshy'])
-  end
-
   if good_def.looks_for and not good_def.environment then
     good_def.environment = table.copy(good_def.looks_for)
   elseif good_def.environment and not good_def.looks_for then
@@ -706,6 +700,7 @@ function nmobs_mod.register_mob(def)
     _name = name,
     _new_destination = nmobs_mod.new_destination,
     _noise = nmobs_mod.noise,
+    _printed_name = name:gsub('_', ' '),
     _rarity = (good_def.rarity or 20000),
     _run_speed = (good_def.run_speed or 3),
     _sound = good_def.sound,

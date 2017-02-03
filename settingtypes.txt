@@ -1,0 +1,2 @@
+# Mobs will not attack if you set this to true.
+nmobs_nice_mobs (Nice Mobs) bool false
