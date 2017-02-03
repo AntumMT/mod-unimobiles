@@ -7,7 +7,7 @@
 
 nmobs.register_mob({
   attacks_player = true,
-  hit_dice = 1,
+  hit_dice = 2,
   environment = {'fun_caves:stone_with_algae', 'fun_caves:stone_with_lichen'},
   looks_for = {'default:stone_with_coal', 'default:stone_with_iron', 'default:stone_with_copper', 'default:stone_with_gold', 'default:stone_with_mese', 'default:stone_with_diamond', 'fun_caves:giant_mushroom_stem'},
   name = 'goblin',
@@ -37,7 +37,7 @@ nmobs.register_mob({
     {-0.4375, -0.375, 0.0625, -0.375, 0.125, 0.125}, -- leftarm2
     {0.375, -0.375, 0.0625, 0.4375, 0.125, 0.125}, -- rightarm2
   },
-  replaces = {{{'group:cracky', 'group:choppy', 'group:snappy'}, {'air'}},}
+  replaces = {{{'group:cracky', 'group:choppy', 'group:snappy'}, {'air'}},},
   size = 0.8,
   tames = {'default:diamond'},
 })
@@ -45,7 +45,7 @@ nmobs.register_mob({
 
 nmobs.register_mob({
   attacks_player = true,
-  hit_dice = 1,
+  hit_dice = 4,
   environment = {'fun_caves:stone_with_algae', 'fun_caves:stone_with_lichen'},
   looks_for = {'default:stone_with_coal', 'default:stone_with_iron', 'default:stone_with_copper', 'default:stone_with_gold', 'default:stone_with_mese', 'default:stone_with_diamond', 'fun_caves:giant_mushroom_stem'},
   name = 'goblin basher',
@@ -75,6 +75,6 @@ nmobs.register_mob({
     {-0.4375, -0.375, 0.0625, -0.375, 0.125, 0.125}, -- leftarm2
     {0.375, -0.375, 0.0625, 0.4375, 0.125, 0.125}, -- rightarm2
   },
-  replaces = {{{'group:cracky', 'group:choppy', 'group:snappy'}, {'air'}},}
+  replaces = {{{'group:cracky', 'group:choppy', 'group:snappy'}, {'air'}},},
   tames = {'default:diamond'},
 })

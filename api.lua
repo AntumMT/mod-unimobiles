@@ -395,6 +395,10 @@ function nmobs_mod.take_punch(self, puncher, time_from_last_punch, tool_capabili
   local hp = self.object:get_hp()
   local bug = true -- bug in minetest code prevents damage calculation
 
+  if nmobs_mod.nice_mobs then
+    return true
+  end
+
   local e_mult = 1
   local player_name
   if puncher and puncher.get_player_name then
