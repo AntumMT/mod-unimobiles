@@ -234,7 +234,11 @@ function nmobs_mod.flee(self)  -- self._flee
       return
     end
 
-    self:_travel(self._run_speed)
+    local speed = self._run_speed
+    if self.object:get_hp() <= self._hit_dice then
+      speed = 1
+    end
+    self:_travel(speed)
   else
     --print('turning to fight')
     self._state = 'fighting'
@@ -402,6 +406,7 @@ function nmobs_mod.take_punch(self, puncher, time_from_last_punch, tool_capabili
     e_mult = damage_multiplier[player_name] or 1
   end
 
+  -- * check for creative and damage
   if nmobs_mod.nice_mobs or self._owner then
     return true
   end
