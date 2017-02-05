@@ -40,5 +40,3 @@ dofile(nmobs_mod.path .. "/boulder.lua")
 dofile(nmobs_mod.path .. "/goblin.lua")
 dofile(nmobs_mod.path .. "/scorpion.lua")
 dofile(nmobs_mod.path .. "/skeleton.lua")
-
-minetest.override_item('default:mossycobble', {light_source = 8})
