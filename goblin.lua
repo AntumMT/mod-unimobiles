@@ -8,8 +8,7 @@
 nmobs.register_mob({
   attacks_player = true,
   hit_dice = 2,
-  environment = {'fun_caves:stone_with_algae', 'fun_caves:stone_with_lichen'},
-  looks_for = {'default:stone_with_coal', 'default:stone_with_iron', 'default:stone_with_copper', 'default:stone_with_gold', 'default:stone_with_mese', 'default:stone_with_diamond', 'fun_caves:giant_mushroom_stem'},
+  looks_for = {'default:stone_with_coal', 'default:stone_with_iron', 'default:stone_with_copper', 'default:stone_with_gold', 'default:stone_with_mese', 'default:stone_with_diamond', 'fun_caves:giant_mushroom_stem', 'default:mossycobble'},
   name = 'goblin',
   nocturnal = true,
   nodebox = {
@@ -38,8 +37,36 @@ nmobs.register_mob({
     {-0.4375, -0.375, 0.0625, -0.375, 0.125, 0.125}, -- leftarm2
     {0.375, -0.375, 0.0625, 0.4375, 0.125, 0.125}, -- rightarm2
   },
-  replaces = {{{'group:cracky', 'group:choppy', 'group:snappy'}, {'air'}},},
+  replaces = {
+    --{
+    --  replace = {'group:cracky', 'group:choppy', 'group:snappy'},
+    --  with = {'air'},
+    --  when = 10,
+    --},
+    {
+      floor = true,
+      replace = {'air'},
+      with = {'default:dirt'},
+      when = 10,
+    },
+    {
+      floor = true,
+      replace = {'group:cracky'},
+      with = {'default:mossycobble', 'default:mossycobble', 'default:mossycobble'},
+      when = 10,
+    },
+  },
   size = 0.8,
+  spawn = {
+    {
+      nodes = {'default:stone', 'fun_caves:stone_with_algae', 'fun_caves:stone_with_lichen'},
+      rarity = 20000,
+    },
+    {
+      nodes = {'default:mossycobble'},
+      rarity = 1000,
+    },
+  },
   tames = {'default:diamond'},
 })
 
@@ -48,8 +75,7 @@ nmobs.register_mob({
   armor_class = 8,
   attacks_player = true,
   hit_dice = 4,
-  environment = {'fun_caves:stone_with_algae', 'fun_caves:stone_with_lichen'},
-  looks_for = {'default:stone_with_coal', 'default:stone_with_iron', 'default:stone_with_copper', 'default:stone_with_gold', 'default:stone_with_mese', 'default:stone_with_diamond', 'fun_caves:giant_mushroom_stem'},
+  looks_for = {'default:stone_with_coal', 'default:stone_with_iron', 'default:stone_with_copper', 'default:stone_with_gold', 'default:stone_with_mese', 'default:stone_with_diamond', 'fun_caves:giant_mushroom_stem', 'default:mossycobble'},
   name = 'goblin basher',
   nocturnal = true,
   nodebox = {
@@ -78,6 +104,34 @@ nmobs.register_mob({
     {-0.4375, -0.375, 0.0625, -0.375, 0.125, 0.125}, -- leftarm2
     {0.375, -0.375, 0.0625, 0.4375, 0.125, 0.125}, -- rightarm2
   },
-  replaces = {{{'group:cracky', 'group:choppy', 'group:snappy'}, {'air'}},},
+  replaces = {
+    --{
+    --  replace = {'group:cracky', 'group:choppy', 'group:snappy'},
+    --  with = {'air'},
+    --  when = 10,
+    --},
+    {
+      floor = true,
+      replace = {'air'},
+      with = {'default:dirt'},
+      when = 10,
+    },
+    {
+      floor = true,
+      replace = {'group:cracky'},
+      with = {'default:mossycobble', 'default:mossycobble', 'default:mossycobble'},
+      when = 10,
+    },
+  },
+  spawn = {
+    {
+      nodes = {'default:stone', 'fun_caves:stone_with_algae', 'fun_caves:stone_with_lichen'},
+      rarity = 50000,
+    },
+    {
+      nodes = {'default:mossycobble'},
+      rarity = 1000,
+    },
+  },
   tames = {'default:diamond'},
 })

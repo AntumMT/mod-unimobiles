@@ -2,6 +2,10 @@
 -- Copyright Duane Robertson (duane@duanerobertson.com), 2017
 -- Distributed under the LGPLv2.1 (https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html)
 
+-- turtle
+-- crawling eye (snake eye)
+-- ant/termite
+
 
 local check = {
   {'armor_class', 'number', false},
@@ -20,7 +24,9 @@ local check = {
   {'nodebox', 'table', true},
   {'nocturnal', 'boolean', false},
   {'rarity', 'number', false},
+  {'replaces', 'table', false},
   {'run_speed', 'number', false},
+  {'spawn', 'table', false},
   {'sound', 'string', false},
   {'size', 'number', false},
   {'tames', 'table', false},
@@ -56,10 +62,22 @@ end
 
 
 function nmobs_mod.step(self, dtime)
+  if self._kill_me then
+    self.object:remove()
+    return
+  end
+
+  if self._lock then
+    --print('Nmobs: slow response')
+    return
+  end
+
+  self._lock = true
   self:_fall()
 
   self._last_step = self._last_step + dtime
   if self._last_step < 1 then
+    self._lock = nil
     return
   end
 
@@ -67,7 +85,8 @@ function nmobs_mod.step(self, dtime)
     --if (not self._born) or ((minetest.get_gametime() - self._born) > (self._lifespan or 300)) or nmobs_mod.abandoned(self) then
     if (not self._born) or ((minetest.get_gametime() - self._born) > (self._lifespan or 200)) then
       --print('Nmobs: removing a '..self._printed_name..'.')
-      self.object:remove()
+      self._kill_me = true
+      self._lock = nil
       return
     end
   end
@@ -88,6 +107,62 @@ function nmobs_mod.step(self, dtime)
   end
 
   self:_noise()
+
+  self._lock = nil
+end
+
+
+function nmobs_mod.replace(self)  -- _replace
+  if not self._replaces then
+    return
+  end
+
+  local pos = self._last_pos
+  pos.y = pos.y + 0.5
+  pos = vector.round(pos)
+
+  for _, instance in pairs(self._replaces) do
+    for non_loop = 1, 1 do
+      local when = instance.when or 10
+      if not instance.replace or type(when) ~= 'number' or math.random(when) ~= 1 then
+        break
+      end
+
+      for r = 1, (self._reach or 3) do
+        local minp = vector.subtract(pos, r)
+        if not (instance.down or instance.floor) then
+          minp.y = pos.y
+        end
+
+        local maxp = vector.add(pos, r)
+        if instance.floor then
+          maxp.y = pos.y - 1
+          minp.y = maxp.y
+        end
+
+        --print('find_nodes_in_area 128')
+        local nodes = minetest.find_nodes_in_area(minp, maxp, instance.replace)
+        local with = instance.with or {'air'}
+        if not type(with) == 'table' and #with > 0 then
+          break
+        end
+
+        if nodes and #nodes > 0 then
+          local dpos = nodes[math.random(#nodes)]
+          --print('is_protected 137')
+          if not minetest.is_protected(dpos, '') then
+            --print('get_node_or_nil 139')
+            local node = minetest.get_node_or_nil(dpos)
+            local wnode = with[math.random(#with)]
+            --print('set_node 142')
+            minetest.set_node(dpos, {name=wnode})
+            --print('Nmobs: a '..self._printed_name..' replaced '..node.name..' with '..wnode..'.')
+            return
+          end
+        end
+      end
+    end
+  end
 end
 
 
@@ -99,7 +174,7 @@ function nmobs_mod.abandoned(self)
   end
 
   for _, player in pairs(minetest.get_connected_players()) do
-    local opos = player:getpos()
+    local opos = player:get_pos()
     if vector.distance(self._last_pos, opos) < 100 then
       lonely = false
     end
@@ -113,11 +188,12 @@ function nmobs_mod.find_prey(self)
   local prey = {}
 
   if not self._last_pos then
-    self._last_pos = self.object:getpos()
+    self._last_pos = self.object:get_pos()
   end
 
   for _, player in pairs(minetest.get_connected_players()) do
-    local opos = player:getpos()
+    --print('get_pos 180')
+    local opos = player:get_pos()
     if vector.distance(self._last_pos, opos) < self._vision then
       prey[#prey+1] = player
     end
@@ -198,7 +274,7 @@ function nmobs_mod.follow(self)  -- self._follow
     return
   end
 
-  self._destination = player:getpos()
+  self._destination = player:get_pos()
 
   local pos = self._last_pos
   pos.y = pos.y + self.collisionbox[2]
@@ -208,6 +284,14 @@ function nmobs_mod.follow(self)  -- self._follow
   end
 
   self:_travel(self._walk_speed)
+end
+
+
+function vector.horizontal_distance(p1, p2)
+  if not (p1.x and p2.x and p1.z and p2.z) then
+    return 0
+  end
+  return math.sqrt((p2.x - p1.x)^2 + (p2.z - p2.z)^2)
 end
 
 
@@ -223,7 +307,7 @@ function nmobs_mod.walk(self)  -- self._walk
 
   local pos = self._last_pos
   pos.y = pos.y + self.collisionbox[2]
-  if math.random(20) == 1 or vector.distance(pos, self._destination) < 1 + self._walk_speed then
+  if math.random(20) == 1 or vector.horizontal_distance(pos, self._destination) < 1 + self._walk_speed then
     self._state = 'standing'
     return
   end
@@ -254,7 +338,7 @@ function nmobs_mod.flee(self)  -- self._flee
 
   if self._destination then
     pos.y = pos.y + self.collisionbox[2]
-    if vector.distance(pos, self._destination) < 1 + speed then
+    if vector.horizontal_distance(pos, self._destination) < 1 + speed then
       self._destination = nil
       return
     end
@@ -279,6 +363,8 @@ function nmobs_mod.stand(self)  -- self._stand
   self.object:set_velocity(null_vector)
   self._destination = nil
 
+  self:_replace()
+
   if math.random(10) == 1 then
     self._destination = self:_new_destination('looks_for')
     if self._destination then
@@ -299,6 +385,12 @@ end
 
 function nmobs_mod.travel(self, speed)  -- self._travel
   local target
+
+  local old_v = vector.round(self.object:get_velocity())
+  if old_v.x == 0 and old_v.y == 0 and old_v.z == 0 then
+    -- stalled
+    self:_replace('tunnel')
+  end
 
   -- Why doesn't this ever work?
   local path -- = minetest.find_path(pos,self._destination,10,2,2,'A*_noprefetch')
@@ -353,6 +445,7 @@ function nmobs_mod.new_destination(self, dtype, object)  -- self._new_destinatio
       maxp = vector.add(pos, 10)
     end
 
+    --print('find_nodes_in_area 425')
     local nodes = minetest.find_nodes_in_area(minp, maxp, self._looks_for)
     if nodes and #nodes > 0 then
       dest = nodes[math.random(#nodes)]
@@ -366,6 +459,7 @@ function nmobs_mod.new_destination(self, dtype, object)  -- self._new_destinatio
       maxp = vector.add(toward, 15)
     end
 
+    --print('find_nodes_in_area_under_air 439')
     local nodes = minetest.find_nodes_in_area_under_air(minp, maxp, nonliquids)
     if nodes and #nodes > 0 then
       dest = nodes[math.random(#nodes)]
@@ -378,6 +472,7 @@ function nmobs_mod.new_destination(self, dtype, object)  -- self._new_destinatio
       maxp = vector.add(pos, 15)
     end
 
+    --print('find_nodes_in_area_under_air 452')
     local nodes = minetest.find_nodes_in_area_under_air(minp, maxp, nonliquids)
     if nodes and #nodes > 0 then
       dest = nodes[math.random(#nodes)]
@@ -392,6 +487,7 @@ function nmobs_mod.fall(self)  -- self._fall
   --local acc = self.object:get_acceleration()
   local acc = null_vector
   local pos = self.object:get_pos()
+  --print('get_node_or_nil 467')
   local node = minetest.get_node_or_nil(pos)
   local gravity = 10
 
@@ -473,7 +569,7 @@ function nmobs_mod.take_punch(self, puncher, time_from_last_punch, tool_capabili
 
   if hp < 1 then
     if bug then
-      self.object:remove()
+      self._kill_me = true
     end
     -- ** drop code **
   end
@@ -505,6 +601,7 @@ function nmobs_mod.activate(self, staticdata, dtime_s)
 
   self.object:set_armor_groups(self._armor_groups)
   self._state = 'standing'
+  self._lock = nil
   self.object:set_velocity(null_vector)
   if self._hp then
     self.object:set_hp(self._hp)
@@ -521,10 +618,11 @@ function nmobs_mod.activate(self, staticdata, dtime_s)
     end
     self._hp = hp
     self.object:set_hp(hp)
-    print('Nmobs: activated a '..self._printed_name..' with '..hp..' HP at ('..pos.x..','..pos.y..','..pos.z..'). Game time: '..self._born)
+    --print('Nmobs: activated a '..self._printed_name..' with '..hp..' HP at ('..pos.x..','..pos.y..','..pos.z..'). Game time: '..self._born)
   end
 
   if self._sound then
+    --print('sound_play 602')
     minetest.sound_play(self._sound, {object = self.object})
   end
 end
@@ -564,9 +662,11 @@ function nmobs_mod.abm_callback(name, pos, node, active_object_count, active_obj
   end
 
   local pos_above = {x=pos.x, y=pos.y+1, z=pos.z}
+  --print('get_node_or_nil 642')
   local node_above = minetest.get_node_or_nil(pos_above)
   if node_above and node_above.name == 'air' and active_object_count < 3 then
     pos_above.y = pos_above.y + 2
+    --print('add_entity 646')
     minetest.add_entity(pos_above, 'nmobs:'..name)
   end
 end
@@ -574,14 +674,14 @@ end
 
 function nmobs_mod.on_rightclick(self, clicker)
   if not self._tames then
-    print('no tames')
+    minetest.chat_send_player(player_name, 'You can\'t tame a '..self._printed_name..' that way.')
+    minetest.sound_play(self._sound, {object = self.object})
     return
   end
 
   -- check item
   --local hand = clicker:get_wielded_item()
 
-  print('right-clicking')
   local player_name = clicker:get_player_name()
   if not self._owner then
     self._state = 'following'
@@ -590,7 +690,7 @@ function nmobs_mod.on_rightclick(self, clicker)
     return
   elseif self._owner == player_name then
     if self._state == 'following' then
-      self._tether = self.object:getpos()
+      self._tether = self.object:get_pos()
       self._state = 'standing'
       minetest.chat_send_player(player_name, 'Your '..self._printed_name..' is tethered here.')
       return
@@ -600,6 +700,7 @@ function nmobs_mod.on_rightclick(self, clicker)
       return
     end
   elseif self._sound then
+    --print('sound_play 680')
     minetest.sound_play(self._sound, {object = self.object})
   end
 end
@@ -704,6 +805,12 @@ function nmobs_mod.register_mob(def)
     good_def.looks_for = table.copy(good_def.environment)
   end
 
+  if good_def.replaces and good_def.replaces[1] and type(good_def.replaces[1]) == 'table' and good_def.replaces[1].replace and type(good_def.replaces[1].replace) == 'table' then
+    -- nop
+  else
+    good_def.replaces = nil
+  end
+
   local proto = {
     collide_with_objects = true,
     collisionbox = cbox,
@@ -741,8 +848,11 @@ function nmobs_mod.register_mob(def)
     _noise = nmobs_mod.noise,
     _printed_name = name:gsub('_', ' '),
     _rarity = (good_def.rarity or 20000),
+    _replace = nmobs_mod.replace,
+    _replaces = good_def.replaces,
     _run_speed = (good_def.run_speed or 3),
     _sound = good_def.sound,
+    _spawn_table = good_def.spawn,
     _stand = nmobs_mod.stand,
     _state = 'standing',
     _tames = good_def.tames,
@@ -759,7 +869,20 @@ function nmobs_mod.register_mob(def)
   minetest.register_node(proto.textures[1], node)
   minetest.register_entity('nmobs:'..name, proto)
 
-  if proto._environment then
+  if proto._spawn_table then
+    for _, instance in pairs(proto._spawn_table) do
+      minetest.register_abm({
+        nodenames = (instance.nodes or proto._environment or {'default:dirt_with_grass'}),
+        neighbors = {'air'},
+        interval = (instance.interval or 30),
+        chance = (instance.rarity or 20000),
+        catch_up = false,
+        action = function(...)
+          nmobs_mod.abm_callback(name, ...)
+        end,
+      })
+    end
+  elseif proto._environment then
     minetest.register_abm({
       nodenames = proto._environment,
       neighbors = {'air'},
