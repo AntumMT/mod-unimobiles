@@ -11,6 +11,7 @@ nmobs.register_mob({
   environment = {'fun_caves:stone_with_algae', 'fun_caves:stone_with_lichen'},
   looks_for = {'default:stone_with_coal', 'default:stone_with_iron', 'default:stone_with_copper', 'default:stone_with_gold', 'default:stone_with_mese', 'default:stone_with_diamond', 'fun_caves:giant_mushroom_stem'},
   name = 'goblin',
+  nocturnal = true,
   nodebox = {
     {-0.25, -0.3125, -0.25, 0.25, 0.1875, 0.25}, -- body1
     {-0.25, -0.5, -0.125, -0.0625, -0.3125, 0.0625}, -- leftleg
@@ -50,6 +51,7 @@ nmobs.register_mob({
   environment = {'fun_caves:stone_with_algae', 'fun_caves:stone_with_lichen'},
   looks_for = {'default:stone_with_coal', 'default:stone_with_iron', 'default:stone_with_copper', 'default:stone_with_gold', 'default:stone_with_mese', 'default:stone_with_diamond', 'fun_caves:giant_mushroom_stem'},
   name = 'goblin basher',
+  nocturnal = true,
   nodebox = {
     {-0.25, -0.3125, -0.25, 0.25, 0.1875, 0.25}, -- body1
     {-0.25, -0.5, -0.125, -0.0625, -0.3125, 0.0625}, -- leftleg

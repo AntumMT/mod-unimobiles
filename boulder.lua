@@ -22,4 +22,5 @@ nmobs.register_mob({
   },
   sound = 'ccmobs_rockmonster',
   textures = {'default_stone'},
+  vision = 4,
 })

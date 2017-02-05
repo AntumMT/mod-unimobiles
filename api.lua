@@ -8,6 +8,7 @@ local check = {
   {'attacks_player', 'boolean', false},
   {'collisionbox', 'table', false},
   {'damage', 'number', false},
+  {'diurnal', 'boolean', false},
   {'environment', 'table', false},
   {'higher_than', 'number', false},
   {'hit_dice', 'number', false},
@@ -63,7 +64,8 @@ function nmobs_mod.step(self, dtime)
   end
 
   if not self._owner then
-    if not self._born or ((minetest.get_gametime() - self._born) > (self._lifespan or 300)) then
+    --if (not self._born) or ((minetest.get_gametime() - self._born) > (self._lifespan or 300)) or nmobs_mod.abandoned(self) then
+    if (not self._born) or ((minetest.get_gametime() - self._born) > (self._lifespan or 200)) then
       --print('Nmobs: removing a '..self._printed_name..'.')
       self.object:remove()
       return
@@ -89,8 +91,31 @@ function nmobs_mod.step(self, dtime)
 end
 
 
+function nmobs_mod.abandoned(self)
+  local lonely = true
+
+  if self._owner then
+    return
+  end
+
+  for _, player in pairs(minetest.get_connected_players()) do
+    local opos = player:getpos()
+    if vector.distance(self._last_pos, opos) < 100 then
+      lonely = false
+    end
+  end
+
+  return lonely
+end
+
+
 function nmobs_mod.find_prey(self)
   local prey = {}
+
+  if not self._last_pos then
+    self._last_pos = self.object:getpos()
+  end
+
   for _, player in pairs(minetest.get_connected_players()) do
     local opos = player:getpos()
     if vector.distance(self._last_pos, opos) < self._vision then
@@ -529,9 +554,11 @@ function nmobs_mod.abm_callback(name, pos, node, active_object_count, active_obj
   if proto.higher_than and pos.y <= proto.higher_than then
     return
   end
-  if proto.nocturnal then
+  if pos.y > -50 and (proto._nocturnal or proto._diurnal) then
     local time = minetest.get_timeofday()
-    if time > 0.15 and time < 0.65 then
+    if proto._nocturnal and time > 0.15 and time < 0.65 then
+      return
+    elseif proto._diurnal and time < 0.15 or time > 0.65 then
       return
     end
   end
@@ -696,6 +723,7 @@ function nmobs_mod.register_mob(def)
     _armor_groups = good_def.armor,
     _attacks_player = good_def.attacks_player,
     _damage = good_def.damage,
+    _diurnal = good_def.diurnal,
     _environment = good_def.environment,
     _fall = nmobs_mod.fall,
     _fight = nmobs_mod.fight,
@@ -703,11 +731,13 @@ function nmobs_mod.register_mob(def)
     _flee = nmobs_mod.flee,
     _follow = nmobs_mod.follow,
     _hit_dice = (good_def.hit_dice or 1),
+    _is_a_mob = true,
     _last_step = 0,
-    _lifespan = (good_def.lifespan or 300),
+    _lifespan = (good_def.lifespan or 200),
     _looks_for = good_def.looks_for,
     _name = name,
     _new_destination = nmobs_mod.new_destination,
+    _nocturnal = good_def.nocturnal,
     _noise = nmobs_mod.noise,
     _printed_name = name:gsub('_', ' '),
     _rarity = (good_def.rarity or 20000),

@@ -8,6 +8,7 @@
 
 
 nmobs.register_mob({
+  diurnal = true,
   hit_dice = 1,
   looks_for = {'default:dirt_with_grass'},
   media_prefix = 'ccmobs',

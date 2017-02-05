@@ -11,6 +11,7 @@ nmobs.register_mob({
   hit_dice = 3,
   looks_for = {'default:desert_sand'},
   name = 'scorpion',
+  nocturnal = true,
   nodebox = {
     {-0.0625, -0.375, -0.25, 0.0625, -0.25, -0.125}, -- segment4
     {-0.1, -0.4375, -0.125, 0.1, -0.25, 0}, -- segment3
