@@ -56,7 +56,7 @@ nmobs.register_mob({
       when = 10,
     },
   },
-  size = 0.8,
+  size = 0.7,
   spawn = {
     {
       nodes = {'default:stone', 'fun_caves:stone_with_algae', 'fun_caves:stone_with_lichen'},
@@ -123,6 +123,7 @@ nmobs.register_mob({
       when = 10,
     },
   },
+  size = 0.8,
   spawn = {
     {
       nodes = {'default:stone', 'fun_caves:stone_with_algae', 'fun_caves:stone_with_lichen'},

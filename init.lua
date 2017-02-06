@@ -31,6 +31,14 @@ function math.limit(n, l, h)
 end
 
 
+function vector.horizontal_distance(p1, p2)
+  if not (p1.x and p2.x and p1.z and p2.z) then
+    return 0
+  end
+  return math.sqrt((p2.x - p1.x)^2 + (p2.z - p2.z)^2)
+end
+
+
 dofile(nmobs_mod.path .. "/api.lua")
 dofile(nmobs_mod.path .. "/cow.lua")
 dofile(nmobs_mod.path .. "/goat.lua")
@@ -40,3 +48,5 @@ dofile(nmobs_mod.path .. "/boulder.lua")
 dofile(nmobs_mod.path .. "/goblin.lua")
 dofile(nmobs_mod.path .. "/scorpion.lua")
 dofile(nmobs_mod.path .. "/skeleton.lua")
+
+minetest.override_item('default:mossycobble', {light_source = 8})

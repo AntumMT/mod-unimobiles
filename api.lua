@@ -7,6 +7,13 @@
 -- ant/termite
 
 
+local bored_with_standing = 10
+local bored_with_walking = 10
+local noise_rarity = 100
+local stand_and_fight = 10
+
+
+-- These are the only legitimate properties to pass to register.
 local check = {
   {'armor_class', 'number', false},
   {'attacks_player', 'boolean', false},
@@ -24,10 +31,13 @@ local check = {
   {'nodebox', 'table', true},
   {'nocturnal', 'boolean', false},
   {'rarity', 'number', false},
+  {'reach', 'number', false},
   {'replaces', 'table', false},
   {'run_speed', 'number', false},
   {'spawn', 'table', false},
   {'sound', 'string', false},
+  {'sound_angry', 'string', false},
+  {'sound_scared', 'string', false},
   {'size', 'number', false},
   {'tames', 'table', false},
   {'textures', 'table', false},
@@ -36,10 +46,12 @@ local check = {
   {'weapon_capabilities', 'table', false},
 }
 
+-- Don't save these variables between activations.
 local skip_serializing = {}
 skip_serializing['_last_pos'] = true
 skip_serializing['_destination'] = true
 skip_serializing['_target'] = true
+
 
 local null_vector = {x=0,y=0,z=0}
 
@@ -55,36 +67,43 @@ for _, n in pairs(minetest.registered_nodes) do
 end
 
 
+-- Allow elixirs to multiply player attacks.
 local damage_multiplier = {}
 if minetest.get_modpath('elixirs') and elixirs_mod and elixirs_mod.damage_multiplier then
   damage_multiplier = elixirs_mod.damage_multiplier
 end
 
 
+-- Executed by every mob, every step.
 function nmobs_mod.step(self, dtime)
+  -- Remove mobs outside of locked state.
   if self._kill_me then
+    --print('Nmobs: removing a '..self._printed_name..'.')
     self.object:remove()
     return
   end
 
+  -- If the mob is locked, do not execute until the first step
+  --  instance finishes.
   if self._lock then
     --print('Nmobs: slow response')
     return
   end
 
+  -- Everything else happens in lock state.
   self._lock = true
   self:_fall()
 
+  -- Most behavior only happens once per second.
   self._last_step = self._last_step + dtime
   if self._last_step < 1 then
     self._lock = nil
     return
   end
 
+  -- Check if a mob has lived too long.
   if not self._owner then
-    --if (not self._born) or ((minetest.get_gametime() - self._born) > (self._lifespan or 300)) or nmobs_mod.abandoned(self) then
     if (not self._born) or ((minetest.get_gametime() - self._born) > (self._lifespan or 200)) then
-      --print('Nmobs: removing a '..self._printed_name..'.')
       self._kill_me = true
       self._lock = nil
       return
@@ -94,14 +113,14 @@ function nmobs_mod.step(self, dtime)
   self._last_step = 0
 
   --print(self._state)
-  if self._state == 'traveling' then
-    self:_walk()
+  if self._state == 'fighting' then
+    self:_fight()
   elseif self._state == 'fleeing' then
     self:_flee()
-  elseif self._state == 'fighting' then
-    self:_fight()
   elseif self._state == 'following' then
     self:_follow()
+  elseif self._state == 'traveling' then
+    self:_walk()
   else -- standing
     self:_stand()
   end
@@ -109,6 +128,235 @@ function nmobs_mod.step(self, dtime)
   self:_noise()
 
   self._lock = nil
+end
+
+
+function nmobs_mod.fight(self)  -- self._fight
+  if not self._target then
+    self._state = 'standing'
+    return
+  end
+
+  local opponent_pos = self._target:get_pos()
+  if vector.distance(self._last_pos, opponent_pos) > self._vision then
+    -- out of range
+    self._target = nil
+    self._state = 'standing'
+    return
+  elseif vector.distance(self._last_pos, opponent_pos) < 1 + (self._reach or 2) then
+    -- in punching range
+    self.object:set_velocity(null_vector)
+    self._target:punch(self.object, 1, self._weapon_capabilities, nil)
+  else
+    -- chasing
+    self._destination = self._target:get_pos()
+    self:_travel(self._run_speed)
+  end
+end
+
+
+function nmobs_mod.flee(self)  -- self._flee
+  nmobs_mod.walk_run(self, self._run_speed, 'flee', stand_and_fight, 'fighting')
+end
+
+
+function nmobs_mod.follow(self)  -- self._follow
+  if not self._owner then
+    self._state = 'standing'
+    return
+  end
+
+  local player = minetest.get_player_by_name(self._owner)
+  if not player then
+    self._state = 'standing'
+    return
+  end
+
+  self._destination = player:get_pos()
+
+  local pos = self._last_pos
+  if vector.horizontal_distance(pos, self._destination) < 1 + self._walk_speed then
+    self.object:set_velocity(null_vector)
+    return
+  end
+
+  self:_travel(self._walk_speed)
+end
+
+
+function nmobs_mod.walk(self)  -- self._walk
+  if self:_aggressive_behavior() then
+    return
+  end
+
+  nmobs_mod.walk_run(self, self._walk_speed, 'looks_for', bored_with_walking, 'standing')
+end
+
+
+function nmobs_mod.stand(self)  -- self._stand
+  if self:_aggressive_behavior() then
+    return
+  end
+
+  self.object:set_velocity(null_vector)
+  self._destination = nil
+
+  self:_replace()
+
+  if math.random(bored_with_standing) == 1 then
+    self._destination = self:_new_destination('looks_for')
+    if self._destination then
+      self._state = 'traveling'
+      return
+    else
+      print('Nmobs: Error finding destination')
+    end
+  end
+end
+
+
+function nmobs_mod.noise(self)  -- self._noise
+  local odds = noise_rarity
+  local sound
+
+  if self._sound then
+    sound = self._sound
+  end
+
+  if self._state == 'fleeing' then
+    odds = math.floor(odds / 20)
+    sound = self._sound_scared or sound
+  elseif self._state == 'fighting' then
+    odds = math.floor(odds / 10)
+    sound = self._sound_angry or sound
+  elseif self._state == 'standing' then
+    odds = math.floor(odds / 2)
+  end
+
+  if sound and math.random(odds) == 1 then
+    minetest.sound_play(sound, {object = self.object})
+  end
+end
+
+
+function vector.horizontal_length(vec)
+  return math.sqrt(vec.x ^ 2 + vec.z ^ 2)
+end
+
+
+-- This just combines the walk/flee code, since they're very similar.
+function nmobs_mod.walk_run(self, max_speed, new_dest_type, fail_chance, fail_action)
+  -- the chance of tiring and stopping or fighting
+  if math.random(fail_chance) == 1 then
+    self._state = fail_action
+    return
+  end
+
+  local velocity = self.object:get_velocity()
+  local actual_speed = vector.horizontal_length(velocity)
+
+  -- if we've hit an obstacle
+  if actual_speed < 0.5 and minetest.get_gametime() - self._chose_destination > 1.5 then
+    if false and self._tunnel then
+      self:_replace('tunnel')
+    else
+      self._destination = nil
+    end
+  end
+
+  if not self._destination then
+    self._destination = self:_new_destination(new_dest_type, self._target)
+  end
+
+  if self._destination then
+    local pos = self._last_pos
+
+    if vector.horizontal_distance(pos, self._destination) < 1 + max_speed then
+      -- We've arrived.
+      self._destination = nil
+      self._state = fail_action
+      self.object:set_velocity(null_vector)
+    else
+      local speed = max_speed
+      if self.object:get_hp() <= self._hit_dice then
+        -- Severe wounds slow the mob.
+        speed = 1
+      end
+      self:_travel(speed)
+    end
+  else
+    self._state = fail_action
+    self.object:set_velocity(null_vector)
+
+    -- Turn it around, just for appearance's sake.
+    local yaw = self.object:get_yaw()
+    if yaw < math.pi then
+      yaw = yaw + math.pi
+    else
+      yaw = yaw - math.pi
+    end
+    self.object:set_yaw(yaw)
+  end
+end
+
+
+function nmobs_mod.travel(self, speed)  -- self._travel
+  -- Actually move the mob.
+  local target
+
+  -- Why doesn't this ever work?
+  local path -- = minetest.find_path(pos,self._destination,10,2,2,'A*_noprefetch')
+  if path then
+    print('pathing')
+    target = path[1]
+  else
+    target = self._destination
+  end
+
+  --local dir = nmobs_mod.dir_to_target(self._last_pos, target) + math.random() * 0.5 - 0.25
+  local dir = nmobs_mod.dir_to_target(self._last_pos, target)
+  --print(vector.distance(pos, self._destination))
+
+  local v = {x=0, y=0, z=0}
+  local yaw = self.object:get_yaw()
+  if math.abs(yaw - dir) > 0.05 then
+    self.object:set_yaw(dir)
+    v.x = - speed * math.sin(dir)
+    v.z = speed * math.cos(dir)
+    self.object:set_velocity(v)
+  end
+end
+
+
+function nmobs_mod.aggressive_behavior(self)  -- self._aggressive_behavior
+  if self._attacks_player and not self._owner and not nmobs_mod.nice_mobs then
+    local prey = self:_find_prey()
+    if prey then
+      self._target = prey
+      self._state = 'fighting'
+      return true
+    end
+  end
+end
+
+
+function nmobs_mod.find_prey(self)
+  local prey = {}
+
+  if not self._last_pos then
+    self._last_pos = self.object:get_pos()
+  end
+
+  for _, player in pairs(minetest.get_connected_players()) do
+    --print('get_pos 180')
+    local opos = player:get_pos()
+    if vector.distance(self._last_pos, opos) < self._vision then
+      prey[#prey+1] = player
+    end
+  end
+  if #prey > 0 then
+    return prey[math.random(#prey)]
+  end
 end
 
 
@@ -128,7 +376,7 @@ function nmobs_mod.replace(self)  -- _replace
         break
       end
 
-      for r = 1, (self._reach or 3) do
+      for r = 1, 1 + (self._reach or 2) do
         local minp = vector.subtract(pos, r)
         if not (instance.down or instance.floor) then
           minp.y = pos.y
@@ -166,252 +414,6 @@ function nmobs_mod.replace(self)  -- _replace
 end
 
 
-function nmobs_mod.abandoned(self)
-  local lonely = true
-
-  if self._owner then
-    return
-  end
-
-  for _, player in pairs(minetest.get_connected_players()) do
-    local opos = player:get_pos()
-    if vector.distance(self._last_pos, opos) < 100 then
-      lonely = false
-    end
-  end
-
-  return lonely
-end
-
-
-function nmobs_mod.find_prey(self)
-  local prey = {}
-
-  if not self._last_pos then
-    self._last_pos = self.object:get_pos()
-  end
-
-  for _, player in pairs(minetest.get_connected_players()) do
-    --print('get_pos 180')
-    local opos = player:get_pos()
-    if vector.distance(self._last_pos, opos) < self._vision then
-      prey[#prey+1] = player
-    end
-  end
-  if #prey > 0 then
-    return prey[math.random(#prey)]
-  end
-end
-
-
-function nmobs_mod.noise(self)  -- self._noise
-  local odds = 100
-  local sound
-
-  if self._sound then
-    sound = self._sound
-  end
-
-  if self._state == 'fleeing' then
-    odds = 5
-    sound = self._sound_scared or sound
-  elseif self._state == 'fighting' then
-    odds = 10
-    sound = self._sound_angry or sound
-  elseif self._state == 'standing' then
-    odds = 50
-  end
-
-  if sound and math.random(odds) == 1 then
-    --print('noise: '..sound)
-    minetest.sound_play(sound, {object = self.object})
-  end
-end
-
-
-function nmobs_mod.fight(self)  -- self._fight
-  if not self._target then
-    self._state = 'standing'
-    return
-  end
-
-  local opos = self._target:get_pos()
-  if vector.distance(self._last_pos, opos) > self._vision then
-    self._target = nil
-    self._state = 'standing'
-    return
-  elseif vector.distance(self._last_pos, opos) < self._run_speed then
-    self.object:set_velocity(null_vector)
-    self._target:punch(self.object, 1, self._weapon_capabilities, nil)
-  else
-    self._destination = self._target:get_pos()
-    self:_travel(self._run_speed)
-  end
-end
-
-
-function nmobs_mod.aggressive_behavior(self)  -- self._aggressive_behavior
-  if self._attacks_player and not self._owner and not nmobs_mod.nice_mobs then
-    local prey = self:_find_prey()
-    if prey then
-      self._target = prey
-      self._state = 'fighting'
-      return true
-    end
-  end
-end
-
-
-function nmobs_mod.follow(self)  -- self._follow
-  if not self._owner then
-    self._state = 'standing'
-    return
-  end
-
-  local player = minetest.get_player_by_name(self._owner)
-  if not player then
-    self._state = 'standing'
-    return
-  end
-
-  self._destination = player:get_pos()
-
-  local pos = self._last_pos
-  pos.y = pos.y + self.collisionbox[2]
-  if vector.distance(pos, self._destination) < 1 + self._walk_speed then
-    self.object:set_velocity(null_vector)
-    return
-  end
-
-  self:_travel(self._walk_speed)
-end
-
-
-function vector.horizontal_distance(p1, p2)
-  if not (p1.x and p2.x and p1.z and p2.z) then
-    return 0
-  end
-  return math.sqrt((p2.x - p1.x)^2 + (p2.z - p2.z)^2)
-end
-
-
-function nmobs_mod.walk(self)  -- self._walk
-  if self:_aggressive_behavior() then
-    return
-  end
-
-  if not self._destination then
-    self._state = 'standing'
-    return
-  end
-
-  local pos = self._last_pos
-  pos.y = pos.y + self.collisionbox[2]
-  if math.random(20) == 1 or vector.horizontal_distance(pos, self._destination) < 1 + self._walk_speed then
-    self._state = 'standing'
-    return
-  end
-
-  self:_travel(self._walk_speed)
-end
-
-
-function nmobs_mod.flee(self)  -- self._flee
-  if not self._target then
-    self._state = 'standing'
-    return
-  end
-
-  local velocity = self.object:get_velocity()
-  local speed = velocity.x + velocity.y + velocity.z
-
-  local pos = self._last_pos
-  local opos = self._target:get_pos()
-  if vector.distance(pos, opos) > 50 then
-    self._state = 'standing'
-    return
-  end
-
-  if not self._destination or speed < self._run_speed / 2 then
-    self._destination = self:_new_destination('flee', self._target)
-  end
-
-  if self._destination then
-    pos.y = pos.y + self.collisionbox[2]
-    if vector.horizontal_distance(pos, self._destination) < 1 + speed then
-      self._destination = nil
-      return
-    end
-
-    local speed = self._run_speed
-    if self.object:get_hp() <= self._hit_dice then
-      speed = 1
-    end
-    self:_travel(speed)
-  else
-    --print('turning to fight')
-    self._state = 'fighting'
-  end
-end
-
-
-function nmobs_mod.stand(self)  -- self._stand
-  if self:_aggressive_behavior() then
-    return
-  end
-
-  self.object:set_velocity(null_vector)
-  self._destination = nil
-
-  self:_replace()
-
-  if math.random(10) == 1 then
-    self._destination = self:_new_destination('looks_for')
-    if self._destination then
-      self._state = 'traveling'
-      return
-    else
-      self._destination = self:_new_destination()
-      if self._destination then
-        self._state = 'traveling'
-        return
-      else
-        print('Nmobs: Error finding destination')
-      end
-    end
-  end
-end
-
-
-function nmobs_mod.travel(self, speed)  -- self._travel
-  local target
-
-  local old_v = vector.round(self.object:get_velocity())
-  if old_v.x == 0 and old_v.y == 0 and old_v.z == 0 then
-    -- stalled
-    self:_replace('tunnel')
-  end
-
-  -- Why doesn't this ever work?
-  local path -- = minetest.find_path(pos,self._destination,10,2,2,'A*_noprefetch')
-  if path then
-    print('pathing')
-    target = path[1]
-  else
-    target = self._destination
-  end
-
-  local dir = nmobs_mod.dir_to_target(self._last_pos, target) + math.random() * 0.5 - 0.25
-  --print(vector.distance(pos, self._destination))
-
-  local v = {x=0, y=0, z=0}
-  self.object:set_yaw(dir)
-  v.x = - speed * math.sin(dir)
-  v.z = speed * math.cos(dir)
-  self.object:set_velocity(v)
-end
-
-
 function nmobs_mod.dir_to_target(pos, target)
   local direction = vector.direction(pos, target)
   --print(dump(direction))
@@ -431,6 +433,8 @@ function nmobs_mod.new_destination(self, dtype, object)  -- self._new_destinatio
   local minp
   local maxp
   local pos = self._last_pos
+
+  self._chose_destination = minetest.get_gametime()
 
   if self._tether then
     minp = vector.subtract(self._tether, 5)
@@ -602,6 +606,7 @@ function nmobs_mod.activate(self, staticdata, dtime_s)
   self.object:set_armor_groups(self._armor_groups)
   self._state = 'standing'
   self._lock = nil
+  self._chose_destination = 0
   self.object:set_velocity(null_vector)
   if self._hp then
     self.object:set_hp(self._hp)
@@ -609,7 +614,6 @@ function nmobs_mod.activate(self, staticdata, dtime_s)
 
   if not self._born then
     self._born = minetest.get_gametime()
-    --self._lifespan = self._lifespan - dtime_s
     local pos = vector.round(self.object:get_pos())
 
     local hp = 0
@@ -622,7 +626,6 @@ function nmobs_mod.activate(self, staticdata, dtime_s)
   end
 
   if self._sound then
-    --print('sound_play 602')
     minetest.sound_play(self._sound, {object = self.object})
   end
 end
@@ -675,7 +678,11 @@ end
 function nmobs_mod.on_rightclick(self, clicker)
   if not self._tames then
     minetest.chat_send_player(player_name, 'You can\'t tame a '..self._printed_name..' that way.')
-    minetest.sound_play(self._sound, {object = self.object})
+
+    if self._sound then
+      minetest.sound_play(self._sound, {object = self.object})
+    end
+
     return
   end
 
@@ -700,7 +707,6 @@ function nmobs_mod.on_rightclick(self, clicker)
       return
     end
   elseif self._sound then
-    --print('sound_play 680')
     minetest.sound_play(self._sound, {object = self.object})
   end
 end
@@ -848,10 +854,13 @@ function nmobs_mod.register_mob(def)
     _noise = nmobs_mod.noise,
     _printed_name = name:gsub('_', ' '),
     _rarity = (good_def.rarity or 20000),
+    _reach = (good_def.reach or 2),
     _replace = nmobs_mod.replace,
     _replaces = good_def.replaces,
     _run_speed = (good_def.run_speed or 3),
     _sound = good_def.sound,
+    _sound_angry = good_def.sound_angry,
+    _sound_scared = good_def.sound_scared,
     _spawn_table = good_def.spawn,
     _stand = nmobs_mod.stand,
     _state = 'standing',
