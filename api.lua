@@ -9,8 +9,10 @@
 
 local bored_with_standing = 10
 local bored_with_walking = 10
+local gravity = -10
 local noise_rarity = 100
 local stand_and_fight = 10
+local terminal_height = 10
 
 
 -- These are the only legitimate properties to pass to register.
@@ -41,7 +43,7 @@ local check = {
   {'size', 'number', false},
   {'tames', 'table', false},
   {'textures', 'table', false},
-  {'tunnel', 'table', false},
+  {'can_dig', 'table', false},
   {'vision', 'number', false},
   {'walk_speed', 'number', false},
   {'weapon_capabilities', 'table', false},
@@ -129,6 +131,52 @@ function nmobs_mod.step(self, dtime)
   self:_noise()
 
   self._lock = nil
+  self._last_pos = nil
+end
+
+
+function nmobs_mod.get_pos(self)  -- self._get_pos
+  if self._last_pos then
+    return self._last_pos
+  else
+    self._last_pos = self.object:get_pos()
+    --self._last_pos.y = self._last_pos.y - self.collisionbox[5]
+    self._last_pos.y = math.floor(self._last_pos.y + 0.5)
+    --print(self._last_pos.y)
+    return table.copy(self._last_pos)
+  end
+end
+
+
+function nmobs_mod.fall(self)  -- self._fall
+  local falling
+  local pos = self:_get_pos()
+  pos = vector.round(pos)
+
+  pos.y = pos.y - 1 + self.collisionbox[2]
+  local node_below = minetest.get_node_or_nil(pos)
+  pos.y = self:_get_pos().y
+
+  if node_below and node_below.name == 'air' then
+    falling = true
+  end
+
+  if not self._falling_from and falling then
+    self._falling_from = pos.y
+  elseif self._falling_from and not falling then
+    if self._falling_from - pos.y > terminal_height then
+      self._kill_me = true
+      return
+    end
+    self._falling_from = nil
+  end
+
+  local node = minetest.get_node_or_nil(pos)
+  if node and liquids[node.name] then
+    gravity = 1
+  end
+
+  self.object:set_acceleration({x=0, y=gravity, z=0})
 end
 
 
@@ -139,12 +187,12 @@ function nmobs_mod.fight(self)  -- self._fight
   end
 
   local opponent_pos = self._target:get_pos()
-  if vector.distance(self._last_pos, opponent_pos) > self._vision then
+  if vector.distance(self:_get_pos(), opponent_pos) > self._vision then
     -- out of range
     self._target = nil
     self._state = 'standing'
     return
-  elseif vector.distance(self._last_pos, opponent_pos) < 1 + (self._reach or 2) then
+  elseif vector.distance(self:_get_pos(), opponent_pos) < 1 + (self._reach or 2) then
     -- in punching range
     self.object:set_velocity(null_vector)
     self._target:punch(self.object, 1, self._weapon_capabilities, nil)
@@ -175,7 +223,7 @@ function nmobs_mod.follow(self)  -- self._follow
 
   self._destination = player:get_pos()
 
-  local pos = self._last_pos
+  local pos = self:_get_pos()
   if vector.horizontal_distance(pos, self._destination) < 1 + self._walk_speed then
     self.object:set_velocity(null_vector)
     return
@@ -188,6 +236,16 @@ end
 function nmobs_mod.walk(self)  -- self._walk
   if self:_aggressive_behavior() then
     return
+  end
+
+  -- This is a cheat to make more player-navigable tunnels.
+  if self._diggable then
+    local pos = self:_get_pos()
+    pos.y = pos.y + 1
+    local nodes = minetest.find_nodes_in_area(pos, pos, self._diggable)
+    if nodes and #nodes > 0 and not minetest.is_protected(pos, '') then
+      minetest.set_node(pos, {name='air'})
+    end
   end
 
   nmobs_mod.walk_run(self, self._walk_speed, 'looks_for', bored_with_walking, 'standing')
@@ -240,11 +298,6 @@ function nmobs_mod.noise(self)  -- self._noise
 end
 
 
-function vector.horizontal_length(vec)
-  return math.sqrt(vec.x ^ 2 + vec.z ^ 2)
-end
-
-
 -- This just combines the walk/flee code, since they're very similar.
 function nmobs_mod.walk_run(self, max_speed, new_dest_type, fail_chance, fail_action)
   -- the chance of tiring and stopping or fighting
@@ -253,29 +306,18 @@ function nmobs_mod.walk_run(self, max_speed, new_dest_type, fail_chance, fail_ac
     return
   end
 
-  local pos = self._last_pos
+  local pos = self:_get_pos()
 
   if self._destination then
     local velocity = self.object:get_velocity()
     local actual_speed = vector.horizontal_length(velocity)
 
-    -- if we've hit an obstacle
     if actual_speed < 0.5 and minetest.get_gametime() - self._chose_destination > 1.5 then
-      if self._tunnel then
-        self._chose_destination = minetest.get_gametime()
-        --local next_pos = vector.round(vector.add(pos, vector.direction(pos, self._destination)))
-        local next_pos = vector.add(pos, vector.direction(pos, self._destination))
-        next_pos.x = next_pos.x + math.random(2) - math.random(2)
-        next_pos.y = next_pos.y + math.random(2) - 1
-        next_pos.z = next_pos.z + math.random(2) - math.random(2)
-        local nodes = minetest.find_nodes_in_area(next_pos, next_pos, self._tunnel)
-        if nodes and #nodes > 0 then
-          --local node = minetest.get_node_or_nil(next_pos)
-          --print('A '..self._printed_name..' tunnels a '..node.name..'.')
-          minetest.set_node(next_pos, {name='air'})
-        end
-      else
+      -- We've hit an obstacle.
+      if not self._diggable then
         self._destination = nil
+      elseif self:_tunnel() then
+        return
       end
     end
   end
@@ -314,6 +356,37 @@ function nmobs_mod.walk_run(self, max_speed, new_dest_type, fail_chance, fail_ac
 end
 
 
+function nmobs_mod.tunnel(self)  -- self._tunnel
+  local pos = self:_get_pos()
+  self._chose_destination = minetest.get_gametime()
+
+  -- Pick the node in the proper direction.
+  local dir = vector.direction(pos, self._destination)
+  if math.abs(dir.x) > math.abs(dir.z) then
+    dir.x = dir.x > 0 and 1 or -1
+    dir.z = 0
+  else
+    dir.x = 0
+    dir.z = dir.z > 0 and 1 or -1
+  end
+  dir.y = self._destination.y > pos.y and (math.random(2) - 1) or 0
+
+  -- Check if the node can be dug.
+  local next_pos = vector.round(vector.add(pos, dir))
+  local nodes = minetest.find_nodes_in_area(next_pos, next_pos, self._diggable)
+  if nodes and #nodes > 0 and not minetest.is_protected(next_pos, '') then
+    --local node = minetest.get_node_or_nil(next_pos)
+    --print('A '..self._printed_name..' tunnels a '..node.name..'.')
+    minetest.set_node(next_pos, {name='air'})
+
+    -- Move into the space.
+    dir.y = 0
+    self.object:set_velocity(dir)
+    return true
+  end
+end
+
+
 function nmobs_mod.travel(self, speed)  -- self._travel
   -- Actually move the mob.
   local target
@@ -327,14 +400,85 @@ function nmobs_mod.travel(self, speed)  -- self._travel
     target = self._destination
   end
 
-  local dir = nmobs_mod.dir_to_target(self._last_pos, target) + math.random() * 0.5 - 0.25
-  --print(vector.distance(pos, self._destination))
+  local dir = nmobs_mod.dir_to_target(self:_get_pos(), target) + math.random() * 0.5 - 0.25
 
   local v = {x=0, y=0, z=0}
   self.object:set_yaw(dir)
   v.x = - speed * math.sin(dir)
   v.z = speed * math.cos(dir)
   self.object:set_velocity(v)
+end
+
+
+function nmobs_mod.new_destination(self, dtype, object)  -- self._new_destination
+  local dest
+  local minp
+  local maxp
+  local pos = self:_get_pos()
+
+  self._chose_destination = minetest.get_gametime()
+
+  if self._tether then
+    minp = vector.subtract(self._tether, 5)
+    maxp = vector.add(self._tether, 5)
+  end
+
+  pos.y = pos.y + self.collisionbox[2]
+
+  if dtype == 'looks_for' and self._looks_for then
+    if not self._tether then
+      minp = vector.subtract(pos, 10)
+      maxp = vector.add(pos, 10)
+    end
+
+    local nodes = minetest.find_nodes_in_area(minp, maxp, self._looks_for)
+    if nodes and #nodes > 0 then
+      dest = nodes[math.random(#nodes)]
+    end
+  elseif dtype == 'flee' and object then
+    local opos = object:get_pos()
+
+    if not self._tether then
+      local toward = vector.add(pos, vector.direction(opos, pos))
+      minp = vector.subtract(toward, 15)
+      maxp = vector.add(toward, 15)
+    end
+
+    local nodes = minetest.find_nodes_in_area_under_air(minp, maxp, nonliquids)
+    if nodes and #nodes > 0 then
+      dest = nodes[math.random(#nodes)]
+    end
+  end
+
+  if (not dest or math.random(10) == 1) and not self._aquatic then
+    if not self._tether then
+      minp = vector.subtract(pos, 15)
+      maxp = vector.add(pos, 15)
+    end
+
+    local nodes = minetest.find_nodes_in_area_under_air(minp, maxp, nonliquids)
+    if nodes and #nodes > 0 then
+      dest = nodes[math.random(#nodes)]
+    end
+  end
+
+  ------------------------------
+  return dest
+  --pos.x = pos.x - 10
+  --return pos
+  ------------------------------
+end
+
+
+function nmobs_mod.dir_to_target(pos, target)
+  local direction = vector.direction(pos, target)
+
+  local dir = (math.atan(direction.z / direction.x) + math.pi / 2)
+  if target.x > pos.x then
+    dir = dir + math.pi
+  end
+
+  return dir
 end
 
 
@@ -353,14 +497,9 @@ end
 function nmobs_mod.find_prey(self)
   local prey = {}
 
-  if not self._last_pos then
-    self._last_pos = self.object:get_pos()
-  end
-
   for _, player in pairs(minetest.get_connected_players()) do
-    --print('get_pos 180')
     local opos = player:get_pos()
-    if vector.distance(self._last_pos, opos) < self._vision then
+    if vector.distance(self:_get_pos(), opos) < self._vision then
       prey[#prey+1] = player
     end
   end
@@ -375,9 +514,9 @@ function nmobs_mod.replace(self)  -- _replace
     return
   end
 
-  local pos = self._last_pos
-  pos.y = pos.y + 0.5
-  pos = vector.round(pos)
+  local pos = self:_get_pos()
+  --pos.y = pos.y + 0.5
+  --pos = vector.round(pos)
 
   for _, instance in pairs(self._replaces) do
     for non_loop = 1, 1 do
@@ -398,7 +537,6 @@ function nmobs_mod.replace(self)  -- _replace
           minp.y = maxp.y
         end
 
-        --print('find_nodes_in_area 128')
         local nodes = minetest.find_nodes_in_area(minp, maxp, instance.replace)
         local with = instance.with or {'air'}
         if not type(with) == 'table' and #with > 0 then
@@ -407,12 +545,9 @@ function nmobs_mod.replace(self)  -- _replace
 
         if nodes and #nodes > 0 then
           local dpos = nodes[math.random(#nodes)]
-          --print('is_protected 137')
           if not minetest.is_protected(dpos, '') then
-            --print('get_node_or_nil 139')
             local node = minetest.get_node_or_nil(dpos)
             local wnode = with[math.random(#with)]
-            --print('set_node 142')
             minetest.set_node(dpos, {name=wnode})
             --print('Nmobs: a '..self._printed_name..' replaced '..node.name..' with '..wnode..'.')
             return
@@ -421,106 +556,6 @@ function nmobs_mod.replace(self)  -- _replace
       end
     end
   end
-end
-
-
-function nmobs_mod.dir_to_target(pos, target)
-  local direction = vector.direction(pos, target)
-  --print(dump(direction))
-
-  local dir = (math.atan(direction.z / direction.x) + math.pi / 2)
-  if target.x > pos.x then
-    dir = dir + math.pi
-  end
-  --print(dir)
-
-  return dir
-end
-
-
-function nmobs_mod.new_destination(self, dtype, object)  -- self._new_destination
-  local dest
-  local minp
-  local maxp
-  local pos = self._last_pos
-
-  self._chose_destination = minetest.get_gametime()
-
-  if self._tether then
-    minp = vector.subtract(self._tether, 5)
-    maxp = vector.add(self._tether, 5)
-  end
-
-  pos.y = pos.y + self.collisionbox[2]
-
-  if dtype == 'looks_for' and self._looks_for then
-    if not self._tether then
-      minp = vector.subtract(pos, 10)
-      maxp = vector.add(pos, 10)
-    end
-
-    --print('find_nodes_in_area 425')
-    local nodes = minetest.find_nodes_in_area(minp, maxp, self._looks_for)
-    if nodes and #nodes > 0 then
-      dest = nodes[math.random(#nodes)]
-    end
-  elseif dtype == 'flee' and object then
-    local opos = object:get_pos()
-
-    if not self._tether then
-      local toward = vector.add(pos, vector.direction(opos, pos))
-      minp = vector.subtract(toward, 15)
-      maxp = vector.add(toward, 15)
-    end
-
-    --print('find_nodes_in_area_under_air 439')
-    local nodes = minetest.find_nodes_in_area_under_air(minp, maxp, nonliquids)
-    if nodes and #nodes > 0 then
-      dest = nodes[math.random(#nodes)]
-    end
-  end
-
-  if (not dest or math.random(10) == 1) and not self._aquatic then
-    if not self._tether then
-      minp = vector.subtract(pos, 15)
-      maxp = vector.add(pos, 15)
-    end
-
-    --print('find_nodes_in_area_under_air 452')
-    local nodes = minetest.find_nodes_in_area_under_air(minp, maxp, nonliquids)
-    if nodes and #nodes > 0 then
-      dest = nodes[math.random(#nodes)]
-    end
-  end
-
-  return dest
-end
-
-
-function nmobs_mod.fall(self)  -- self._fall
-  --local acc = self.object:get_acceleration()
-  local acc = null_vector
-  local pos = self.object:get_pos()
-  --print('get_node_or_nil 467')
-  local node = minetest.get_node_or_nil(pos)
-  local gravity = 10
-
-  self._last_pos = pos
-
-  pos.y = pos.y - self.collisionbox[5]
-  pos = vector.round(pos)
-  --print(dump(node))
-  if node and liquids[node.name] then
-    --if acc.y < 0 then
-    --  acc.y = acc.y / 2
-    --end
-    gravity = -1
-  else
-    --if acc.y > 0 then
-    --  acc.y = acc.y / 2
-    --end
-  end
-  self.object:set_acceleration({x=0, y=acc.y-gravity, z=0})
 end
 
 
@@ -590,7 +625,7 @@ function nmobs_mod.take_punch(self, puncher, time_from_last_punch, tool_capabili
 
   --print('hp down to '..(hp - damage))
   self._target = puncher
-  if puncher and puncher:is_player() and vector.distance(self._last_pos, puncher:get_pos()) > self._vision then
+  if puncher and puncher:is_player() and vector.distance(self:_get_pos(), puncher:get_pos()) > self._vision then
     self._state = 'fleeing'
   elseif hp < damage * 2 then
     --print('should flee')
@@ -853,6 +888,7 @@ function nmobs_mod.register_mob(def)
     _find_prey = nmobs_mod.find_prey,
     _flee = nmobs_mod.flee,
     _follow = nmobs_mod.follow,
+    _get_pos = nmobs_mod.get_pos,
     _hit_dice = (good_def.hit_dice or 1),
     _is_a_mob = true,
     _last_step = 0,
@@ -877,7 +913,8 @@ function nmobs_mod.register_mob(def)
     _tames = good_def.tames,
     _target = nil,
     _travel = nmobs_mod.travel,
-    _tunnel = good_def.tunnel,
+    _tunnel = nmobs_mod.tunnel,
+    _diggable = good_def.can_dig,
     _vision = (good_def.vision or 15),
     _walk = nmobs_mod.walk,
     _walk_speed = (good_def.walk_speed or 1),
@@ -889,6 +926,7 @@ function nmobs_mod.register_mob(def)
   minetest.register_node(proto.textures[1], node)
   minetest.register_entity('nmobs:'..name, proto)
 
+  if false then
   if proto._spawn_table then
     for _, instance in pairs(proto._spawn_table) do
       minetest.register_abm({
@@ -914,4 +952,5 @@ function nmobs_mod.register_mob(def)
       end,
     })
   end
+end
 end

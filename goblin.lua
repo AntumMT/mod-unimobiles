@@ -7,9 +7,9 @@
 
 nmobs.register_mob({
   attacks_player = true,
+  can_dig = {'group:cracky', 'group:crumbly'},
   hit_dice = 2,
-  --looks_for = {'default:stone_with_coal', 'default:stone_with_iron', 'default:stone_with_copper', 'default:stone_with_gold', 'default:stone_with_mese', 'default:stone_with_diamond', 'fun_caves:giant_mushroom_stem', 'default:mossycobble'},
-  looks_for = {'default:mossycobble', 'default:dirt', 'default:stone_with_algae', 'default:stone_with_lichen'},
+  looks_for = {'default:mossycobble', 'default:dirt', 'default:stone_with_algae', 'default:stone_with_lichen', 'default:stone_with_coal', 'default:stone_with_iron', 'default:stone_with_copper', 'default:stone_with_gold', 'default:stone_with_mese', 'default:stone_with_diamond', 'fun_caves:giant_mushroom_stem'},
   name = 'goblin',
   nocturnal = true,
   nodebox = {
@@ -74,16 +74,15 @@ nmobs.register_mob({
     },
   },
   tames = {'default:diamond'},
-  tunnel = {'group:cracky', 'group:crumbly'},
 })
 
 
 nmobs.register_mob({
   armor_class = 8,
   attacks_player = true,
+  can_dig = {'group:cracky', 'group:crumbly'},
   hit_dice = 4,
-  --looks_for = {'default:stone_with_coal', 'default:stone_with_iron', 'default:stone_with_copper', 'default:stone_with_gold', 'default:stone_with_mese', 'default:stone_with_diamond', 'fun_caves:giant_mushroom_stem', 'default:mossycobble'},
-  looks_for = {'default:mossycobble', 'default:dirt', 'default:stone_with_algae', 'default:stone_with_lichen'},
+  looks_for = {'default:mossycobble', 'default:dirt', 'default:stone_with_algae', 'default:stone_with_lichen', 'default:stone_with_coal', 'default:stone_with_iron', 'default:stone_with_copper', 'default:stone_with_gold', 'default:stone_with_mese', 'default:stone_with_diamond', 'fun_caves:giant_mushroom_stem'},
   name = 'goblin basher',
   nocturnal = true,
   nodebox = {
@@ -148,7 +147,6 @@ nmobs.register_mob({
     },
   },
   tames = {'default:diamond'},
-  tunnel = {'group:cracky', 'group:crumbly'},
 })
 
 

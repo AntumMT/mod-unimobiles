@@ -31,11 +31,20 @@ function math.limit(n, l, h)
 end
 
 
+function vector.horizontal_length(vec)
+  if not (vec.x and vec.z) then
+    return 0
+  end
+
+  return math.sqrt(vec.x ^ 2 + vec.z ^ 2)
+end
+
+
 function vector.horizontal_distance(p1, p2)
   if not (p1.x and p2.x and p1.z and p2.z) then
     return 0
   end
-  return math.sqrt((p2.x - p1.x)^2 + (p2.z - p2.z)^2)
+  return math.sqrt((p2.x - p1.x) ^ 2 + (p2.z - p2.z) ^ 2)
 end
 
 
