@@ -41,6 +41,7 @@ local check = {
   {'size', 'number', false},
   {'tames', 'table', false},
   {'textures', 'table', false},
+  {'tunnel', 'table', false},
   {'vision', 'number', false},
   {'walk_speed', 'number', false},
   {'weapon_capabilities', 'table', false},
@@ -252,15 +253,30 @@ function nmobs_mod.walk_run(self, max_speed, new_dest_type, fail_chance, fail_ac
     return
   end
 
-  local velocity = self.object:get_velocity()
-  local actual_speed = vector.horizontal_length(velocity)
+  local pos = self._last_pos
 
-  -- if we've hit an obstacle
-  if actual_speed < 0.5 and minetest.get_gametime() - self._chose_destination > 1.5 then
-    if false and self._tunnel then
-      self:_replace('tunnel')
-    else
-      self._destination = nil
+  if self._destination then
+    local velocity = self.object:get_velocity()
+    local actual_speed = vector.horizontal_length(velocity)
+
+    -- if we've hit an obstacle
+    if actual_speed < 0.5 and minetest.get_gametime() - self._chose_destination > 1.5 then
+      if self._tunnel then
+        self._chose_destination = minetest.get_gametime()
+        --local next_pos = vector.round(vector.add(pos, vector.direction(pos, self._destination)))
+        local next_pos = vector.add(pos, vector.direction(pos, self._destination))
+        next_pos.x = next_pos.x + math.random(2) - math.random(2)
+        next_pos.y = next_pos.y + math.random(2) - 1
+        next_pos.z = next_pos.z + math.random(2) - math.random(2)
+        local nodes = minetest.find_nodes_in_area(next_pos, next_pos, self._tunnel)
+        if nodes and #nodes > 0 then
+          --local node = minetest.get_node_or_nil(next_pos)
+          --print('A '..self._printed_name..' tunnels a '..node.name..'.')
+          minetest.set_node(next_pos, {name='air'})
+        end
+      else
+        self._destination = nil
+      end
     end
   end
 
@@ -269,8 +285,6 @@ function nmobs_mod.walk_run(self, max_speed, new_dest_type, fail_chance, fail_ac
   end
 
   if self._destination then
-    local pos = self._last_pos
-
     if vector.horizontal_distance(pos, self._destination) < 1 + max_speed then
       -- We've arrived.
       self._destination = nil
@@ -313,18 +327,14 @@ function nmobs_mod.travel(self, speed)  -- self._travel
     target = self._destination
   end
 
-  --local dir = nmobs_mod.dir_to_target(self._last_pos, target) + math.random() * 0.5 - 0.25
-  local dir = nmobs_mod.dir_to_target(self._last_pos, target)
+  local dir = nmobs_mod.dir_to_target(self._last_pos, target) + math.random() * 0.5 - 0.25
   --print(vector.distance(pos, self._destination))
 
   local v = {x=0, y=0, z=0}
-  local yaw = self.object:get_yaw()
-  if math.abs(yaw - dir) > 0.05 then
-    self.object:set_yaw(dir)
-    v.x = - speed * math.sin(dir)
-    v.z = speed * math.cos(dir)
-    self.object:set_velocity(v)
-  end
+  self.object:set_yaw(dir)
+  v.x = - speed * math.sin(dir)
+  v.z = speed * math.cos(dir)
+  self.object:set_velocity(v)
 end
 
 
@@ -867,6 +877,7 @@ function nmobs_mod.register_mob(def)
     _tames = good_def.tames,
     _target = nil,
     _travel = nmobs_mod.travel,
+    _tunnel = good_def.tunnel,
     _vision = (good_def.vision or 15),
     _walk = nmobs_mod.walk,
     _walk_speed = (good_def.walk_speed or 1),
