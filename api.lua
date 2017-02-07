@@ -462,11 +462,7 @@ function nmobs_mod.new_destination(self, dtype, object)  -- self._new_destinatio
     end
   end
 
-  ------------------------------
   return dest
-  --pos.x = pos.x - 10
-  --return pos
-  ------------------------------
 end
 
 
@@ -926,7 +922,6 @@ function nmobs_mod.register_mob(def)
   minetest.register_node(proto.textures[1], node)
   minetest.register_entity('nmobs:'..name, proto)
 
-  if false then
   if proto._spawn_table then
     for _, instance in pairs(proto._spawn_table) do
       minetest.register_abm({
@@ -952,5 +947,4 @@ function nmobs_mod.register_mob(def)
       end,
     })
   end
-end
 end
