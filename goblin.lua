@@ -5,9 +5,22 @@
 -- The nodebox and textures are distributed as Public Domain (WTFPL).
 
 
+local drops = {
+  {name = "default:mossycobble", chance = 2, max = 3},
+  {name = "default:pick_stone", chance = 3, max = 3},
+  {name = "default:sword_stone", chance = 5},
+  {name = "default:torch", chance = 3, max = 10},
+  {name = "nmobs:glowing_fungus", chance = 3, min = 2, max = 5},
+}
+
+if minetest.registered_items['fun_caves:mushroom_steak'] then
+  drops[#drops+1] = {name = "fun_caves:mushroom_steak", chance = 2, max = 2}
+end
+
 nmobs.register_mob({
   attacks_player = true,
   can_dig = {'group:cracky', 'group:crumbly'},
+  drops = drops,
   hit_dice = 2,
   looks_for = {'default:mossycobble', 'default:dirt', 'default:stone_with_algae', 'default:stone_with_lichen', 'default:stone_with_coal', 'default:stone_with_iron', 'default:stone_with_copper', 'default:stone_with_gold', 'default:stone_with_mese', 'default:stone_with_diamond', 'fun_caves:giant_mushroom_stem'},
   name = 'goblin',
@@ -77,10 +90,16 @@ nmobs.register_mob({
 })
 
 
+drops = table.copy(drops)
+drops[#drops+1] = {name = "default:coal_lump", chance = 2, max = 2}
+drops[#drops+1] = {name = "default:copper_lump", chance = 4, max = 2}
+drops[#drops+1] = {name = "default:iron_lump", chance = 6, max = 2}
+
 nmobs.register_mob({
   armor_class = 8,
   attacks_player = true,
   can_dig = {'group:cracky', 'group:crumbly'},
+  drops = drops,
   hit_dice = 4,
   looks_for = {'default:mossycobble', 'default:dirt', 'default:stone_with_algae', 'default:stone_with_lichen', 'default:stone_with_coal', 'default:stone_with_iron', 'default:stone_with_copper', 'default:stone_with_gold', 'default:stone_with_mese', 'default:stone_with_diamond', 'fun_caves:giant_mushroom_stem'},
   name = 'goblin basher',

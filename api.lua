@@ -22,6 +22,7 @@ local check = {
   {'collisionbox', 'table', false},
   {'damage', 'number', false},
   {'diurnal', 'boolean', false},
+  {'drops', 'table', false},
   {'environment', 'table', false},
   {'higher_than', 'number', false},
   {'hit_dice', 'number', false},
@@ -192,8 +193,10 @@ function nmobs_mod.fight(self)  -- self._fight
     self._target = nil
     self._state = 'standing'
     return
-  elseif vector.distance(self:_get_pos(), opponent_pos) < 1 + (self._reach or 2) then
+  elseif vector.distance(self:_get_pos(), opponent_pos) < 1 + self._reach then
     -- in punching range
+    local dir = nmobs_mod.dir_to_target(self:_get_pos(), opponent_pos) + math.random()
+    self.object:set_yaw(dir)
     self.object:set_velocity(null_vector)
     self._target:punch(self.object, 1, self._weapon_capabilities, nil)
   else
@@ -521,7 +524,7 @@ function nmobs_mod.replace(self)  -- _replace
         break
       end
 
-      for r = 1, 1 + (self._reach or 2) do
+      for r = 1, 1 + self._reach do
         local minp = vector.subtract(pos, r)
         if not (instance.down or instance.floor) then
           minp.y = pos.y
@@ -616,15 +619,20 @@ function nmobs_mod.take_punch(self, puncher, time_from_last_punch, tool_capabili
     if bug then
       self._kill_me = true
     end
-    -- ** drop code **
+
+    if player_name and puncher:get_inventory() then
+      for _, drop in ipairs(self._drops) do
+        if drop.name and (not drop.chance or math.random(1, drop.chance) == 1) then
+          puncher:get_inventory():add_item("main", ItemStack(drop.name.." "..math.random((drop.min or 1), (drop.max or 1))))
+        end
+      end
+    end
   end
 
-  --print('hp down to '..(hp - damage))
   self._target = puncher
   if puncher and puncher:is_player() and vector.distance(self:_get_pos(), puncher:get_pos()) > self._vision then
     self._state = 'fleeing'
   elseif hp < damage * 2 then
-    --print('should flee')
     self._state = 'fleeing'
   else
     self._state = 'fighting'
@@ -756,6 +764,7 @@ end
 function nmobs_mod.register_mob(def)
   local good_def = {}
 
+  -- Check for legitimate properties.
   for _, att in pairs(check) do
     if att[3] and not def[att[1]] then
       print('Nmobs: registration missing '..att[1])
@@ -767,6 +776,7 @@ function nmobs_mod.register_mob(def)
     end
   end
 
+  -- Allow overrides (mainly for functions).
   for att, val in pairs(def) do
     if att:find('^_') then
       good_def[att] = val
@@ -805,6 +815,7 @@ function nmobs_mod.register_mob(def)
     tiles = good_def.textures,
   }
 
+  -- Make a useful collision box.
   local cbox = good_def.collisionbox
   if not cbox then
     -- measure nodebox
@@ -821,6 +832,8 @@ function nmobs_mod.register_mob(def)
         end
       end
     end
+    -- Since the collision box doesn't turn with the mob,
+    --  make it the average of the z and x dimentions.
     cbox[1] = (cbox[1] + cbox[3]) / 2
     cbox[4] = (cbox[4] + cbox[6]) / 2
     cbox[3] = cbox[1]
@@ -884,6 +897,7 @@ function nmobs_mod.register_mob(def)
     _attacks_player = good_def.attacks_player,
     _damage = good_def.damage,
     _diurnal = good_def.diurnal,
+    _drops = good_def.drops or {},
     _environment = good_def.environment,
     _fall = good_def._fall or nmobs_mod.fall,
     _fight = good_def._fight or nmobs_mod.fight,
@@ -902,7 +916,7 @@ function nmobs_mod.register_mob(def)
     _noise = good_def._noise or nmobs_mod.noise,
     _printed_name = name:gsub('_', ' '),
     _rarity = (good_def.rarity or 20000),
-    _reach = (good_def.reach or 2),
+    _reach = (good_def.reach or 1),
     _replace = good_def._replace or nmobs_mod.replace,
     _replaces = good_def.replaces,
     _run_speed = (good_def.run_speed or 3),
