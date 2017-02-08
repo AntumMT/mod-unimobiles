@@ -767,6 +767,12 @@ function nmobs_mod.register_mob(def)
     end
   end
 
+  for att, val in pairs(def) do
+    if att:find('^_') then
+      good_def[att] = val
+    end
+  end
+
   local name = good_def.name:gsub('^.*:', '')
   name = name:lower()
   name = name:gsub('[^a-z0-9]', '_')
@@ -873,46 +879,46 @@ function nmobs_mod.register_mob(def)
     textures = {'nmobs:'..name..'_block',},
     visual = 'wielditem',
     visual_size = sz,
-    _aggressive_behavior = nmobs_mod.aggressive_behavior,
+    _aggressive_behavior = good_def._aggressive_behavior or nmobs_mod.aggressive_behavior,
     _armor_groups = good_def.armor,
     _attacks_player = good_def.attacks_player,
     _damage = good_def.damage,
     _diurnal = good_def.diurnal,
     _environment = good_def.environment,
-    _fall = nmobs_mod.fall,
-    _fight = nmobs_mod.fight,
-    _find_prey = nmobs_mod.find_prey,
-    _flee = nmobs_mod.flee,
-    _follow = nmobs_mod.follow,
-    _get_pos = nmobs_mod.get_pos,
+    _fall = good_def._fall or nmobs_mod.fall,
+    _fight = good_def._fight or nmobs_mod.fight,
+    _find_prey = good_def._find_prey or nmobs_mod.find_prey,
+    _flee = good_def._flee or nmobs_mod.flee,
+    _follow = good_def._follow or nmobs_mod.follow,
+    _get_pos = good_def._get_pos or nmobs_mod.get_pos,
     _hit_dice = (good_def.hit_dice or 1),
     _is_a_mob = true,
     _last_step = 0,
     _lifespan = (good_def.lifespan or 200),
     _looks_for = good_def.looks_for,
     _name = name,
-    _new_destination = nmobs_mod.new_destination,
+    _new_destination = good_def._new_destination or nmobs_mod.new_destination,
     _nocturnal = good_def.nocturnal,
-    _noise = nmobs_mod.noise,
+    _noise = good_def._noise or nmobs_mod.noise,
     _printed_name = name:gsub('_', ' '),
     _rarity = (good_def.rarity or 20000),
     _reach = (good_def.reach or 2),
-    _replace = nmobs_mod.replace,
+    _replace = good_def._replace or nmobs_mod.replace,
     _replaces = good_def.replaces,
     _run_speed = (good_def.run_speed or 3),
     _sound = good_def.sound,
     _sound_angry = good_def.sound_angry,
     _sound_scared = good_def.sound_scared,
     _spawn_table = good_def.spawn,
-    _stand = nmobs_mod.stand,
+    _stand = good_def._stand or nmobs_mod.stand,
     _state = 'standing',
     _tames = good_def.tames,
     _target = nil,
-    _travel = nmobs_mod.travel,
-    _tunnel = nmobs_mod.tunnel,
+    _travel = good_def._travel or nmobs_mod.travel,
+    _tunnel = good_def._tunnel or nmobs_mod.tunnel,
     _diggable = good_def.can_dig,
     _vision = (good_def.vision or 15),
-    _walk = nmobs_mod.walk,
+    _walk = good_def._walk or nmobs_mod.walk,
     _walk_speed = (good_def.walk_speed or 1),
     _weapon_capabilities = good_def.weapon_capabilities,
   }
