@@ -7,11 +7,11 @@
 -- ant/termite
 
 
-local bored_with_standing = 10
-local bored_with_walking = 10
+local bored_with_standing = 20
+local bored_with_walking = 20
 local gravity = -10
 local noise_rarity = 100
-local stand_and_fight = 10
+local stand_and_fight = 40
 local terminal_height = 10
 
 
@@ -53,7 +53,9 @@ local check = {
 -- Don't save these variables between activations.
 local skip_serializing = {}
 skip_serializing['_last_pos'] = true
+skip_serializing['_lock'] = true
 skip_serializing['_destination'] = true
+skip_serializing['_falling_from'] = true
 skip_serializing['_target'] = true
 
 
@@ -116,7 +118,6 @@ function nmobs_mod.step(self, dtime)
 
   self._last_step = 0
 
-  --print(self._state)
   if self._state == 'fighting' then
     self:_fight()
   elseif self._state == 'fleeing' then
@@ -141,9 +142,7 @@ function nmobs_mod.get_pos(self)  -- self._get_pos
     return self._last_pos
   else
     self._last_pos = self.object:get_pos()
-    --self._last_pos.y = self._last_pos.y - self.collisionbox[5]
     self._last_pos.y = math.floor(self._last_pos.y + 0.5)
-    --print(self._last_pos.y)
     return table.copy(self._last_pos)
   end
 end
@@ -151,6 +150,7 @@ end
 
 function nmobs_mod.fall(self)  -- self._fall
   local falling
+  local grav = gravity
   local pos = self.object:get_pos()
   pos = vector.round(pos)
 
@@ -174,10 +174,10 @@ function nmobs_mod.fall(self)  -- self._fall
 
   local node = minetest.get_node_or_nil(pos)
   if node and liquids[node.name] then
-    gravity = 1
+    grav = 1
   end
 
-  self.object:set_acceleration({x=0, y=gravity, z=0})
+  self.object:set_acceleration({x=0, y=grav, z=0})
 end
 
 
@@ -227,7 +227,7 @@ function nmobs_mod.follow(self)  -- self._follow
   self._destination = player:get_pos()
 
   local pos = self:_get_pos()
-  if vector.horizontal_distance(pos, self._destination) < 1 + self._walk_speed then
+  if vector.horizontal_distance(pos, self._destination) < self._walk_speed * 2 then
     self.object:set_velocity(null_vector)
     return
   end
@@ -330,10 +330,12 @@ function nmobs_mod.walk_run(self, max_speed, new_dest_type, fail_chance, fail_ac
   end
 
   if self._destination then
-    if vector.horizontal_distance(pos, self._destination) < 1 + max_speed then
+    if vector.horizontal_distance(pos, self._destination) < max_speed * 2 then
       -- We've arrived.
       self._destination = nil
-      self._state = fail_action
+      if self._state ~= 'fleeing' then
+        self._state = fail_action
+      end
       self.object:set_velocity(null_vector)
     else
       local speed = max_speed
@@ -559,12 +561,6 @@ end
 
 
 function nmobs_mod.take_punch(self, puncher, time_from_last_punch, tool_capabilities, dir, damage)
-  --print(dump(puncher))
-  --print(self.object:get_hp())
-  --print(damage)
-  --print(dump(tool_capabilities))
-  --print(dump(self.object:get_armor_groups()))
-  --self.object:set_hp(self.object:get_hp() - damage)
   local hp = self.object:get_hp()
   local bug = true -- bug in minetest code prevents damage calculation
 
@@ -575,7 +571,6 @@ function nmobs_mod.take_punch(self, puncher, time_from_last_punch, tool_capabili
     e_mult = damage_multiplier[player_name] or 1
   end
 
-  -- * check for creative and damage
   if nmobs_mod.nice_mobs or self._owner then
     return true
   end
@@ -654,9 +649,11 @@ function nmobs_mod.activate(self, staticdata, dtime_s)
 
   self.object:set_armor_groups(self._armor_groups)
   self._state = 'standing'
-  self._last_pos = nil
-  self._lock = nil
   self._chose_destination = 0
+  for prop, _ in pairs(skip_serializing) do
+    self[prop] = nil
+  end
+
   self.object:set_velocity(null_vector)
   if self._hp then
     self.object:set_hp(self._hp)
@@ -687,12 +684,10 @@ function nmobs_mod.get_staticdata(self)
 
   for k, d in pairs(self) do
     if k:find('^_') and not skip_serializing[k] and not nmobs_mod.mobs[self._name][k] then
-      --print('serializing '..k)
       data[k] = d
     end
   end
 
-  --print('serialized data length: '..minetest.serialize(data):len())
   return minetest.serialize(data)
 end
 
@@ -715,11 +710,9 @@ function nmobs_mod.abm_callback(name, pos, node, active_object_count, active_obj
   end
 
   local pos_above = {x=pos.x, y=pos.y+1, z=pos.z}
-  --print('get_node_or_nil 642')
   local node_above = minetest.get_node_or_nil(pos_above)
   if node_above and node_above.name == 'air' and active_object_count < 3 then
     pos_above.y = pos_above.y + 2
-    --print('add_entity 646')
     minetest.add_entity(pos_above, 'nmobs:'..name)
   end
 end
