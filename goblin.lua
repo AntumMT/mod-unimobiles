@@ -186,7 +186,7 @@ else
     description = "Glowing Fungal Stone",
     tiles = {"default_stone.png^vmg_glowing_fungal.png",},
     is_ground_content = true,
-    light_source = light_max - 4,
+    light_source = LIGHT_MAX - 4,
     groups = {cracky=3, stone=1},
     drop = {items={ {items={"default:cobble"},}, {items={"fun_caves:glowing_fungus",},},},},
     sounds = default.node_sound_stone_defaults(),

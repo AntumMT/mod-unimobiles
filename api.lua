@@ -151,12 +151,12 @@ end
 
 function nmobs_mod.fall(self)  -- self._fall
   local falling
-  local pos = self:_get_pos()
+  local pos = self.object:get_pos()
   pos = vector.round(pos)
 
-  pos.y = pos.y - 1 + self.collisionbox[2]
-  local node_below = minetest.get_node_or_nil(pos)
-  pos.y = self:_get_pos().y
+  local pos_below = table.copy(pos)
+  pos_below.y = pos_below.y - 1 + self.collisionbox[2]
+  local node_below = minetest.get_node_or_nil(pos_below)
 
   if node_below and node_below.name == 'air' then
     falling = true
@@ -654,6 +654,7 @@ function nmobs_mod.activate(self, staticdata, dtime_s)
 
   self.object:set_armor_groups(self._armor_groups)
   self._state = 'standing'
+  self._last_pos = nil
   self._lock = nil
   self._chose_destination = 0
   self.object:set_velocity(null_vector)
@@ -725,6 +726,8 @@ end
 
 
 function nmobs_mod.on_rightclick(self, clicker)
+  local player_name = clicker:get_player_name()
+
   if not self._tames then
     minetest.chat_send_player(player_name, 'You can\'t tame a '..self._printed_name..' that way.')
 
@@ -738,7 +741,6 @@ function nmobs_mod.on_rightclick(self, clicker)
   -- check item
   --local hand = clicker:get_wielded_item()
 
-  local player_name = clicker:get_player_name()
   if not self._owner then
     self._state = 'following'
     self._owner = clicker:get_player_name()
