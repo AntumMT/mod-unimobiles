@@ -24,6 +24,7 @@ local check = {
   {'diurnal', 'boolean', false},
   {'drops', 'table', false},
   {'environment', 'table', false},
+  {'fly', 'boolean', false},
   {'higher_than', 'number', false},
   {'hit_dice', 'number', false},
   {'looks_for', 'table', false},
@@ -37,11 +38,12 @@ local check = {
   {'reach', 'number', false},
   {'replaces', 'table', false},
   {'run_speed', 'number', false},
+  {'size', 'number', false},
   {'spawn', 'table', false},
   {'sound', 'string', false},
   {'sound_angry', 'string', false},
   {'sound_scared', 'string', false},
-  {'size', 'number', false},
+  {'step_height', 'number', false},
   {'tames', 'table', false},
   {'textures', 'table', false},
   {'can_dig', 'table', false},
@@ -153,6 +155,10 @@ function nmobs_mod.fall(self)  -- self._fall
   local grav = gravity
   local pos = self.object:get_pos()
   pos = vector.round(pos)
+
+  if self._fly then
+    grav = 0
+  end
 
   local pos_below = table.copy(pos)
   pos_below.y = pos_below.y - 1 + self.collisionbox[2]
@@ -405,12 +411,16 @@ function nmobs_mod.travel(self, speed)  -- self._travel
     target = self._destination
   end
 
-  local dir = nmobs_mod.dir_to_target(self:_get_pos(), target) + math.random() * 0.5 - 0.25
+  local pos = self:_get_pos()
+  local dir = nmobs_mod.dir_to_target(pos, target) + math.random() * 0.5 - 0.25
 
   local v = {x=0, y=0, z=0}
   self.object:set_yaw(dir)
   v.x = - speed * math.sin(dir)
   v.z = speed * math.cos(dir)
+  if self._fly then
+    v.y = speed * (target.y - pos.y) / math.abs(target.y - pos.y) / 2
+  end
   self.object:set_velocity(v)
 end
 
@@ -883,7 +893,7 @@ function nmobs_mod.register_mob(def)
     on_punch = nmobs_mod.take_punch,
     on_rightclick = nmobs_mod.on_rightclick,
     physical = true,
-    stepheight = 1.1,
+    stepheight = good_def.step_height or 1.1,
     textures = {'nmobs:'..name..'_block',},
     visual = 'wielditem',
     visual_size = sz,
@@ -899,6 +909,7 @@ function nmobs_mod.register_mob(def)
     _find_prey = good_def._find_prey or nmobs_mod.find_prey,
     _flee = good_def._flee or nmobs_mod.flee,
     _follow = good_def._follow or nmobs_mod.follow,
+    _fly = good_def.fly,
     _get_pos = good_def._get_pos or nmobs_mod.get_pos,
     _hit_dice = (good_def.hit_dice or 1),
     _is_a_mob = true,

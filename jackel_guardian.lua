@@ -8,6 +8,7 @@
 nmobs.register_mob({
   attacks_player = true,
   armor_class = 6,
+  fly = true,
   hit_dice = 5,
   looks_for = {'zigg:ziggurat_1'},
   name = 'jackel guardian',
@@ -33,6 +34,7 @@ nmobs.register_mob({
     {-0.03, 0.25, -0.06, 0.03, 0.34375, 0.04}, -- neck
     {0.26, -0.5, 0.26, 0.28, 0.5, 0.29}, -- staff
   },
+  rarity = 4000,
   size = 2,
   --tames = {'farming:wheat'},
 })
