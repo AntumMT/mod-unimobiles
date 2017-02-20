@@ -419,7 +419,10 @@ function nmobs_mod.travel(self, speed)  -- self._travel
   v.x = - speed * math.sin(dir)
   v.z = speed * math.cos(dir)
   if self._fly then
-    v.y = speed * (target.y - pos.y) / math.abs(target.y - pos.y) / 2
+    local off = target.y - pos.y
+    if off ~= 0 then
+      v.y = speed * off / math.abs(off) / 2
+    end
   end
   self.object:set_velocity(v)
 end

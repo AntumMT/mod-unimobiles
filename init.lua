@@ -44,7 +44,7 @@ function vector.horizontal_distance(p1, p2)
   if not (p1.x and p2.x and p1.z and p2.z) then
     return 0
   end
-  return math.sqrt((p2.x - p1.x) ^ 2 + (p2.z - p2.z) ^ 2)
+  return math.sqrt((p2.x - p1.x) ^ 2 + (p2.z - p1.z) ^ 2)
 end
 
 
@@ -58,3 +58,4 @@ dofile(nmobs_mod.path .. "/goblin.lua")
 dofile(nmobs_mod.path .. "/scorpion.lua")
 dofile(nmobs_mod.path .. "/skeleton.lua")
 dofile(nmobs_mod.path .. "/jackel_guardian.lua")
+dofile(nmobs_mod.path .. "/primative.lua")
