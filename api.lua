@@ -523,6 +523,33 @@ function nmobs_mod.find_prey(self)
 end
 
 
+function nmobs_mod.simple_replace(self, replaces, with)
+  if not (replaces and type(replaces) == 'table' and with and type(with) == 'table') then
+    return
+  end
+
+  local pos = self:_get_pos()
+
+  for r = 1, 1 + self._reach do
+    local minp = vector.subtract(pos, r)
+    local maxp = vector.add(pos, r)
+    local nodes = minetest.find_nodes_in_area(minp, maxp, replaces)
+
+    if nodes and #nodes > 0 then
+      local dpos = nodes[math.random(#nodes)]
+      if not minetest.is_protected(dpos, '') then
+        local node = minetest.get_node_or_nil(dpos)
+        minetest.set_node(dpos, {name='air'})
+        local wnode = with[math.random(#with)]
+        minetest.set_node(dpos, {name=wnode})
+        --print('Nmobs: a '..self._printed_name..' replaced '..node.name..' with '..wnode..'.')
+        return
+      end
+    end
+  end
+end
+
+
 function nmobs_mod.replace(self)  -- _replace
   if not self._replaces then
     return
