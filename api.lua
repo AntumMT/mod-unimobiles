@@ -948,8 +948,12 @@ function nmobs_mod.register_mob(def)
 
   nmobs_mod.mobs[name] = proto
 
-  minetest.register_node(proto.textures[1], node)
-  minetest.register_entity('nmobs:'..name, proto)
+  local reg_name = proto.textures[1]
+  if not reg_name:find('^:') then
+    reg_name = reg_name:gsub('^', ':')
+  end
+  minetest.register_node(reg_name, node)
+  minetest.register_entity(':nmobs:'..name, proto)
 
   if proto._spawn_table then
     for _, instance in pairs(proto._spawn_table) do
