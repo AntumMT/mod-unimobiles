@@ -78,7 +78,7 @@ nmobs.register_mob({
   size = 0.7,
   spawn = {
     {
-      nodes = {'default:stone', 'fun_caves:stone_with_algae', 'fun_caves:stone_with_lichen'},
+      nodes = {'default:stone', 'fun_caves:stone_with_algae', 'fun_caves:stone_with_lichen', 'squaresville:concrete', 'squaresville:road', 'squaresville:sidewalk', 'squaresville:floor_ceiling', 'squaresville:concrete_broken', 'squaresville:road_broken', 'squaresville:sidewalk_broken', 'squaresville:floor_ceiling_broken'},
       rarity = 20000,
     },
     {
@@ -157,7 +157,7 @@ nmobs.register_mob({
   size = 0.8,
   spawn = {
     {
-      nodes = {'default:stone', 'fun_caves:stone_with_algae', 'fun_caves:stone_with_lichen'},
+      nodes = {'default:stone', 'fun_caves:stone_with_algae', 'fun_caves:stone_with_lichen', 'squaresville:concrete', 'squaresville:road', 'squaresville:sidewalk', 'squaresville:floor_ceiling', 'squaresville:concrete_broken', 'squaresville:road_broken', 'squaresville:sidewalk_broken', 'squaresville:floor_ceiling_broken'},
       rarity = 50000,
     },
     {
