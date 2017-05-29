@@ -11,6 +11,10 @@ Not sure if this will turn into anything, but will all the different mob engines
 - [KPGMobs][f.kpgmobs]
 - [Mobs Redo][f.mobs_redo]
 
+### Licensing:
+
+- New code under MIT license (see LICENSE.txt)
+
 
 [f.cme]: https://forum.minetest.net/viewtopic.php?t=8638
 [f.goblins]: https://forum.minetest.net/viewtopic.php?t=13004
