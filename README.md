@@ -1,23 +1,23 @@
-# Unified Mobiles Engine (unified_me)
+# Unified Mobiles Engine (unimobiles)
 
-Unified mobiles engine for Minetest
+An attempt at unifying different mobiles (mobs) engines for Minetest.
 
 Not sure if this will turn into anything, but will all the different mob engines for minetest, would be nice to have one that is universal. Hopefully, in the future, this project will merge the best features from the most popular engines.
 
-### Possible mobs/mob engines to use:
+## **Possible mobs/mob engines to use:**
 
-- *[Animals Modpack][f.animals_modpack]*
-- *[Entity AI][f.entity_ai]*
-- *[Goblins][f.mobs_goblins]*
-- *[KPGMobs][f.kpgmobs]* (deprecated)
-- *[M.I.L.A.][f.mila]*
-- *[Mob Engine][gh.mob-engine]*
-- *[MOB Framework][gh.mobf_core]* by sapier
-- *[Mobs Redo][f.mobs_redo]*
-- *[Nodebox Mob API][f.nmobs]*
-- *[Open AI][f.open_ai]*
+- *[Animals Modpack][f.animals_modpack]*  by sapier ([GitHub][gh.animals_modpack])
+- *[Entity AI][f.entity_ai]*  by sofar ([GitHub][gh.entity_ai])
+- *[Goblins][f.mobs_goblins]*  by FreeLikeGNU ([GitHub][gh.mobs_goblins])
+- *[KPGMobs][f.kpgmobs]*  by krupnovpavel (deprecated)
+- *[M.I.L.A.][f.mila]*  by azekill_DIABLO/azekillDIABLO ([GitHub][gh.mila])
+- *[Mob Engine][gh.mob-engine]*  by BlockMen ([GitHub][gh.mob-engine])
+- *[MOB Framework][gh.mobf_core]*  by sapier ([GitHub][gh.mobf_core])
+- *[Mobs Redo][f.mobs_redo]*  by tenplus1 ([GitHub][gh.mobs_redo])
+- *[Nodebox Mob API][f.nmobs]*  by duane/duane-r ([GitHub][gh.nmobs])
+- *[Open AI][f.open_ai]*  by jordan4ibanez ([GitHub][gh.open_ai])
 
-### Licensing:
+## **Licensing:**
 
 - New code under MIT license (see LICENSE.txt)
 
@@ -31,6 +31,7 @@ Not sure if this will turn into anything, but will all the different mob engines
 [f.nmobs]: https://forum.minetest.net/viewtopic.php?t=16557
 [f.open_ai]: https://forum.minetest.net/viewtopic.php?t=16032
 
+[gh.animals_modpack]: https://github.com/sapier/animals_modpack
 [gh.entity_ai]: https://github.com/sofar/entity_ai
 [gh.mila]: https://github.com/azekillDIABLO/mila
 [gh.mob-engine]: https://github.com/minetest-mods/mob-engine
