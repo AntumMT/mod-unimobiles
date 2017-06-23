@@ -6,15 +6,16 @@ Not sure if this will turn into anything, but will all the different mob engines
 
 ### Possible mobs/mob engines to use:
 
-- [Animals Modpack][f.animals_modpack]
-- [Entity AI][f.entity_ai]
-- [Goblins][f.goblins]
-- [KPGMobs][f.kpgmobs] (deprecated)
-- [M.I.L.A.][f.mila]
-- [Mob Engine][gh.mob-engine]
-- [Mobs Redo][f.mobs_redo]
-- [Nodebox Mob API][f.nb_mob_api]
-- [Open AI][f.open_ai]
+- *[Animals Modpack][f.animals_modpack]*
+- *[Entity AI][f.entity_ai]*
+- *[Goblins][f.goblins]*
+- *[KPGMobs][f.kpgmobs]* (deprecated)
+- *[M.I.L.A.][f.mila]*
+- *[Mob Engine][gh.mob-engine]*
+- *[MOB Framework][gh.mobf_core]* by sapier
+- *[Mobs Redo][f.mobs_redo]*
+- *[Nodebox Mob API][f.nb_mob_api]*
+- *[Open AI][f.open_ai]*
 
 ### Licensing:
 
@@ -31,3 +32,4 @@ Not sure if this will turn into anything, but will all the different mob engines
 [f.open_ai]: https://forum.minetest.net/viewtopic.php?t=16032
 
 [gh.mob-engine]: https://github.com/minetest-mods/mob-engine
+[gh.mobf_core]: https://github.com/sapier/mobf_core
