@@ -38,6 +38,8 @@ New code under MIT license (see LICENSE.txt).
   - LGPL 2.1 (code)
   - WTFPL (textures & sounds)
   - CC BY-SA (sounds)
+- Open AI
+  - CC0
 
 
 
