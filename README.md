@@ -37,6 +37,8 @@ New code under MIT license (see LICENSE.txt).
 - Mob Engine
   - modified zlib (code)
   - CC BY-SA 3.0 (media)
+- Mob Framework
+  - CC BY-SA 3.0
 - Mobs Redo
   - MIT
 - Nodebox Mob API
