@@ -13,6 +13,7 @@ This project is still a work-in-progress.
 - *[Goblins][f.mobs_goblins]*  by FreeLikeGNU ([GitHub][gh.mobs_goblins])
 - *[KPGMobs][f.kpgmobs]*  by krupnovpavel (deprecated)
 - *[M.I.L.A.][f.mila]*  by azekill_DIABLO/azekillDIABLO ([GitHub][gh.mila])
+- *[MC Mobs][f.mobs_mc]* by maikerumine ([GitHub][gh.mobs_mc])
 - *[Mob Engine][gh.mob-engine]*  by BlockMen ([GitHub][gh.mob-engine])
 - *[MOB Framework][gh.mobf_core]*  by sapier ([GitHub][gh.mobf_core])
 - *[Mobs Redo][f.mobs_redo]*  by tenplus1 ([GitHub][gh.mobs_redo])
@@ -43,6 +44,12 @@ New code under MIT license (see LICENSE.txt).
   - MIT
 - M.I.L.A.
   - LGPL 3.0
+- MC Mobs
+  - WTFPL
+  - Freesound
+  - CC0
+  - CC BY 3.0
+  - GPL 3.0
 - Mob Engine
   - modified zlib (code)
   - CC BY-SA 3.0 (media)
@@ -67,6 +74,7 @@ New code under MIT license (see LICENSE.txt).
 [f.kpgmobs]: https://forum.minetest.net/viewtopic.php?t=8798
 [f.mila]: https://forum.minetest.net/viewtopic.php?t=15375
 [f.mobs_goblins]: https://forum.minetest.net/viewtopic.php?t=13004
+[f.mobs_mc]: https://forum.minetest.net/viewtopic.php?t=17751
 [f.mobs_redo]: https://forum.minetest.net/viewtopic.php?t=9917
 [f.nmobs]: https://forum.minetest.net/viewtopic.php?t=16557
 [f.nssm]: https://forum.minetest.net/viewtopic.php?t=11813
@@ -78,6 +86,7 @@ New code under MIT license (see LICENSE.txt).
 [gh.mob-engine]: https://github.com/minetest-mods/mob-engine
 [gh.mobf_core]: https://github.com/sapier/mobf_core
 [gh.mobs_goblins]: https://github.com/FreeLikeGNU/mobs_goblins
+[gh.mobs_mc]: https://github.com/maikerumine/mobs_mc
 [gh.mobs_redo]: https://github.com/tenplus1/mobs_redo
 [gh.nmobs]: https://github.com/duane-r/nmobs
 [gh.nssm]: https://github.com/NPXcoot/nssm
