@@ -9,7 +9,7 @@ Not sure if this will turn into anything, but will all the different mob engines
 - [Animals Modpack][f.animals_modpack]
 - [Entity AI][f.entity_ai]
 - [Goblins][f.goblins]
-- [KPGMobs][f.kpgmobs]
+- [KPGMobs][f.kpgmobs] (deprecated)
 - [M.I.L.A.][f.mila]
 - [Mob Engine][gh.mob-engine]
 - [Mobs Redo][f.mobs_redo]
