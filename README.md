@@ -19,7 +19,14 @@ Not sure if this will turn into anything, but will all the different mob engines
 
 ## **Licensing:**
 
-- New code under MIT license (see LICENSE.txt)
+New code under MIT license (see LICENSE.txt).
+
+- Entity AI
+  - AGPL 3.0
+  - CC BY-ND 4.0
+  - CC BY-SA 3.0 (sounds)
+  - LGPL (stone_giant? see: README)
+
 
 
 [f.animals_modpack]: https://forum.minetest.net/viewtopic.php?t=629
