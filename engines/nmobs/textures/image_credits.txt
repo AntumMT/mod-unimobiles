@@ -1,0 +1,3 @@
+-- The textures of most mobs are copied from Cute Cubic Mobs
+-- https://github.com/Napiophelios/ccmobs
+-- and are distributed as Public Domain (WTFPL).

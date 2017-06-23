@@ -1,0 +1,114 @@
+Nmobs manual.txt
+Copyright Duane Robertson (duane@duanerobertson.com), 2017
+Distributed under the LGPLv2.1 (https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html)
+
+
+To add a mob, you must first make a nodebox table (see 
+doc/lua_api.txt). The simplest mob.lua file will contain the 
+following:
+
+nmobs.register_mob({
+  looks_for = {'default:dirt_with_grass'},
+  name = 'pig',
+  nodebox = {
+    {-0.0625, -0.3125, 0.375, 0.0625, -0.1875, 0.4375},
+    {-0.1875, -0.375, 0.1875, 0.1875, -0.1875, 0.375},
+    {-0.0625, -0.1875, 0.1875, 0.0625, -0.125, 0.375},
+    {-0.1875, -0.1875, 0.1875, 0.1875, -0.0625, 0.3125},
+    {-0.25, -0.4375, 0.125, 0.25, 0, 0.1875},
+    {-0.3125, -0.4375, -0.375, 0.3125, 0.0625, 0.125},
+    {-0.25, -0.1875, 0.1875, 0.25, -0.125, 0.25},
+    {0.125, -0.5, -0, 0.25, -0.4375, 0.125},
+    {-0.25, -0.5, -0, -0.125, -0.4375, 0.125},
+    {0.125, -0.5, -0.3125, 0.25, -0.4375, -0.1875},
+    {-0.25, -0.5, -0.3125, -0.125, -0.4375, -0.1875},
+    {-0.0625, -0.0625, -0.4375, 0.0625, 0, -0.375},
+    {0, -0.125, -0.4375, 0.0625, -0.0625, -0.375},
+    {-0.0625, -0.1875, -0.4375, 0, -0.125, -0.375},
+  },
+})
+
+The nodebox data creates the actual shape of the mob. The looks_for
+entry is a table of nodes that the mob likes (usually grass for
+grazing animals) and will gravitate toward.
+
+
+-- Other Options --
+
+Options are added as part of the table structure:
+
+  armor_class = 10,
+
+They are not necessary, and have reasonable defaults.
+
+
+armor_class = [number] specifies an AD&D-style armor class with 10
+                       as unarmored and lower numbers increasing
+                       protection. Plate mail is 2. Default: 10.
+
+attacks_player = true  makes the mob attack players.
+
+collisionbox = [table] specifies a nodebox to use for the mob's
+                       collision box (see doc/lua_api.txt). This
+                       should be fairly simple and defaults to a box
+                       around the size of the nodebox.
+
+damage = [number]      specifies the amount of damage the mob does in
+                       combat. Default: 1.
+
+environment = [table]  specifies the nodes that a mob can spawn on.
+                       This defaults to the same nodes in looks_for.
+
+higher_than = [number] prevents the mob from spawning this low.
+
+hit_dice = [number]    is the number of eight-sided dice rolled for
+                       the creature's hit points. Default: 1.
+
+looks_for = [table]    specifies nodes the mob likes and will walk
+                       to. This defaults to the nodes in environment.
+
+lifespan = [number]    is the number of seconds the mob will live.
+                       Default: 300.
+
+lower_than = [number]  prevents the mob from spawning this high up.
+
+media_prefix = [string] specifies a different prefix for texture and
+                        sound files copied from another mod. The
+                        default prefix is 'nmobs'.
+
+name = [string]        shows the mob's name. (Required)
+
+nocturnal = [boolean]  says the mob only appears at night.
+
+nodebox = [table]      specifies the mob's nodebox shapee. (Required)
+
+rarity = [number]      is a measure of how rare the mob is. A lower
+                       value will make the mob appear more often.
+                       Default: 20000.
+
+run_speed = [number]   indicates how fast the mob runs. Default: 3.
+
+sound = [string]       lists the default sound the mob makes. No
+                       default.
+
+size = [number]        tells how much to multiply the nodebox's
+                       dimensions by, to make the mob bigger or
+                       smaller. Default: 1.
+
+textures = [table]     This must contain six texture names in order
+                       of (top, bottom, left, right, front, back).
+                       By default, then mod will look for a texture
+                       in this format:
+
+                         [prefix]_[name]_[side].png
+
+                         (e.g.) nmobs_cow_front.png
+
+vision = [number]      specifies the mob's visual radius, or the
+                       range at which it can react to players or
+                       other mobs. Default: 15.
+
+walk_speed = [number]  indicates how fast the mob walks. Default: 1.
+
+weapon_capabilities = [table]  specifies a weapon capabilities table
+                               as in doc/lua_api.txt.
