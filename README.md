@@ -32,6 +32,8 @@ New code under MIT license (see LICENSE.txt).
   - CC0
 - M.I.L.A.
   - LGPL 3.0
+- Mobs Redo
+  - MIT
 
 
 
