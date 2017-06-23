@@ -4,6 +4,8 @@ An attempt at unifying different mobiles (mobs) engines for Minetest.
 
 Not sure if this will turn into anything, but will all the different mob engines for minetest, would be nice to have one that is universal. Hopefully, in the future, this project will merge the best features from the most popular engines.
 
+This project is still a work-in-progress.
+
 ## **Possible mobs/mob engines to use:**
 
 - *[Animals Modpack][f.animals_modpack]*  by sapier ([GitHub][gh.animals_modpack])
