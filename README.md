@@ -15,6 +15,7 @@ Not sure if this will turn into anything, but will all the different mob engines
 - *[MOB Framework][gh.mobf_core]*  by sapier ([GitHub][gh.mobf_core])
 - *[Mobs Redo][f.mobs_redo]*  by tenplus1 ([GitHub][gh.mobs_redo])
 - *[Nodebox Mob API][f.nmobs]*  by duane/duane-r ([GitHub][gh.nmobs])
+- *[Not So Simple Mobs][f.nssm]*  by NPX ([GitHub][gh.nssm])
 - *[Open AI][f.open_ai]*  by jordan4ibanez ([GitHub][gh.open_ai])
 
 ## **Licensing:**
@@ -45,6 +46,9 @@ New code under MIT license (see LICENSE.txt).
   - LGPL 2.1 (code)
   - WTFPL (textures & sounds)
   - CC BY-SA (sounds)
+- Not So Simple Mobs
+  - LGPL (code)
+  - CC BY-SA 4.0 (models, textures, & sounds)
 - Open AI
   - CC0
 
@@ -57,6 +61,7 @@ New code under MIT license (see LICENSE.txt).
 [f.mobs_goblins]: https://forum.minetest.net/viewtopic.php?t=13004
 [f.mobs_redo]: https://forum.minetest.net/viewtopic.php?t=9917
 [f.nmobs]: https://forum.minetest.net/viewtopic.php?t=16557
+[f.nssm]: https://forum.minetest.net/viewtopic.php?t=11813
 [f.open_ai]: https://forum.minetest.net/viewtopic.php?t=16032
 
 [gh.animals_modpack]: https://github.com/sapier/animals_modpack
@@ -67,4 +72,5 @@ New code under MIT license (see LICENSE.txt).
 [gh.mobs_goblins]: https://github.com/FreeLikeGNU/mobs_goblins
 [gh.mobs_redo]: https://github.com/tenplus1/mobs_redo
 [gh.nmobs]: https://github.com/duane-r/nmobs
+[gh.nssm]: https://github.com/NPXcoot/nssm
 [gh.open_ai]: https://github.com/jordan4ibanez/open_ai
