@@ -2,8 +2,8 @@
 -- Mobs Api (16th June 2017)
 
 mobs = {}
-mobs.mod = "redo"
-mobs.version = "20170616"
+mobs.mod = "unimobiles"
+mobs.version = "20170622"
 
 
 -- Intllib
