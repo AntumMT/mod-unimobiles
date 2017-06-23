@@ -30,6 +30,8 @@ New code under MIT license (see LICENSE.txt).
   - CC BY-SA 3.0
   - CC BY 3.0
   - CC0
+- KPGMobs
+  - MIT
 - M.I.L.A.
   - LGPL 3.0
 - Mobs Redo
