@@ -34,6 +34,10 @@ New code under MIT license (see LICENSE.txt).
   - LGPL 3.0
 - Mobs Redo
   - MIT
+- Nodebox Mob API
+  - LGPL 2.1 (code)
+  - WTFPL (textures & sounds)
+  - CC BY-SA (sounds)
 
 
 
