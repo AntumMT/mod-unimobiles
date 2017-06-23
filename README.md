@@ -26,6 +26,10 @@ New code under MIT license (see LICENSE.txt).
   - CC BY-ND 4.0
   - CC BY-SA 3.0 (sounds)
   - LGPL (stone_giant? see: README)
+- Goblins
+  - CC BY-SA 3.0
+  - CC BY 3.0
+  - CC0
 
 
 
