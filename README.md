@@ -8,7 +8,7 @@ Not sure if this will turn into anything, but will all the different mob engines
 
 - [Animals Modpack][f.animals_modpack]
 - [Creatures Mob Engine][f.cme]
-- [Entity AI][entity_ai]
+- [Entity AI][f.entity_ai]
 - [Goblins][f.goblins]
 - [KPGMobs][f.kpgmobs]
 - [M.I.L.A.][f.mila]
