@@ -22,6 +22,12 @@ Not sure if this will turn into anything, but will all the different mob engines
 
 New code under MIT license (see LICENSE.txt).
 
+- Animals Modpack
+  - CC BY-SA 3.0
+  - CC BY 3.0 (mob_slime sounds)
+  - CC0 (sounds)
+  - GFDL 1.2 or later | CC-BY-SA 3.0 or later (animal_cow & animal_sheep sounds)
+  - WTFPL (animal_cow textures)
 - Entity AI
   - AGPL 3.0
   - CC BY-ND 4.0
