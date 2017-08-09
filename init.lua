@@ -16,3 +16,12 @@ else
 end
 
 unimobiles.path = minetest.get_modpath(unimobiles.name)
+
+
+local scripts = {
+	'api',
+}
+
+for i, s in ipairs(scripts) do
+	dofile(unimobiles .. '/' .. script .. '.lua')
+end
