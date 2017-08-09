@@ -23,5 +23,5 @@ local scripts = {
 }
 
 for i, s in ipairs(scripts) do
-	dofile(unimobiles .. '/' .. script .. '.lua')
+	dofile(unimobiles.path .. '/' .. script .. '.lua')
 end
