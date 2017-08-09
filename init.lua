@@ -18,6 +18,23 @@ end
 unimobiles.path = minetest.get_modpath(unimobiles.name)
 
 
+-- Mob Engines
+local engines = {
+	'entity_ai',
+	'mila',
+	'mob-engine',
+	'mobf',
+	'mobs_mc',
+	'mobs_redo',
+	'nmobs',
+	'open_ai',
+}
+
+for i, e in ipairs(engines) do
+	dofile(unimobiles.path .. '/engine/' .. e .. '/init.lua')
+end
+
+
 local scripts = {
 	'api',
 }
