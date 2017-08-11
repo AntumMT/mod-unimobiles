@@ -8,7 +8,7 @@
 
 --- Unimobiles API.
 --
--- @script api.lua
+-- @module umobs.api
 
 
 --- Mobs Redo Functions
