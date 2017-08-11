@@ -20,73 +20,172 @@
 --
 -- @function umobs.mobsRegisterMob
 -- @tparam string name Name of the mob.
--- @tparam table def Definition table.
--- @see umobs.mobsRegisterMob:def
+-- @tparam table def Definition table (See: [umobs.mobsRegisterMob.def](#umobs.mobsRegisterMob.def)).
 function umobs.mobsRegisterMob(name, def)
 	return mobs:register_mob(name, def)
 end
 
 
+---
+--
+-- @function umobs.mobsRegisterSpawn
+-- @param name
+-- @param nodes
+-- @param max_light
+-- @param min_light
+-- @param chance
+-- @param active_object_count
+-- @param max_height
+-- @param day_toggle
 function umobs.mobsRegisterSpawn(name, nodes, max_light, min_light, chance, active_object_count, max_height, day_toggle)
 	return mobs:register_spawn(name, nodes, max_light, min_light, chance, active_object_count, max_height, day_toggle)
 end
 
 
+---
+--
+-- @function umobs.mobsRegisterSpawnSpecific
+-- @param name
+-- @param nodes
+-- @param neighbors
+-- @param min_light
+-- @param max_light
+-- @param interval
+-- @param chance
+-- @param active_object_count
+-- @param min_height
+-- @param max_height
+-- @param day_toggle
+-- @param on_spawn
 function umobs.mobsRegisterSpawnSpecific(name, nodes, neighbors, min_light, max_light, interval, chance, active_object_count, min_height, max_height, day_toggle, on_spawn)
 	return mobs:spawn_specfic(name, nodes, neighbors, min_light, max_light, interval, chance, active_object_count, min_height, max_height, day_toggle, on_spawn)
 end
 
 
+---
+--
+-- @function umobs.mobsRegisterArrow
+-- @param name
+-- @tparam table def See: [umobs.mobsRegisterArrow.def](#umobs.mobsRegisterArrow.def)
 function umobs.mobsRegisterArrow(name, def)
 	return mobs:register_arrow(name, def)
 end
 
 
+---
+--
+-- @function umobs.mobsRegisterEgg
+-- @param name
+-- @param description
+-- @param background
+-- @param addegg
 function umobs.mobsRegisterEgg(name, description, background, addegg)
 	return mobs:register_egg(name, description, background, addegg)
 end
 
 
+---
+--
+-- @function umobs.mobsBoom
+-- @param self
+-- @param pos
+-- @param radius
 function umobs.mobsBoom(self, pos, radius)
 	return mobs:boom(self, pos, radius)
 end
 
 
+---
+--
+-- @function umobs.mobsCaptureMob
+-- @param self
+-- @param clicker
+-- @param chance_hand
+-- @param chance_net
+-- @param chance_lasso
+-- @param force_take
+-- @param replacewith
 function umobs.mobsCaptureMob(self, clicker, chance_hand, chance_net, chance_lasso, force_take, replacewith)
 	return mobs:capture_mob(self, clicker, chance_hand, chance_net, chance_lasso, force_take, replacewith)
 end
 
 
+---
+--
+-- @function umobs.mobsFeedTame
+-- @param self
+-- @param clicker
+-- @param feed_count
+-- @param breed
+-- @param tame
 function umobs.mobsFeedTame(self, clicker, feed_count, breed, tame)
 	return mobs:feed_tame(self, clicker, feed_count, breed, tame)
 end
 
 
+---
+--
+-- @function umobs.mobsProtect
+-- @param self
+-- @param clicker
 function umobs.mobsProtect(self, clicker)
 	return mobs:protect(self, clicker)
 end
 
 
+---
+--
+-- @function umobs.mobsAttach
+-- @param self
+-- @param player
 function umobs.mobsAttach(self, player)
 	return mobs:attach(self, player)
 end
 
 
+---
+--
+-- @function umobs.mobsDetach
+-- @param player
+-- @param offset
 function umobs.mobsDetach(player, offset)
 	return mobs:detach(player, offset)
 end
 
 
+---
+--
+-- @function umobs.mobsDrive
+-- @param self
+-- @param move_animation
+-- @param stand_animation
+-- @param can_fly
+-- @param dtime
 function umobs.mobsDrive(self, move_animation, stand_animation, can_fly, dtime)
 	return mobs:drive(self, move_animation, stand_animation, can_fly, dtime)
 end
 
 
+---
+--
+-- @function umobs.mobsFly
+-- @param self
+-- @param dtime
+-- @param speed
+-- @param can_shoot
+-- @param arrow_entity
+-- @param move_animation
+-- @param stand_animation
 function umobs.mobsFly(self, dtime, speed, can_shoot, arrow_entity, move_animation, stand_animation)
 	return mobs:fly(self, dtime, speed, can_shoot, arrow_entity, move_animation, stand_animation)
 end
 
 
+---
+--
+-- @function umobs.mobsSetAnimation
+-- @param self
+-- @param name
 function umobs.mobsSetAnimation(self, name)
 	return mobs:set_animation(self, name)
 end
@@ -97,10 +196,10 @@ end
 -- @section mobs_redo_t
 
 
---- Definition table for *[umobs.mobsRegisterMob](#umobs.mobsRegisterMob)*.
+--- Definition table for [umobs.mobsRegisterMob](#umobs.mobsRegisterMob).
 --
 --
--- @table umobs.mobsRegisterMob:def
+-- @table umobs.mobsRegisterMob.def
 -- @tfield string type The type of the mob (***monster***, ***animal*** or ***npc***) where monsters attack players and npc's, animals and npc's tend to wander around and can attack when hit 1st.
 -- @tfield bool passive Mob will *not* defend itself (set to ***false*** to attack).
 -- @tfield bool docile_by_day When ***true***, mob will not attack during daylight hours unless provoked.
@@ -286,6 +385,47 @@ end
 --   - ***punch_start, punch_end, punch_speed:*** When mob attacks.
 --   - ***punch2_start, punch2_end, punch2_speed:*** When mob attacks (alternative).
 --   - ***die_start, die_end, die_speed:*** When mob dies.
+
+
+--- Definition table for [umobs.mobsRegisterArrow](#umobs.mobsRegisterArrow).
+--
+-- @table umobs.mobsRegisterArrow.def
+-- @tfield string visual Same as in [minetest.register_entity](http://dev.minetest.net/minetest.register_entity)
+-- @tfield size visual_size Same as in [minetest.register_entity](http://dev.minetest.net/minetest.register_entity)
+-- @tfield table textures Same as in [minetest.register_entity](http://dev.minetest.net/minetest.register_entity)
+-- @field velocity Velocity of the arrow.
+-- @tfield bool drop If ***true***, any arrows hitting a node will drop as item.
+-- @tfield callback hit_player
+-- - Called when the arrow hits a player (should hurt the player).
+-- - Usage: ***hit_player = function(self, player)***
+-- - Parameters:
+--   - ***self:***
+--   - ***player***
+--
+-- @tfield callback hit_mob
+-- - Called when the arrow hits a mob (should hurt the mob).
+-- - Usage: ***hit_mobs(self, player)***
+-- - Parameters:
+--   - ***self:***
+--   - ***player:***
+--
+-- @tfield callback hit_node
+-- - Called when the arrow hits a node.
+-- - Usage: ***hit_node = function(self, pos, node)***
+-- - Parameters:
+--   - ***self:***
+--   - ***pos:***
+--   - ***node:***
+--
+-- @tfield int tail When set to ***1*** adds a trail or tail to mob arrows.
+-- @tfield string tail_texture Texture used for **tail** effect.
+-- @tfield int tail_size Has size for **tail*** texture (default: between 5 and 10).
+-- @tfield float expire How long tail appears for (default: 0.25).
+-- @tfield int glow Value for how brightly tail glows. Can be between 0 to 10 (default: 0).
+-- @tfield int rotate Degrees to rotate arrow.
+-- @tfield callback on_step
+-- - A custom function when arrow is active.
+-- - Default: ***nil***
 
 
 --- Mobs Redo Settings.
