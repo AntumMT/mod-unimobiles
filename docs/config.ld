@@ -3,15 +3,21 @@ project = 'Unimobiles'
 format = 'discount'
 --format = 'markdown'
 not_luadoc = true
---wrap = true
+wrap = true
 boilerplate = true
 one = true
+ignore = true
+one = true
+output = 'api'
 
 file = {
 	'init.lua',
 	'api.lua',
-	exclude = {'engine/mobf/api.lua'},
+	exclude = {
+		'engine',
+	},
 }
+
 
 local function italic(value)
 	return '<i>' .. value .. '</i>'

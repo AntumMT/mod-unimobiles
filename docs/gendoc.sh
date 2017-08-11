@@ -11,5 +11,4 @@ cd "${ROOT}"
 # Clean old files
 rm -rf "${DOCS}/api.html" "${DOCS}/scripts" "${DOCS}/modules"
 # Create new files
-ldoc -i -O -c "${CONFIG}" -d "${DOCS}" -o "api" ${SCRIPTS}
-
+ldoc -c "${CONFIG}" -d "${DOCS}" "api.lua"
