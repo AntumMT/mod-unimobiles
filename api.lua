@@ -104,6 +104,18 @@ function umobs.mobsBoom(self, pos, radius)
 end
 
 
+--- Generates a self-destruct explosion from mob.
+--
+-- ***DEPRECATED:*** Use [umobs.mobsBoom](#umobs.mobsBoom).
+--
+-- @function umobs.mobsExplosion
+-- @tparam pos pos
+-- @tparam int radius
+function umobs.mobsExplosion(pos, radius)
+	return mobs:explosion(pos, radius)
+end
+
+
 ---
 --
 -- @function umobs.mobsCaptureMob
