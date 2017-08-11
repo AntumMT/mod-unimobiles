@@ -64,6 +64,15 @@ end
 
 ---
 --
+-- @function umobs.mobsSpawn
+-- @tparam table def See: [umobs.mobsSpawn.def](#umobs.mobsSpawn.def)
+function umobs.mobsSpawn(def)
+	return mobs:spawn(def)
+end
+
+
+---
+--
 -- @function umobs.mobsRegisterArrow
 -- @param name
 -- @tparam table def See: [umobs.mobsRegisterArrow.def](#umobs.mobsRegisterArrow.def)
@@ -385,6 +394,13 @@ end
 --   - ***punch_start, punch_end, punch_speed:*** When mob attacks.
 --   - ***punch2_start, punch2_end, punch2_speed:*** When mob attacks (alternative).
 --   - ***die_start, die_end, die_speed:*** When mob dies.
+
+
+--- Definition table for [umobs.mobsSpawn](#umobs.mobsSpawn).
+--
+-- For field values, see [umobs.mobsRegisterSpawnSpecific](umobs.mobsRegisterSpawnSpecific) parameters.
+--
+-- @table umobs.mobsSpawn.def
 
 
 --- Definition table for [umobs.mobsRegisterArrow](#umobs.mobsRegisterArrow).
