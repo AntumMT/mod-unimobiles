@@ -35,7 +35,7 @@ end
 umobs.mobs_register_mob = umobs.mobsRegisterMob
 
 
---- Mobs Redo Definition Tables
+--- Mobs Redo Function Definition Tables
 --
 -- @section mobs_redo_t
 
