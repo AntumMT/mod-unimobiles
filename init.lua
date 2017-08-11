@@ -8,7 +8,7 @@
 
 --- Unimobiles initialization script.
 --
--- @script init.lua
+-- @module umobs
 
 
 --- Global namespace.
