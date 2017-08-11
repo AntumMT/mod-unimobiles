@@ -1,12 +1,15 @@
-# Unified Mobiles Engine (unimobiles)
+## Unified Mobiles Engine (unimobiles) mod for [Minetest][]
 
+
+### **Description:**
 An attempt at unifying different mobiles (mobs) engines for Minetest.
 
 Not sure if this will turn into anything, but will all the different mob engines for minetest, would be nice to have one that is universal. Hopefully, in the future, this project will merge the best features from the most popular engines.
 
-This project is still a work-in-progress.
+**NOTE:** This project is still a *work-in-progress*.
 
-## **Possible mobs/mob engines to use:**
+
+### **Possible mobs/mob engines to use:**
 
 - *[Animals Modpack][f.animals_modpack]*  by sapier ([GitHub][gh.animals_modpack])
 - *[Entity AI][f.entity_ai]*  by sofar ([GitHub][gh.entity_ai])
@@ -21,7 +24,8 @@ This project is still a work-in-progress.
 - *[Not So Simple Mobs][f.nssm]*  by NPX ([GitHub][gh.nssm])
 - *[Open AI][f.open_ai]*  by jordan4ibanez ([GitHub][gh.open_ai])
 
-## **Licensing:**
+
+### **Licensing:**
 
 New code under MIT license (see LICENSE.txt).
 
@@ -68,6 +72,13 @@ New code under MIT license (see LICENSE.txt).
   - CC0
 
 
+### **Documentation:**
+
+[API Documentation](https://antummt.github.io/mod-unimobiles/api.html)
+
+
+
+[Minetest]: https://www.minetest.net/
 
 [f.animals_modpack]: https://forum.minetest.net/viewtopic.php?t=629
 [f.entity_ai]: https://forum.minetest.net/viewtopic.php?t=15572
