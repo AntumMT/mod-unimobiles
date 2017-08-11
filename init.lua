@@ -7,15 +7,15 @@
 ]]
 
 
-unimobiles = {}
+umobs = {}
 
 if core.get_mod_metadata then
-	core.get_mod_metadata(unimobiles)
+	core.get_mod_metadata(umobs)
 else
-	unimobiles.name = minetest.get_current_modname()
+	umobs.name = minetest.get_current_modname()
 end
 
-unimobiles.path = minetest.get_modpath(unimobiles.name)
+umobs.path = minetest.get_modpath(umobs.name)
 
 
 -- Mob Engines
@@ -31,7 +31,7 @@ local engines = {
 }
 
 for i, e in ipairs(engines) do
-	dofile(unimobiles.path .. '/engine/' .. e .. '/init.lua')
+	dofile(umobs.path .. '/engine/' .. e .. '/init.lua')
 end
 
 
@@ -40,5 +40,5 @@ local scripts = {
 }
 
 for i, s in ipairs(scripts) do
-	dofile(unimobiles.path .. '/' .. script .. '.lua')
+	dofile(umobs.path .. '/' .. script .. '.lua')
 end
