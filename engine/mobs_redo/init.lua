@@ -1,5 +1,5 @@
 
-local path = minetest.get_modpath(minetest.get_current_modname())
+local path = minetest.get_modpath("mobs")
 
 -- Mob API
 dofile(path .. "/api.lua")
@@ -16,4 +16,4 @@ dofile(path .. "/spawner.lua")
 -- Lucky Blocks
 dofile(path .. "/lucky_block.lua")
 
-print ("[MOD] Mobs Redo loaded")
+minetest.log("action", "[MOD] Mobs Redo loaded")
