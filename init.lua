@@ -45,6 +45,7 @@ end
 
 
 local scripts = {
+	'settings',
 	'api',
 }
 
