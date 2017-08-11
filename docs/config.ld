@@ -1,9 +1,17 @@
 title = 'Unimobiles mod for Minetest'
 project = 'Unimobiles'
-format = 'markdown'
+format = 'discount'
+--format = 'markdown'
 not_luadoc = true
 --wrap = true
 boilerplate = true
+one = true
+
+file = {
+	'init.lua',
+	'api.lua',
+	exclude = {'engine/mobf/api.lua'},
+}
 
 local function italic(value)
 	return '<i>' .. value .. '</i>'
