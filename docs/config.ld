@@ -7,7 +7,7 @@ wrap = true
 boilerplate = true
 one = true
 ignore = true
-one = true
+--one = true
 output = 'api'
 
 file = {
@@ -25,6 +25,8 @@ end
 
 new_type('setting', 'Configuration Settings')
 new_type('chatcmd', 'Chat Commands', false, 'chatparam')
+new_type('notes', 'Notes')
+new_type('examples', 'Examples')
 custom_tags = {
 	{'dfield',
 		title = 'Definition Fields',
@@ -42,7 +44,6 @@ custom_tags = {
 	},
 	{'note',
 		title = 'Notes',
-		format = italic,
 	},
 }
 
