@@ -35,6 +35,83 @@ end
 umobs.mobs_register_mob = umobs.mobsRegisterMob
 
 
+function umobs.mobsRegisterSpawn(name, nodes, max_light, min_light, chance, active_object_count, max_height, day_toggle)
+	return mobs:register_spawn(name, nodes, max_light, min_light, chance, active_object_count, max_height, day_toggle)
+end
+
+umobs.mobs_register_spawn = umobs.mobsRegisterSpawn()
+
+
+function umobs.mobsRegisterSpawnSpecific(name, nodes, neighbors, min_light, max_light, interval, chance, active_object_count, min_height, max_height, day_toggle, on_spawn)
+	return mobs:spawn_specfic(name, nodes, neighbors, min_light, max_light, interval, chance, active_object_count, min_height, max_height, day_toggle, on_spawn)
+end
+
+umobs.mobs_spawn_specific = umobs.mobsRegisterSpawnSpecific
+
+
+function umobs.mobsRegisterArrow(name, def)
+	return mobs:register_arrow(name, def)
+end
+
+umobs.mobs_register_arrow = umobs.mobsRegisterArrow
+
+
+function umobs.mobsRegisterEgg(name, description, background, addegg)
+	return mobs:register_egg(name, description, background, addegg)
+end
+
+umobs.mobs_register_egg = umobs.mobsRegisterEgg
+
+
+function umobs.mobsBoom(self, pos, radius)
+	return mobs:boom(self, pos, radius)
+end
+
+umobs.mobs_boom = umobs.mobsBoom
+
+
+function umobs.mobsCaptureMob(self, clicker, chance_hand, chance_net, chance_lasso, force_take, replacewith)
+	return mobs:capture_mob(self, clicker, chance_hand, chance_net, chance_lasso, force_take, replacewith)
+end
+
+umobs.mobs_capture_mob = umobs.mobsCaptureMob
+
+
+function umobs.mobsFeedTame(self, clicker, feed_count, breed, tame)
+	return mobs:feed_tame(self, clicker, feed_count, breed, tame)
+end
+
+
+function umobs.mobsProtect(self, clicker)
+	return mobs:protect(self, clicker)
+end
+
+
+function umobs.mobsAttach(self, player)
+	return mobs:attach(self, player)
+end
+
+
+function umobs.mobsDetach(player, offset)
+	return mobs:detach(player, offset)
+end
+
+
+function umobs.mobsDrive(self, move_animation, stand_animation, can_fly, dtime)
+	return mobs:drive(self, move_animation, stand_animation, can_fly, dtime)
+end
+
+
+function umobs.mobsFly(self, dtime, speed, can_shoot, arrow_entity, move_animation, stand_animation)
+	return mobs:fly(self, dtime, speed, can_shoot, arrow_entity, move_animation, stand_animation)
+end
+
+
+function umobs.mobsSetAnimation(self, name)
+	return mobs:set_animation(self, name)
+end
+
+
 --- Mobs Redo Function Definition Tables
 --
 -- @section mobs_redo_t
