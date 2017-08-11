@@ -6,7 +6,16 @@
   
 ]]
 
+--- Unimobiles initialization script.
+--
+-- @script init.lua
 
+
+--- Global namespace.
+--
+-- @table umobs
+-- @field name Mod name ("unimobiles")
+-- @field path Mod path.
 umobs = {}
 
 if core.get_mod_metadata then
