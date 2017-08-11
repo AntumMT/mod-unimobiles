@@ -229,3 +229,71 @@ umobs.mobs_register_mob = umobs.mobsRegisterMob
 --   - ***punch_start, punch_end, punch_speed:*** When mob attacks.
 --   - ***punch2_start, punch2_end, punch2_speed:*** When mob attacks (alternative).
 --   - ***die_start, die_end, die_speed:*** When mob dies.
+
+
+--- Mobs Redo Settings.
+--
+-- @section mobs_redo_s
+
+
+--- Enable damage.
+--
+-- If ***true***, monsters will attack players.
+--
+-- @setting enable_damage
+-- - Type: ***bool***
+-- - Default: ***true***
+
+--- Only peaceful mobs.
+--
+-- If ***true***, only animals will spawn in game.
+--
+-- @setting only_peaceful_mobs
+-- - Type: ***bool***
+-- - Default: ***false***
+
+--- Disable blood.
+--
+-- If ***false***, blood effects appear when mob is hit.
+--
+-- @setting mobs_disable_blood
+-- - Type: ***bool***
+-- - Default: ***false***
+
+--- Spawn in protected areas.
+--
+-- If set to ***1***, mobs will not spawn in protected areas.
+--
+-- @setting mobs_spawn_protected
+-- - Type: ***int***
+-- - Default: ***0***
+
+--- Remove far mobs.
+--
+-- If ***true***, mobs that are outside players visual range will be removed.
+--
+-- @setting remove_far_mobs
+-- - Type: ***bool***
+-- - Default: ***false***
+
+--- Settings for specific mobs.
+--
+-- Can change specific mob chance rate (0 to disable) and spawn number (e.g. ***mobs_animal:cow = 1000,5***).
+--
+-- @setting mobname
+
+--- Mob difficulty.
+-- 
+-- Sets difficulty level (health and hit damage multiplied by this number).
+--
+-- @setting mob_difficulty
+-- - Type: ***float***
+-- - Default: ***1.0***
+
+--- Show mob health.
+--
+-- If ***false*** then punching mob will not show health status.
+--
+-- @setting mob_show_health
+-- - Type: ***bool***
+-- - Default: ***true***
