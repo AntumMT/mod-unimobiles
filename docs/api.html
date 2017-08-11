@@ -32,6 +32,8 @@
 <li><a href="#Mobs_Redo_Functions">Mobs Redo Functions </a></li>
 <li><a href="#Mobs_Redo_Function_Definition_Tables">Mobs Redo Function Definition Tables </a></li>
 <li><a href="#Mobs_Redo_Settings">Mobs Redo Settings </a></li>
+<li><a href="#Mobs_Redo_Notes">Mobs Redo Notes </a></li>
+<li><a href="#Mobs_Redo_Examples">Mobs Redo Examples </a></li>
 </ul>
 
 
@@ -57,59 +59,63 @@
 	</tr>
 	<tr>
 	<td class="name" ><a href="#umobs.mobsRegisterSpawn">umobs.mobsRegisterSpawn (name, nodes, max_light, min_light, chance, active_object_count, max_height, day_toggle)</a></td>
-	<td class="summary"></td>
+	<td class="summary">Registers spawning behavior of mob for <em>mobs_redo</em> engine.</td>
 	</tr>
 	<tr>
 	<td class="name" ><a href="#umobs.mobsRegisterSpawnSpecific">umobs.mobsRegisterSpawnSpecific (name, nodes, neighbors, min_light, max_light, interval, chance, active_object_count, min_height, max_height, day_toggle, on_spawn)</a></td>
-	<td class="summary"></td>
+	<td class="summary">Registers spawning behavior of mob for <em>mobs_redo</em> engine.</td>
 	</tr>
 	<tr>
 	<td class="name" ><a href="#umobs.mobsSpawn">umobs.mobsSpawn (def)</a></td>
-	<td class="summary"></td>
+	<td class="summary">Registers spawning behavior of mob for <em>mobs_redo</em> engine.</td>
 	</tr>
 	<tr>
 	<td class="name" ><a href="#umobs.mobsRegisterArrow">umobs.mobsRegisterArrow (name, def)</a></td>
-	<td class="summary"></td>
+	<td class="summary">Registers an item that mob can use for ranged attack for <em>mobs_redo</em> engine.</td>
 	</tr>
 	<tr>
-	<td class="name" ><a href="#umobs.mobsRegisterEgg">umobs.mobsRegisterEgg (name, description, background, addegg)</a></td>
-	<td class="summary"></td>
+	<td class="name" ><a href="#umobs.mobsRegisterEgg">umobs.mobsRegisterEgg (name, description, Texture, addegg, no_creative)</a></td>
+	<td class="summary">Registers a mob spawning egg for <em>mobs_redo</em> engine.</td>
 	</tr>
 	<tr>
 	<td class="name" ><a href="#umobs.mobsBoom">umobs.mobsBoom (self, pos, radius)</a></td>
-	<td class="summary"></td>
+	<td class="summary">Generates a self-destruct explosion from mob.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#umobs.mobsExplosion">umobs.mobsExplosion (pos, radius)</a></td>
+	<td class="summary">Generates a self-destruct explosion from mob.</td>
 	</tr>
 	<tr>
 	<td class="name" ><a href="#umobs.mobsCaptureMob">umobs.mobsCaptureMob (self, clicker, chance_hand, chance_net, chance_lasso, force_take, replacewith)</a></td>
-	<td class="summary"></td>
+	<td class="summary">Attempts to capture a mob and place in inventory.</td>
 	</tr>
 	<tr>
-	<td class="name" ><a href="#umobs.mobsFeedTame">umobs.mobsFeedTame (self, clicker, feed_count, breed, tame)</a></td>
-	<td class="summary"></td>
+	<td class="name" ><a href="#umobs.mobsFeedTame">umobs.mobsFeedTame (table, clicker, feed_count, breed, tame)</a></td>
+	<td class="summary">Allows feeding items to mobs.</td>
 	</tr>
 	<tr>
 	<td class="name" ><a href="#umobs.mobsProtect">umobs.mobsProtect (self, clicker)</a></td>
-	<td class="summary"></td>
+	<td class="summary">Protects mobs from being attacked by other players.</td>
 	</tr>
 	<tr>
 	<td class="name" ><a href="#umobs.mobsAttach">umobs.mobsAttach (self, player)</a></td>
-	<td class="summary"></td>
+	<td class="summary">Attaches a player to the mob so it can be ridden.</td>
 	</tr>
 	<tr>
 	<td class="name" ><a href="#umobs.mobsDetach">umobs.mobsDetach (player, offset)</a></td>
-	<td class="summary"></td>
+	<td class="summary">Detaches player from riding mob.</td>
 	</tr>
 	<tr>
 	<td class="name" ><a href="#umobs.mobsDrive">umobs.mobsDrive (self, move_animation, stand_animation, can_fly, dtime)</a></td>
-	<td class="summary"></td>
+	<td class="summary">Controls mob movement with player.</td>
 	</tr>
 	<tr>
 	<td class="name" ><a href="#umobs.mobsFly">umobs.mobsFly (self, dtime, speed, can_shoot, arrow_entity, move_animation, stand_animation)</a></td>
-	<td class="summary"></td>
+	<td class="summary">Controls mob flight with player.</td>
 	</tr>
 	<tr>
 	<td class="name" ><a href="#umobs.mobsSetAnimation">umobs.mobsSetAnimation (self, name)</a></td>
-	<td class="summary"></td>
+	<td class="summary">Sets current animation for mob.</td>
 	</tr>
 </table>
 <h2><a href="#Mobs_Redo_Function_Definition_Tables">Mobs Redo Function Definition Tables </a></h2>
@@ -117,10 +123,6 @@
 	<tr>
 	<td class="name" ><a href="#umobs.mobsRegisterMob.def">umobs.mobsRegisterMob.def</a></td>
 	<td class="summary">Definition table for <a href="#umobs.mobsRegisterMob">umobs.mobsRegisterMob</a>.</td>
-	</tr>
-	<tr>
-	<td class="name" ><a href="#umobs.mobsSpawn.def">umobs.mobsSpawn.def</a></td>
-	<td class="summary">Definition table for <a href="#umobs.mobsSpawn">umobs.mobsSpawn</a>.</td>
 	</tr>
 	<tr>
 	<td class="name" ><a href="#umobs.mobsRegisterArrow.def">umobs.mobsRegisterArrow.def</a></td>
@@ -160,6 +162,25 @@
 	<tr>
 	<td class="name" ><a href="#mob_show_health">mob_show_health</a></td>
 	<td class="summary">Show mob health.</td>
+	</tr>
+</table>
+<h2><a href="#Mobs_Redo_Notes">Mobs Redo Notes </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#Variables">Variables</a></td>
+	<td class="summary"><p>These variables need to be set before using the mobs functions:</p>
+
+<ul>
+<li><code>self.v2:</code> Toggle switch used to define below values for the first time.</li>
+</ul>
+</td>
+	</tr>
+</table>
+<h2><a href="#Mobs_Redo_Examples">Mobs Redo Examples </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#Horse">Horse</a></td>
+	<td class="summary">Rideable horse.</td>
 	</tr>
 </table>
 
@@ -205,7 +226,7 @@
     <strong>umobs.mobsRegisterSpawn (name, nodes, max_light, min_light, chance, active_object_count, max_height, day_toggle)</strong>
     </dt>
     <dd>
-
+    Registers spawning behavior of mob for <em>mobs_redo</em> engine.
 
     </ul>
     </ul>
@@ -216,33 +237,45 @@
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">name</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
 
         </li>
         <li><span class="parameter">nodes</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
 
         </li>
         <li><span class="parameter">max_light</span>
+            <span class="types"><span class="type">int</span></span>
 
         </li>
         <li><span class="parameter">min_light</span>
+            <span class="types"><span class="type">int</span></span>
 
         </li>
         <li><span class="parameter">chance</span>
+            <span class="types"><span class="type">int</span></span>
 
         </li>
         <li><span class="parameter">active_object_count</span>
+            <span class="types"><span class="type">int</span></span>
 
         </li>
         <li><span class="parameter">max_height</span>
+            <span class="types"><span class="type">int</span></span>
 
         </li>
         <li><span class="parameter">day_toggle</span>
+            <span class="types"><span class="type">bool</span></span>
 
         </li>
     </ul>
 
 
 
+    <h3>See also:</h3>
+    <ul>
+         <a href="api.html#umobs.mobsRegisterSpawnSpecific">umobs.mobsRegisterSpawnSpecific</a>
+    </ul>
 
 
 </dd>
@@ -251,7 +284,7 @@
     <strong>umobs.mobsRegisterSpawnSpecific (name, nodes, neighbors, min_light, max_light, interval, chance, active_object_count, min_height, max_height, day_toggle, on_spawn)</strong>
     </dt>
     <dd>
-
+    Registers spawning behavior of mob for <em>mobs_redo</em> engine.
 
     </ul>
     </ul>
@@ -262,39 +295,65 @@
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">name</span>
-
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         Name of the animal/monster.
         </li>
         <li><span class="parameter">nodes</span>
-
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         A list of nodes on top of which the mob can spawn.
         </li>
         <li><span class="parameter">neighbors</span>
-
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         A list of nodes of which must be adjacent for the mob to spawn(default: <strong><em>{&ldquo;air&rdquo;}</em></strong>).
         </li>
         <li><span class="parameter">min_light</span>
-
+            <span class="types"><span class="type">int</span></span>
+         The minimum light value of node for spawn to occur.
         </li>
         <li><span class="parameter">max_light</span>
-
+            <span class="types"><span class="type">int</span></span>
+         The maximum light value of node for spawn to occur.
         </li>
         <li><span class="parameter">interval</span>
-
+            <span class="types"><span class="type">int</span></span>
+         Same as in <a href="http://dev.minetest.net/minetest.register_abm">minetest.register_abm</a> (default: <strong><em>30</em></strong>).
         </li>
         <li><span class="parameter">chance</span>
-
+            <span class="types"><span class="type">int</span></span>
+         Same as in <a href="http://dev.minetest.net/minetest.register_abm">minetest.register_abm</a>.
         </li>
         <li><span class="parameter">active_object_count</span>
-
+            <span class="types"><span class="type">int</span></span>
+         Mob is only spawned if <strong><em>active_object_count_wider</em></strong> of ABM is &lt;= this.
         </li>
         <li><span class="parameter">min_height</span>
-
+            <span class="types"><span class="type">int</span></span>
+         Minimum height at which mob will spawn.
         </li>
         <li><span class="parameter">max_height</span>
-
+            <span class="types"><span class="type">int</span></span>
+         Maximum height at which mob will spawn.
         </li>
         <li><span class="parameter">day_toggle</span>
+            <span class="types"><span class="type">bool</span></span>
+        <ul>
+<li>Value descriptions:
+
+<ul>
+<li><strong><em>true:</em></strong> Mob will spawn during daytime.</li>
+<li><strong><em>false:</em></strong> Mob will spawn during nighttime.</li>
+<li><strong><em>nil:</em></strong> Mob will spawn anytime.</li>
+</ul>
+</li>
+</ul>
 
         </li>
         <li><span class="parameter">on_spawn</span>
+            <span class="types"><span class="type">callback</span></span>
+        <ul>
+<li>Called after mob has spawned.</li>
+<li>Usage: ***on_spawn = function(self, pos)</li>
+</ul>
 
         </li>
     </ul>
@@ -309,7 +368,7 @@
     <strong>umobs.mobsSpawn (def)</strong>
     </dt>
     <dd>
-
+    Registers spawning behavior of mob for <em>mobs_redo</em> engine.
 
     </ul>
     </ul>
@@ -321,7 +380,7 @@
     <ul>
         <li><span class="parameter">def</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
-         See: <a href="#umobs.mobsSpawn.def">umobs.mobsSpawn.def</a>
+         See: <a href="#umobs.mobsRegisterSpawnSpecific">umobs.mobsRegisterSpawnSpecific</a>, where parameters = table definition fields here.
         </li>
     </ul>
 
@@ -335,7 +394,7 @@
     <strong>umobs.mobsRegisterArrow (name, def)</strong>
     </dt>
     <dd>
-
+    Registers an item that mob can use for ranged attack for <em>mobs_redo</em> engine.
 
     </ul>
     </ul>
@@ -346,7 +405,8 @@
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">name</span>
-
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         Name of throwable item.
         </li>
         <li><span class="parameter">def</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
@@ -361,10 +421,12 @@
 </dd>
     <dt>
     <a name = "umobs.mobsRegisterEgg"></a>
-    <strong>umobs.mobsRegisterEgg (name, description, background, addegg)</strong>
+    <strong>umobs.mobsRegisterEgg (name, description, Texture, addegg, no_creative)</strong>
     </dt>
     <dd>
+    Registers a mob spawning egg for <em>mobs_redo</em> engine.</p>
 
+<p> The &ldquo;egg&rdquo; is an item that is held in inventory when a mob is captured/tamed.
 
     </ul>
     </ul>
@@ -375,16 +437,24 @@
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">name</span>
-
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         Name of the mob to be spawned (ex.: &ldquo;<strong><em>mob:sheep</em></strong>&rdquo;).
         </li>
         <li><span class="parameter">description</span>
-
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         name of the egg (ex.: &ldquo;<strong><em>Spawn Sheep</em></strong>&rdquo;).
         </li>
-        <li><span class="parameter">background</span>
-
+        <li><span class="parameter">Texture</span>
+            <span class="types"><span class="type">background</span></span>
+         displayed for egg in inventory.
         </li>
         <li><span class="parameter">addegg</span>
-
+            <span class="types"><span class="type">int</span></span>
+         Adds an egg image in front of your texture (1=yes, 0=no).
+        </li>
+        <li><span class="parameter">no_creative</span>
+            <span class="types"><span class="type">bool</span></span>
+         If <strong><em>true</em></strong>, spawn egg is not available in creative mode (useful for destructive mobs like <strong><em>Dungeon Master</em></strong>).
         </li>
     </ul>
 
@@ -398,7 +468,11 @@
     <strong>umobs.mobsBoom (self, pos, radius)</strong>
     </dt>
     <dd>
+    Generates a self-destruct explosion from mob.</p>
 
+<p> Explosion removes nodes in a specific radius and damages any
+ entity caught inside the blast radius. Protection will limit
+ node destruction but not entity damage.
 
     </ul>
     </ul>
@@ -409,12 +483,46 @@
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">self</span>
-
+         The mob entity.
         </li>
         <li><span class="parameter">pos</span>
+            <span class="types"><span class="type">(pos)</span></span>
+         Position of explosion centre.
+        </li>
+        <li><span class="parameter">radius</span>
+            <span class="types"><span class="type">int</span></span>
+         Radius of explosion reach (typically set to <strong><em>3</em></strong>).
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "umobs.mobsExplosion"></a>
+    <strong>umobs.mobsExplosion (pos, radius)</strong>
+    </dt>
+    <dd>
+    Generates a self-destruct explosion from mob.</p>
+
+<p> <strong><em>DEPRECATED:</em></strong> Use <a href="#umobs.mobsBoom">umobs.mobsBoom</a>.
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">pos</span>
+            <span class="types"><span class="type">pos</span></span>
 
         </li>
         <li><span class="parameter">radius</span>
+            <span class="types"><span class="type">int</span></span>
 
         </li>
     </ul>
@@ -429,7 +537,13 @@
     <strong>umobs.mobsCaptureMob (self, clicker, chance_hand, chance_net, chance_lasso, force_take, replacewith)</strong>
     </dt>
     <dd>
+    Attempts to capture a mob and place in inventory.</p>
 
+<p> This function is generally called inside the <strong><em>on_rightclick</em></strong>
+ section of the mob api code. It provides a chance of capturing
+ the mob by hand, using the net, or magic lasso items. It can
+ also have the player take the mob by force if tamed and replace
+ it with another item entirely.
 
     </ul>
     </ul>
@@ -440,25 +554,48 @@
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">self</span>
-
+         Mob information.
         </li>
         <li><span class="parameter">clicker</span>
-
+         Player information.
         </li>
         <li><span class="parameter">chance_hand</span>
+            <span class="types"><span class="type">int</span></span>
+        <ul>
+<li>Chance of capturing mob by hand.</li>
+<li><strong><em>0</em></strong> to disable.</li>
+<li>Min: <strong><em>0</em></strong></li>
+<li>Max: <strong><em>100</em></strong></li>
+</ul>
 
         </li>
         <li><span class="parameter">chance_net</span>
+            <span class="types"><span class="type">int</span></span>
+        <ul>
+<li>Chance of capturing mob with net.</li>
+<li><strong><em>0</em></strong> to disable.</li>
+<li>Min: <strong><em>0</em></strong></li>
+<li>Max: <strong><em>100</em></strong></li>
+</ul>
 
         </li>
         <li><span class="parameter">chance_lasso</span>
+            <span class="types"><span class="type">int</span></span>
+        <ul>
+<li>Chance of capturing mob with magic lasso.</li>
+<li><strong><em>0</em></strong> to disable.</li>
+<li>Min: <strong><em>0</em></strong></li>
+<li>Max: <strong><em>100</em></strong></li>
+</ul>
 
         </li>
         <li><span class="parameter">force_take</span>
-
+            <span class="types"><span class="type">bool</span></span>
+         If <strong><em>true</em></strong>, takes mob by force even if tamed by another player.
         </li>
         <li><span class="parameter">replacewith</span>
-
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         On capture, place this item in inventory instead of mob (overrides new mob eggs with saved information).
         </li>
     </ul>
 
@@ -469,10 +606,14 @@
 </dd>
     <dt>
     <a name = "umobs.mobsFeedTame"></a>
-    <strong>umobs.mobsFeedTame (self, clicker, feed_count, breed, tame)</strong>
+    <strong>umobs.mobsFeedTame (table, clicker, feed_count, breed, tame)</strong>
     </dt>
     <dd>
+    Allows feeding items to mobs.</p>
 
+<p> This function allows the mob to be fed the item inside <strong><em>self.follow</em></strong>
+ a set number of times to be tamed or bred as a result. Will return
+ <strong><em>true</em></strong> when mob is fed with item it likes.
 
     </ul>
     </ul>
@@ -482,20 +623,23 @@
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">self</span>
-
+        <li><span class="parameter">table</span>
+         self Mob information.
         </li>
         <li><span class="parameter">clicker</span>
-
+         Player information.
         </li>
         <li><span class="parameter">feed_count</span>
-
+            <span class="types"><span class="type">int</span></span>
+         Number of times mob must be fed to tame or breed.
         </li>
         <li><span class="parameter">breed</span>
-
+            <span class="types"><span class="type">bool</span></span>
+         If <strong><em>true</em></strong>, mob can be bred and a child created afterwards.
         </li>
         <li><span class="parameter">tame</span>
-
+            <span class="types"><span class="type">bool</span></span>
+         If <strong><em>true</em></strong>, mob can be tamed so player can pick them up.
         </li>
     </ul>
 
@@ -509,7 +653,12 @@
     <strong>umobs.mobsProtect (self, clicker)</strong>
     </dt>
     <dd>
+    Protects mobs from being attacked by other players.</p>
 
+<p> This function can be used to right-click any tamed mob with
+ <strong><em>mobs:protector</em></strong> item. This will protect the mob from harm
+ inside a protected area from other players. Will return <strong><em>true</em></strong>
+ when mob right-clicked with <strong><em>mobs:protector</em></strong> item.
 
     </ul>
     </ul>
@@ -520,10 +669,10 @@
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">self</span>
-
+         Mob information.
         </li>
         <li><span class="parameter">clicker</span>
-
+         Player information.
         </li>
     </ul>
 
@@ -537,7 +686,7 @@
     <strong>umobs.mobsAttach (self, player)</strong>
     </dt>
     <dd>
-
+    Attaches a player to the mob so it can be ridden.
 
     </ul>
     </ul>
@@ -548,10 +697,10 @@
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">self</span>
-
+         Mob information.
         </li>
         <li><span class="parameter">player</span>
-
+         Player information.
         </li>
     </ul>
 
@@ -565,7 +714,9 @@
     <strong>umobs.mobsDetach (player, offset)</strong>
     </dt>
     <dd>
+    Detaches player from riding mob.</p>
 
+<p> Detaches the player currently riding a mob to an offset position.
 
     </ul>
     </ul>
@@ -576,10 +727,11 @@
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">player</span>
-
+         Player information.
         </li>
         <li><span class="parameter">offset</span>
-
+            <span class="types"><span class="type">pos</span></span>
+         Position table containing offset values.
         </li>
     </ul>
 
@@ -593,7 +745,9 @@
     <strong>umobs.mobsDrive (self, move_animation, stand_animation, can_fly, dtime)</strong>
     </dt>
     <dd>
+    Controls mob movement with player.</p>
 
+<p> Allows an attached player to move the mob around and animate it at same time.
 
     </ul>
     </ul>
@@ -604,19 +758,22 @@
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">self</span>
-
+         Mob information.
         </li>
         <li><span class="parameter">move_animation</span>
-
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         Pre-defined movement state animation (e.g. &ldquo;<strong><em>walk</em></strong>&rdquo;).
         </li>
         <li><span class="parameter">stand_animation</span>
-
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         Pre-defined standing state animation (e.g. &ldquo;<strong><em>stand</em></strong>&rdquo;).
         </li>
         <li><span class="parameter">can_fly</span>
-
+            <span class="types"><span class="type">bool</span></span>
+         If <strong><em>true</em></strong>, jump and sneak controls will allow mob to fly up and down.
         </li>
         <li><span class="parameter">dtime</span>
-
+         Tick time used inside function.
         </li>
     </ul>
 
@@ -630,7 +787,11 @@
     <strong>umobs.mobsFly (self, dtime, speed, can_shoot, arrow_entity, move_animation, stand_animation)</strong>
     </dt>
     <dd>
+    Controls mob flight with player.</p>
 
+<p> Allows the attached player to fly the mob around using directional controls.</p>
+
+<p> <strong>NOTE:</strong> animation names are from the <em>pre-defined</em> animation lists inside mob registry without extensions.
 
     </ul>
     </ul>
@@ -641,25 +802,30 @@
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">self</span>
-
+         Mob information.
         </li>
         <li><span class="parameter">dtime</span>
-
+         Tick time used inside function.
         </li>
         <li><span class="parameter">speed</span>
-
+            <span class="types"><span class="type">int</span></span>
+         Speed at which mob moves in flight.
         </li>
         <li><span class="parameter">can_shoot</span>
-
+            <span class="types"><span class="type">bool</span></span>
+         If <strong><em>true</em></strong>, player can fire arrow with mob (sneak and left mouse button fires).
         </li>
         <li><span class="parameter">arrow_entity</span>
-
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         Name of item used for firing ranged attack.
         </li>
         <li><span class="parameter">move_animation</span>
-
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         Pre-defined movement state animation (e.g. &ldquo;<strong><em>walk</em></strong>&rdquo;, &ldquo;<strong><em>fly</em></strong>&rdquo;, etc.).
         </li>
         <li><span class="parameter">stand_animation</span>
-
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         Pre-defined standing state animation (e.g. &ldquo;<strong><em>stand</em></strong>&rdquo;, &ldquo;<strong><em>blink</em></strong>&rdquo;, etc.).
         </li>
     </ul>
 
@@ -673,7 +839,9 @@
     <strong>umobs.mobsSetAnimation (self, name)</strong>
     </dt>
     <dd>
+    Sets current animation for mob.</p>
 
+<p> Default: &ldquo;<strong><em>stand</em></strong>&rdquo;
 
     </ul>
     </ul>
@@ -684,10 +852,11 @@
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">self</span>
-
+         Mob information.
         </li>
         <li><span class="parameter">name</span>
-
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         Name of animation (e.g. &ldquo;<strong><em>stand</em></strong>&rdquo;, &ldquo;<strong><em>walk</em></strong>&rdquo;, &ldquo;<strong><em>fly</em></strong>&rdquo;, etc.).
         </li>
     </ul>
 
@@ -850,8 +1019,8 @@
 <li>Example:
 <pre>
 immune_to = {
-  {&ldquo;default:sword_wood&rdquo;, 0},  &ndash; immune to sword
-  {&ldquo;default:gold_lump&rdquo;, -10},  &ndash; gold lump heals
+  {&ldquo;default:sword_wood&rdquo;, 0},  -- immune to sword
+  {&ldquo;default:gold_lump&rdquo;, -10},  -- gold lump heals
 }
 </pre></li>
 </ul>
@@ -1152,27 +1321,6 @@ replace_what = {
 
         </li>
     </ul>
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "umobs.mobsSpawn.def"></a>
-    <strong>umobs.mobsSpawn.def</strong>
-    </dt>
-    <dd>
-    Definition table for <a href="#umobs.mobsSpawn">umobs.mobsSpawn</a>.</p>
-
-<p> For field values, see <a href="umobs.mobsRegisterSpawnSpecific">umobs.mobsRegisterSpawnSpecific</a> parameters.
-
-    </ul>
-    </ul>
-    </ul>
-    </ul>
-    </ul>
-
 
 
 
@@ -1513,13 +1661,181 @@ replace_what = {
 
 </dd>
 </dl>
+    <h2 class="section-header "><a name="Mobs_Redo_Notes"></a>Mobs Redo Notes </h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "Variables"></a>
+    <strong>Variables</strong>
+    </dt>
+    <dd>
+    <p>These variables need to be set before using the mobs functions:</p>
+
+<ul>
+<li><code>self.v2:</code> Toggle switch used to define below values for the first time.</li>
+<li><code>self.max_speed_forward:</code> Max speed mob can move forward.</li>
+<li><code>self.max_speed_reverse:</code> Max speed mob can move backwards.</li>
+<li><code>self.accel:</code> Acceleration speed.</li>
+<li><code>self.terrain_type:</code> Integer containing terrain mob can walk on:
+
+<ul>
+<li><strong><em>1:</em></strong> water</li>
+<li><strong><em>2:</em></strong> water/land???</li>
+<li><strong><em>3:</em></strong> land</li>
+</ul>
+</li>
+<li><code>self.driver_attach_at:</code> Position offset for attaching player to mob.</li>
+<li><code>self.driver_eye_offset:</code> Position offset for attached player view.</li>
+<li><code>self.driver_scale:</code> Sets driver scale for mobs larger than {x=1, y=1}.</li>
+</ul>
+
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Mobs_Redo_Examples"></a>Mobs Redo Examples </h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "Horse"></a>
+    <strong>Horse</strong>
+    </dt>
+    <dd>
+    Rideable horse.</p>
+
+<p> Example of how to register a rideable horse:
+ <pre>
+ mobs:register_mob(&ldquo;mob_horse:horse&rdquo;, {
+     type = &ldquo;animal&rdquo;,
+     visual = &ldquo;mesh&rdquo;,
+     visual_size = {x = 1.20, y = 1.20},
+     mesh = &ldquo;mobs_horse.x&rdquo;,
+     collisionbox = {-0.4, -0.01, -0.4, 0.4, 1.25, 0.4},
+     animation = {
+         speed_normal = 15,
+         speed_run = 30,
+         stand_start = 25,
+         stand_end = 75,
+         walk_start = 75,
+         walk_end = 100,
+         run_start = 75,
+         run_end = 100,
+     },
+     textures = {
+         {&ldquo;mobs_horse.png&rdquo;},
+         {&ldquo;mobs_horsepeg.png&rdquo;},
+         {&ldquo;mobs_horseara.png&rdquo;}
+     },
+     fear_height = 3,
+     runaway = true,
+     fly = false,
+     walk_chance = 60,
+     view_range = 5,
+     follow = {&ldquo;farming:wheat&rdquo;},
+     passive = true,
+     hp_min = 12,
+     hp_max = 16,
+     armor = 200,
+     lava_damage = 5,
+     fall_damage = 5,
+     water_damage = 1,
+     makes_footstep_sound = true,
+     drops = {
+         {name = &ldquo;mobs:meat_raw&rdquo;, chance = 1, min = 2, max = 3}
+     },
+     do_custom = function(self, dtime)
+         -- set needed values if not already present
+         if not self.v2 then
+         -- elf.v2 = 0
+             self.max_speed_forward = 6
+             self.max_speed_reverse = 2
+             self.accel = 6
+             self.terrain_type = 3
+             self.driver_attach_at = {x = 0, y = 20, z = -2}
+             self.driver_eye_offset = {x = 0, y = 3, z = 0}
+             self.driver_scale = {x = 1, y = 1}
+         end
+         -- if driver present allow control of horse
+         if self.driver then
+             mobs.drive(self, &ldquo;walk&rdquo;, &ldquo;stand&rdquo;, false, dtime)
+            return false -- skip rest of mob functions
+         end
+          return true
+     end,
+     on_die = function(self, pos)
+         -- drop saddle when horse is killed while riding
+         -- also detach from horse properly
+         if self.driver then
+             minetest.add_item(pos, &ldquo;mobs:saddle&rdquo;)
+             mobs.detach(self.driver, {x = 1, y = 0, z = 1})
+         end
+     end,
+     on_rightclick = function(self, clicker)
+         -- make sure player is clicking
+         if not clicker or not clicker:is_player() then
+             return
+         end
+         -- feed, tame or heal horse
+         if mobs:feed_tame(self, clicker, 10, true, true) then
+             return
+         end
+         -- make sure tamed horse is being clicked by owner only
+         if self.tamed and self.owner == clicker:get_player_name() then
+             local inv = clicker:get_inventory()
+             -- detatch player already riding horse
+             if self.driver and clicker == self.driver then
+                 mobs.detach(clicker, {x = 1, y = 0, z = 1})
+                 -- add saddle back to inventory
+                 if inv:room_for_item(&ldquo;main&rdquo;, &ldquo;mobs:saddle&rdquo;) then
+                     inv:add_item(&ldquo;main&rdquo;, &ldquo;mobs:saddle&rdquo;)
+                 else
+                     minetest.add_item(clicker.getpos(), &ldquo;mobs:saddle&rdquo;)
+                 end
+             -- attach player to horse
+             elseif not self.driver
+             and clicker:get_wielded_item():get_name() == &ldquo;mobs:saddle&rdquo; then
+                 self.object:set_properties({stepheight = 1.1})
+                 mobs.attach(self, clicker)
+                 -- take saddle from inventory
+                 inv:remove_item(&ldquo;main&rdquo;, &ldquo;mobs:saddle&rdquo;)
+             end
+         end
+         -- used to capture horse with magic lasso
+         mobs:capture_mob(self, clicker, 0, 0, 80, false, nil)
+     end
+ })
+ </pre>
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+
+
+
+
+
+</dd>
+</dl>
 
 
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/AntumDeluge/LDoc/tree/antum">LDoc 1.4.6-antum-dev</a></i>
-<i style="float:right;">Last updated 2017-08-10 20:37:40 </i>
+<i style="float:right;">Last updated 2017-08-11 11:34:54 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>
