@@ -17,7 +17,7 @@ local function italic(value)
 	return '<i>' .. value .. '</i>'
 end
 
-new_type('setting', 'Settings')
+new_type('setting', 'Configuration Settings')
 new_type('chatcmd', 'Chat Commands', false, 'chatparam')
 custom_tags = {
 	{'dfield',

@@ -30,7 +30,8 @@
 <h2>Contents</h2>
 <ul>
 <li><a href="#Mobs_Redo_Functions">Mobs Redo Functions </a></li>
-<li><a href="#Mobs_Redo_Definition_Tables">Mobs Redo Definition Tables </a></li>
+<li><a href="#Mobs_Redo_Function_Definition_Tables">Mobs Redo Function Definition Tables </a></li>
+<li><a href="#Mobs_Redo_Settings">Mobs Redo Settings </a></li>
 </ul>
 
 
@@ -56,15 +57,46 @@
 	<td class="summary">Compatibility function.</td>
 	</tr>
 </table>
-<h2><a href="#Mobs_Redo_Definition_Tables">Mobs Redo Definition Tables </a></h2>
+<h2><a href="#Mobs_Redo_Function_Definition_Tables">Mobs Redo Function Definition Tables </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#umobs.mobsRegisterMob:def">umobs.mobsRegisterMob:def</a></td>
 	<td class="summary">Definition table for <em><a href="#umobs.mobsRegisterMob">umobs.mobsRegisterMob</a></em>.</td>
 	</tr>
+</table>
+<h2><a href="#Mobs_Redo_Settings">Mobs Redo Settings </a></h2>
+<table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#mobs:def.drops">mobs:def.drops</a></td>
-	<td class="summary">Mob drops.</td>
+	<td class="name" nowrap><a href="#enable_damage">enable_damage</a></td>
+	<td class="summary">Enable damage.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#only_peaceful_mobs">only_peaceful_mobs</a></td>
+	<td class="summary">Only peaceful mobs.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#mobs_disable_blood">mobs_disable_blood</a></td>
+	<td class="summary">Disable blood.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#mobs_spawn_protected">mobs_spawn_protected</a></td>
+	<td class="summary">Spawn in protected areas.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#remove_far_mobs">remove_far_mobs</a></td>
+	<td class="summary">Remove far mobs.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#mobname">mobname</a></td>
+	<td class="summary">Settings for specific mobs.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#mob_difficulty">mob_difficulty</a></td>
+	<td class="summary">Mob difficulty.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#mob_show_health">mob_show_health</a></td>
+	<td class="summary">Show mob health.</td>
 	</tr>
 </table>
 
@@ -142,7 +174,7 @@
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="Mobs_Redo_Definition_Tables"></a>Mobs Redo Definition Tables </h2>
+    <h2 class="section-header "><a name="Mobs_Redo_Function_Definition_Tables"></a>Mobs Redo Function Definition Tables </h2>
 
     <dl class="function">
     <dt>
@@ -603,12 +635,24 @@ replace_what = {
 
 
 </dd>
+</dl>
+    <h2 class="section-header "><a name="Mobs_Redo_Settings"></a>Mobs Redo Settings </h2>
+
+    <dl class="function">
     <dt>
-    <a name = "mobs:def.drops"></a>
-    <strong>mobs:def.drops</strong>
+    <a name = "enable_damage"></a>
+    <strong>enable_damage</strong>
     </dt>
     <dd>
-    Mob drops.
+    <p>Enable damage.</p>
+
+<p> If <strong><em>true</em></strong>, monsters will attack players.</p>
+
+<ul>
+<li>Type: <strong><em>bool</em></strong></li>
+<li>Default: <strong><em>true</em></strong></li>
+</ul>
+
 
     </ul>
     </ul>
@@ -616,34 +660,189 @@ replace_what = {
     </ul>
     </ul>
 
-    <h3>Fields:</h3>
-    <ul>
-        <li><span class="parameter">name</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-         Item name (e.g. &ldquo;default:stone&rdquo;).
-        </li>
-        <li><span class="parameter">chance</span>
-            <span class="types"><span class="type">int</span></span>
-         The inverted chance (same as in abm) to get the item.
-        </li>
-        <li><span class="parameter">min</span>
-            <span class="types"><span class="type">int</span></span>
-         Minimum number of items dropped at one time.
-        </li>
-        <li><span class="parameter">max</span>
-            <span class="types"><span class="type">int</span></span>
-         Maximum number of items dropped at one time.</p>
 
-<p> <strong>Example:</strong>
- <pre>
- drops = {
-     {name=&lsquo;default:stone&rsquo;, chance=2, min=5, max=5},
-     {name=&lsquo;default:mese_crystal&rsquo;, chance=100, min=1, max=3},
-     {name=&lsquo;mobs:meat&rsquo;, chance=1, min=2, max=5},
- }
- </pre>
-        </li>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "only_peaceful_mobs"></a>
+    <strong>only_peaceful_mobs</strong>
+    </dt>
+    <dd>
+    <p>Only peaceful mobs.</p>
+
+<p> If <strong><em>true</em></strong>, only animals will spawn in game.</p>
+
+<ul>
+<li>Type: <strong><em>bool</em></strong></li>
+<li>Default: <strong><em>false</em></strong></li>
+</ul>
+
+
     </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "mobs_disable_blood"></a>
+    <strong>mobs_disable_blood</strong>
+    </dt>
+    <dd>
+    <p>Disable blood.</p>
+
+<p> If <strong><em>false</em></strong>, blood effects appear when mob is hit.</p>
+
+<ul>
+<li>Type: <strong><em>bool</em></strong></li>
+<li>Default: <strong><em>false</em></strong></li>
+</ul>
+
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "mobs_spawn_protected"></a>
+    <strong>mobs_spawn_protected</strong>
+    </dt>
+    <dd>
+    <p>Spawn in protected areas.</p>
+
+<p> If set to <strong><em>1</em></strong>, mobs will not spawn in protected areas.</p>
+
+<ul>
+<li>Type: <strong><em>int</em></strong></li>
+<li>Default: <strong><em>0</em></strong></li>
+</ul>
+
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "remove_far_mobs"></a>
+    <strong>remove_far_mobs</strong>
+    </dt>
+    <dd>
+    <p>Remove far mobs.</p>
+
+<p> If <strong><em>true</em></strong>, mobs that are outside players visual range will be removed.</p>
+
+<ul>
+<li>Type: <strong><em>bool</em></strong></li>
+<li>Default: <strong><em>false</em></strong></li>
+</ul>
+
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "mobname"></a>
+    <strong>mobname</strong>
+    </dt>
+    <dd>
+    Settings for specific mobs.</p>
+
+<p> Can change specific mob chance rate (0 to disable) and spawn number (e.g. <strong><em>mobs_animal:cow = 1000,5</em></strong>).
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "mob_difficulty"></a>
+    <strong>mob_difficulty</strong>
+    </dt>
+    <dd>
+    <p>Mob difficulty.</p>
+
+<p> Sets difficulty level (health and hit damage multiplied by this number).</p>
+
+<ul>
+<li>Type: <strong><em>float</em></strong></li>
+<li>Default: <strong><em>1.0</em></strong></li>
+</ul>
+
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "mob_show_health"></a>
+    <strong>mob_show_health</strong>
+    </dt>
+    <dd>
+    <p>Show mob health.</p>
+
+<p> If <strong><em>false</em></strong> then punching mob will not show health status.</p>
+
+<ul>
+<li>Type: <strong><em>bool</em></strong></li>
+<li>Default: <strong><em>true</em></strong></li>
+</ul>
+
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
 
 
 
@@ -657,7 +856,7 @@ replace_what = {
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/AntumDeluge/LDoc/tree/antum">LDoc 1.4.6-antum-dev</a></i>
-<i style="float:right;">Last updated 2017-08-10 18:06:43 </i>
+<i style="float:right;">Last updated 2017-08-10 18:55:06 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>
