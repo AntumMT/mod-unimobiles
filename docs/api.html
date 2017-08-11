@@ -35,13 +35,16 @@
 </ul>
 
 
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><strong>umobs.api</strong></li>
 </ul>
 
 </div>
 
 <div id="content">
 
-<h1>Script <code>api.lua</code></h1>
+<h1>Module <code>umobs.api</code></h1>
 <p>Unimobiles API.</p>
 <p></p>
 
@@ -49,53 +52,113 @@
 <h2><a href="#Mobs_Redo_Functions">Mobs Redo Functions </a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#umobs.mobsRegisterMob">umobs.mobsRegisterMob (name, def)</a></td>
+	<td class="name" ><a href="#umobs.mobsRegisterMob">umobs.mobsRegisterMob (name, def)</a></td>
 	<td class="summary">Registers an entity with <em>mobs_redo</em> engine.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#umobs.mobs_register_mob">umobs.mobs_register_mob (name, def)</a></td>
-	<td class="summary">Compatibility function.</td>
+	<td class="name" ><a href="#umobs.mobsRegisterSpawn">umobs.mobsRegisterSpawn (name, nodes, max_light, min_light, chance, active_object_count, max_height, day_toggle)</a></td>
+	<td class="summary"></td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#umobs.mobsRegisterSpawnSpecific">umobs.mobsRegisterSpawnSpecific (name, nodes, neighbors, min_light, max_light, interval, chance, active_object_count, min_height, max_height, day_toggle, on_spawn)</a></td>
+	<td class="summary"></td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#umobs.mobsSpawn">umobs.mobsSpawn (def)</a></td>
+	<td class="summary"></td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#umobs.mobsRegisterArrow">umobs.mobsRegisterArrow (name, def)</a></td>
+	<td class="summary"></td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#umobs.mobsRegisterEgg">umobs.mobsRegisterEgg (name, description, background, addegg)</a></td>
+	<td class="summary"></td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#umobs.mobsBoom">umobs.mobsBoom (self, pos, radius)</a></td>
+	<td class="summary"></td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#umobs.mobsCaptureMob">umobs.mobsCaptureMob (self, clicker, chance_hand, chance_net, chance_lasso, force_take, replacewith)</a></td>
+	<td class="summary"></td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#umobs.mobsFeedTame">umobs.mobsFeedTame (self, clicker, feed_count, breed, tame)</a></td>
+	<td class="summary"></td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#umobs.mobsProtect">umobs.mobsProtect (self, clicker)</a></td>
+	<td class="summary"></td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#umobs.mobsAttach">umobs.mobsAttach (self, player)</a></td>
+	<td class="summary"></td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#umobs.mobsDetach">umobs.mobsDetach (player, offset)</a></td>
+	<td class="summary"></td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#umobs.mobsDrive">umobs.mobsDrive (self, move_animation, stand_animation, can_fly, dtime)</a></td>
+	<td class="summary"></td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#umobs.mobsFly">umobs.mobsFly (self, dtime, speed, can_shoot, arrow_entity, move_animation, stand_animation)</a></td>
+	<td class="summary"></td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#umobs.mobsSetAnimation">umobs.mobsSetAnimation (self, name)</a></td>
+	<td class="summary"></td>
 	</tr>
 </table>
 <h2><a href="#Mobs_Redo_Function_Definition_Tables">Mobs Redo Function Definition Tables </a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#umobs.mobsRegisterMob:def">umobs.mobsRegisterMob:def</a></td>
-	<td class="summary">Definition table for <em><a href="#umobs.mobsRegisterMob">umobs.mobsRegisterMob</a></em>.</td>
+	<td class="name" ><a href="#umobs.mobsRegisterMob.def">umobs.mobsRegisterMob.def</a></td>
+	<td class="summary">Definition table for <a href="#umobs.mobsRegisterMob">umobs.mobsRegisterMob</a>.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#umobs.mobsSpawn.def">umobs.mobsSpawn.def</a></td>
+	<td class="summary">Definition table for <a href="#umobs.mobsSpawn">umobs.mobsSpawn</a>.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#umobs.mobsRegisterArrow.def">umobs.mobsRegisterArrow.def</a></td>
+	<td class="summary">Definition table for <a href="#umobs.mobsRegisterArrow">umobs.mobsRegisterArrow</a>.</td>
 	</tr>
 </table>
 <h2><a href="#Mobs_Redo_Settings">Mobs Redo Settings </a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#enable_damage">enable_damage</a></td>
+	<td class="name" ><a href="#enable_damage">enable_damage</a></td>
 	<td class="summary">Enable damage.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#only_peaceful_mobs">only_peaceful_mobs</a></td>
+	<td class="name" ><a href="#only_peaceful_mobs">only_peaceful_mobs</a></td>
 	<td class="summary">Only peaceful mobs.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#mobs_disable_blood">mobs_disable_blood</a></td>
+	<td class="name" ><a href="#mobs_disable_blood">mobs_disable_blood</a></td>
 	<td class="summary">Disable blood.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#mobs_spawn_protected">mobs_spawn_protected</a></td>
+	<td class="name" ><a href="#mobs_spawn_protected">mobs_spawn_protected</a></td>
 	<td class="summary">Spawn in protected areas.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#remove_far_mobs">remove_far_mobs</a></td>
+	<td class="name" ><a href="#remove_far_mobs">remove_far_mobs</a></td>
 	<td class="summary">Remove far mobs.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#mobname">mobname</a></td>
+	<td class="name" ><a href="#mobname">mobname</a></td>
 	<td class="summary">Settings for specific mobs.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#mob_difficulty">mob_difficulty</a></td>
+	<td class="name" ><a href="#mob_difficulty">mob_difficulty</a></td>
 	<td class="summary">Mob difficulty.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#mob_show_health">mob_show_health</a></td>
+	<td class="name" ><a href="#mob_show_health">mob_show_health</a></td>
 	<td class="summary">Show mob health.</td>
 	</tr>
 </table>
@@ -128,25 +191,151 @@
         </li>
         <li><span class="parameter">def</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
-         Definition table.
+         Definition table (See: <a href="#umobs.mobsRegisterMob.def">umobs.mobsRegisterMob.def</a>).
         </li>
     </ul>
 
 
 
-    <h3>See also:</h3>
-    <ul>
-         <a href="api.html#umobs.mobsRegisterMob:def">umobs.mobsRegisterMob:def</a>
-    </ul>
 
 
 </dd>
     <dt>
-    <a name = "umobs.mobs_register_mob"></a>
-    <strong>umobs.mobs_register_mob (name, def)</strong>
+    <a name = "umobs.mobsRegisterSpawn"></a>
+    <strong>umobs.mobsRegisterSpawn (name, nodes, max_light, min_light, chance, active_object_count, max_height, day_toggle)</strong>
     </dt>
     <dd>
-    Compatibility function.
+
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">name</span>
+
+        </li>
+        <li><span class="parameter">nodes</span>
+
+        </li>
+        <li><span class="parameter">max_light</span>
+
+        </li>
+        <li><span class="parameter">min_light</span>
+
+        </li>
+        <li><span class="parameter">chance</span>
+
+        </li>
+        <li><span class="parameter">active_object_count</span>
+
+        </li>
+        <li><span class="parameter">max_height</span>
+
+        </li>
+        <li><span class="parameter">day_toggle</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "umobs.mobsRegisterSpawnSpecific"></a>
+    <strong>umobs.mobsRegisterSpawnSpecific (name, nodes, neighbors, min_light, max_light, interval, chance, active_object_count, min_height, max_height, day_toggle, on_spawn)</strong>
+    </dt>
+    <dd>
+
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">name</span>
+
+        </li>
+        <li><span class="parameter">nodes</span>
+
+        </li>
+        <li><span class="parameter">neighbors</span>
+
+        </li>
+        <li><span class="parameter">min_light</span>
+
+        </li>
+        <li><span class="parameter">max_light</span>
+
+        </li>
+        <li><span class="parameter">interval</span>
+
+        </li>
+        <li><span class="parameter">chance</span>
+
+        </li>
+        <li><span class="parameter">active_object_count</span>
+
+        </li>
+        <li><span class="parameter">min_height</span>
+
+        </li>
+        <li><span class="parameter">max_height</span>
+
+        </li>
+        <li><span class="parameter">day_toggle</span>
+
+        </li>
+        <li><span class="parameter">on_spawn</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "umobs.mobsSpawn"></a>
+    <strong>umobs.mobsSpawn (def)</strong>
+    </dt>
+    <dd>
+
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">def</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         See: <a href="#umobs.mobsSpawn.def">umobs.mobsSpawn.def</a>
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "umobs.mobsRegisterArrow"></a>
+    <strong>umobs.mobsRegisterArrow (name, def)</strong>
+    </dt>
+    <dd>
+
 
     </ul>
     </ul>
@@ -160,16 +349,350 @@
 
         </li>
         <li><span class="parameter">def</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         See: <a href="#umobs.mobsRegisterArrow.def">umobs.mobsRegisterArrow.def</a>
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "umobs.mobsRegisterEgg"></a>
+    <strong>umobs.mobsRegisterEgg (name, description, background, addegg)</strong>
+    </dt>
+    <dd>
+
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">name</span>
+
+        </li>
+        <li><span class="parameter">description</span>
+
+        </li>
+        <li><span class="parameter">background</span>
+
+        </li>
+        <li><span class="parameter">addegg</span>
 
         </li>
     </ul>
 
 
 
-    <h3>See also:</h3>
-    <ul>
-         <a href="api.html#umobs.mobsRegisterMob">umobs.mobsRegisterMob</a>
+
+
+</dd>
+    <dt>
+    <a name = "umobs.mobsBoom"></a>
+    <strong>umobs.mobsBoom (self, pos, radius)</strong>
+    </dt>
+    <dd>
+
+
     </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+
+        </li>
+        <li><span class="parameter">pos</span>
+
+        </li>
+        <li><span class="parameter">radius</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "umobs.mobsCaptureMob"></a>
+    <strong>umobs.mobsCaptureMob (self, clicker, chance_hand, chance_net, chance_lasso, force_take, replacewith)</strong>
+    </dt>
+    <dd>
+
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+
+        </li>
+        <li><span class="parameter">clicker</span>
+
+        </li>
+        <li><span class="parameter">chance_hand</span>
+
+        </li>
+        <li><span class="parameter">chance_net</span>
+
+        </li>
+        <li><span class="parameter">chance_lasso</span>
+
+        </li>
+        <li><span class="parameter">force_take</span>
+
+        </li>
+        <li><span class="parameter">replacewith</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "umobs.mobsFeedTame"></a>
+    <strong>umobs.mobsFeedTame (self, clicker, feed_count, breed, tame)</strong>
+    </dt>
+    <dd>
+
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+
+        </li>
+        <li><span class="parameter">clicker</span>
+
+        </li>
+        <li><span class="parameter">feed_count</span>
+
+        </li>
+        <li><span class="parameter">breed</span>
+
+        </li>
+        <li><span class="parameter">tame</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "umobs.mobsProtect"></a>
+    <strong>umobs.mobsProtect (self, clicker)</strong>
+    </dt>
+    <dd>
+
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+
+        </li>
+        <li><span class="parameter">clicker</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "umobs.mobsAttach"></a>
+    <strong>umobs.mobsAttach (self, player)</strong>
+    </dt>
+    <dd>
+
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+
+        </li>
+        <li><span class="parameter">player</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "umobs.mobsDetach"></a>
+    <strong>umobs.mobsDetach (player, offset)</strong>
+    </dt>
+    <dd>
+
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">player</span>
+
+        </li>
+        <li><span class="parameter">offset</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "umobs.mobsDrive"></a>
+    <strong>umobs.mobsDrive (self, move_animation, stand_animation, can_fly, dtime)</strong>
+    </dt>
+    <dd>
+
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+
+        </li>
+        <li><span class="parameter">move_animation</span>
+
+        </li>
+        <li><span class="parameter">stand_animation</span>
+
+        </li>
+        <li><span class="parameter">can_fly</span>
+
+        </li>
+        <li><span class="parameter">dtime</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "umobs.mobsFly"></a>
+    <strong>umobs.mobsFly (self, dtime, speed, can_shoot, arrow_entity, move_animation, stand_animation)</strong>
+    </dt>
+    <dd>
+
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+
+        </li>
+        <li><span class="parameter">dtime</span>
+
+        </li>
+        <li><span class="parameter">speed</span>
+
+        </li>
+        <li><span class="parameter">can_shoot</span>
+
+        </li>
+        <li><span class="parameter">arrow_entity</span>
+
+        </li>
+        <li><span class="parameter">move_animation</span>
+
+        </li>
+        <li><span class="parameter">stand_animation</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "umobs.mobsSetAnimation"></a>
+    <strong>umobs.mobsSetAnimation (self, name)</strong>
+    </dt>
+    <dd>
+
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+
+        </li>
+        <li><span class="parameter">name</span>
+
+        </li>
+    </ul>
+
+
+
 
 
 </dd>
@@ -178,11 +701,11 @@
 
     <dl class="function">
     <dt>
-    <a name = "umobs.mobsRegisterMob:def"></a>
-    <strong>umobs.mobsRegisterMob:def</strong>
+    <a name = "umobs.mobsRegisterMob.def"></a>
+    <strong>umobs.mobsRegisterMob.def</strong>
     </dt>
     <dd>
-    Definition table for <em><a href="#umobs.mobsRegisterMob">umobs.mobsRegisterMob</a></em>.
+    Definition table for <a href="#umobs.mobsRegisterMob">umobs.mobsRegisterMob</a>.
 
     </ul>
     </ul>
@@ -635,6 +1158,146 @@ replace_what = {
 
 
 </dd>
+    <dt>
+    <a name = "umobs.mobsSpawn.def"></a>
+    <strong>umobs.mobsSpawn.def</strong>
+    </dt>
+    <dd>
+    Definition table for <a href="#umobs.mobsSpawn">umobs.mobsSpawn</a>.</p>
+
+<p> For field values, see <a href="umobs.mobsRegisterSpawnSpecific">umobs.mobsRegisterSpawnSpecific</a> parameters.
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "umobs.mobsRegisterArrow.def"></a>
+    <strong>umobs.mobsRegisterArrow.def</strong>
+    </dt>
+    <dd>
+    Definition table for <a href="#umobs.mobsRegisterArrow">umobs.mobsRegisterArrow</a>.
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">visual</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         Same as in <a href="http://dev.minetest.net/minetest.register_entity">minetest.register_entity</a>
+        </li>
+        <li><span class="parameter">visual_size</span>
+            <span class="types"><span class="type">size</span></span>
+         Same as in <a href="http://dev.minetest.net/minetest.register_entity">minetest.register_entity</a>
+        </li>
+        <li><span class="parameter">textures</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         Same as in <a href="http://dev.minetest.net/minetest.register_entity">minetest.register_entity</a>
+        </li>
+        <li><span class="parameter">velocity</span>
+         Velocity of the arrow.
+        </li>
+        <li><span class="parameter">drop</span>
+            <span class="types"><span class="type">bool</span></span>
+         If <strong><em>true</em></strong>, any arrows hitting a node will drop as item.
+        </li>
+        <li><span class="parameter">hit_player</span>
+            <span class="types"><span class="type">callback</span></span>
+        <ul>
+<li>Called when the arrow hits a player (should hurt the player).</li>
+<li>Usage: <strong><em>hit_player = function(self, player)</em></strong></li>
+<li>Parameters:
+
+<ul>
+<li><strong><em>self:</em></strong></li>
+<li><strong><em>player</em></strong></li>
+</ul>
+</li>
+</ul>
+
+        </li>
+        <li><span class="parameter">hit_mob</span>
+            <span class="types"><span class="type">callback</span></span>
+        <ul>
+<li>Called when the arrow hits a mob (should hurt the mob).</li>
+<li>Usage: <strong><em>hit_mobs(self, player)</em></strong></li>
+<li>Parameters:
+
+<ul>
+<li><strong><em>self:</em></strong></li>
+<li><strong><em>player:</em></strong></li>
+</ul>
+</li>
+</ul>
+
+        </li>
+        <li><span class="parameter">hit_node</span>
+            <span class="types"><span class="type">callback</span></span>
+        <ul>
+<li>Called when the arrow hits a node.</li>
+<li>Usage: <strong><em>hit_node = function(self, pos, node)</em></strong></li>
+<li>Parameters:
+
+<ul>
+<li><strong><em>self:</em></strong></li>
+<li><strong><em>pos:</em></strong></li>
+<li><strong><em>node:</em></strong></li>
+</ul>
+</li>
+</ul>
+
+        </li>
+        <li><span class="parameter">tail</span>
+            <span class="types"><span class="type">int</span></span>
+         When set to <strong><em>1</em></strong> adds a trail or tail to mob arrows.
+        </li>
+        <li><span class="parameter">tail_texture</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         Texture used for <strong>tail</strong> effect.
+        </li>
+        <li><span class="parameter">tail_size</span>
+            <span class="types"><span class="type">int</span></span>
+         Has size for <strong>tail</strong>* texture (default: between 5 and 10).
+        </li>
+        <li><span class="parameter">expire</span>
+            <span class="types"><span class="type">float</span></span>
+         How long tail appears for (default: 0.25).
+        </li>
+        <li><span class="parameter">glow</span>
+            <span class="types"><span class="type">int</span></span>
+         Value for how brightly tail glows. Can be between 0 to 10 (default: 0).
+        </li>
+        <li><span class="parameter">rotate</span>
+            <span class="types"><span class="type">int</span></span>
+         Degrees to rotate arrow.
+        </li>
+        <li><span class="parameter">on_step</span>
+            <span class="types"><span class="type">callback</span></span>
+        <ul>
+<li>A custom function when arrow is active.</li>
+<li>Default: <strong><em>nil</em></strong></li>
+</ul>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
 </dl>
     <h2 class="section-header "><a name="Mobs_Redo_Settings"></a>Mobs Redo Settings </h2>
 
@@ -856,7 +1519,7 @@ replace_what = {
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/AntumDeluge/LDoc/tree/antum">LDoc 1.4.6-antum-dev</a></i>
-<i style="float:right;">Last updated 2017-08-10 18:55:06 </i>
+<i style="float:right;">Last updated 2017-08-10 20:37:40 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>
