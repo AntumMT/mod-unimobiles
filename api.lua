@@ -26,79 +26,94 @@ function umobs.mobsRegisterMob(name, def)
 end
 
 
----
+--- Registers spawning behavior of mob for *mobs_redo* engine.
 --
 -- @function umobs.mobsRegisterSpawn
--- @param name
--- @param nodes
--- @param max_light
--- @param min_light
--- @param chance
--- @param active_object_count
--- @param max_height
--- @param day_toggle
+-- @tparam string name
+-- @tparam table nodes
+-- @tparam int max_light
+-- @tparam int min_light
+-- @tparam int chance
+-- @tparam int active_object_count
+-- @tparam int max_height
+-- @tparam bool day_toggle
+-- @see umobs.mobsRegisterSpawnSpecific
 function umobs.mobsRegisterSpawn(name, nodes, max_light, min_light, chance, active_object_count, max_height, day_toggle)
 	return mobs:register_spawn(name, nodes, max_light, min_light, chance, active_object_count, max_height, day_toggle)
 end
 
 
----
+--- Registers spawning behavior of mob for *mobs_redo* engine.
 --
 -- @function umobs.mobsRegisterSpawnSpecific
--- @param name
--- @param nodes
--- @param neighbors
--- @param min_light
--- @param max_light
--- @param interval
--- @param chance
--- @param active_object_count
--- @param min_height
--- @param max_height
--- @param day_toggle
--- @param on_spawn
+-- @tparam string name Name of the animal/monster.
+-- @tparam table nodes A list of nodes on top of which the mob can spawn.
+-- @tparam table neighbors A list of nodes of which must be adjacent for the mob to spawn(default: ***{"air"}***).
+-- @tparam int min_light The minimum light value of node for spawn to occur.
+-- @tparam int max_light The maximum light value of node for spawn to occur.
+-- @tparam int interval Same as in [minetest.register_abm](http://dev.minetest.net/minetest.register_abm) (default: ***30***).
+-- @tparam int chance Same as in [minetest.register_abm](http://dev.minetest.net/minetest.register_abm).
+-- @tparam int active_object_count Mob is only spawned if ***active_object_count_wider*** of ABM is <= this.
+-- @tparam int min_height Minimum height at which mob will spawn.
+-- @tparam int max_height Maximum height at which mob will spawn.
+-- @tparam bool day_toggle
+-- - Value descriptions:
+--   - ***true:*** Mob will spawn during daytime.
+--   - ***false:*** Mob will spawn during nighttime.
+--   - ***nil:*** Mob will spawn anytime.
+--
+-- @tparam callback on_spawn
+-- - Called after mob has spawned.
+-- - Usage: ***on_spawn = function(self, pos)
 function umobs.mobsRegisterSpawnSpecific(name, nodes, neighbors, min_light, max_light, interval, chance, active_object_count, min_height, max_height, day_toggle, on_spawn)
 	return mobs:spawn_specfic(name, nodes, neighbors, min_light, max_light, interval, chance, active_object_count, min_height, max_height, day_toggle, on_spawn)
 end
 
 
----
+--- Registers spawning behavior of mob for *mobs_redo* engine.
 --
 -- @function umobs.mobsSpawn
--- @tparam table def See: [umobs.mobsSpawn.def](#umobs.mobsSpawn.def)
+-- @tparam table def See: [umobs.mobsRegisterSpawnSpecific](#umobs.mobsRegisterSpawnSpecific), where parameters = table definition fields here.
 function umobs.mobsSpawn(def)
 	return mobs:spawn(def)
 end
 
 
----
+--- Registers an item that mob can use for ranged attack for *mobs_redo* engine.
 --
 -- @function umobs.mobsRegisterArrow
--- @param name
+-- @tparam string name Name of throwable item.
 -- @tparam table def See: [umobs.mobsRegisterArrow.def](#umobs.mobsRegisterArrow.def)
 function umobs.mobsRegisterArrow(name, def)
 	return mobs:register_arrow(name, def)
 end
 
 
----
+--- Registers a mob spawning egg for *mobs_redo* engine.
+--
+-- The "egg" is an item that is held in inventory when a mob is captured/tamed.
 --
 -- @function umobs.mobsRegisterEgg
--- @param name
--- @param description
--- @param background
--- @param addegg
-function umobs.mobsRegisterEgg(name, description, background, addegg)
-	return mobs:register_egg(name, description, background, addegg)
+-- @tparam string name Name of the mob to be spawned (ex.: "***mob:sheep***").
+-- @tparam string description name of the egg (ex.: "***Spawn Sheep***").
+-- @tparam background Texture displayed for egg in inventory.
+-- @tparam int addegg Adds an egg image in front of your texture (1=yes, 0=no).
+-- @tparam bool no_creative If ***true***, spawn egg is not available in creative mode (useful for destructive mobs like ***Dungeon Master***).
+function umobs.mobsRegisterEgg(name, description, background, addegg, no_creative)
+	return mobs:register_egg(name, description, background, addegg, no_creative)
 end
 
 
----
+--- Generates a self-destruct explosion from mob.
+--
+-- Explosion removes nodes in a specific radius and damages any
+-- entity caught inside the blast radius. Protection will limit
+-- node destruction but not entity damage.
 --
 -- @function umobs.mobsBoom
--- @param self
--- @param pos
--- @param radius
+-- @param self The mob entity.
+-- @tparam (pos) pos Position of explosion centre.
+-- @tparam int radius Radius of explosion reach (typically set to ***3***).
 function umobs.mobsBoom(self, pos, radius)
 	return mobs:boom(self, pos, radius)
 end
@@ -116,97 +131,137 @@ function umobs.mobsExplosion(pos, radius)
 end
 
 
----
+--- Attempts to capture a mob and place in inventory.
+--
+-- This function is generally called inside the ***on_rightclick***
+-- section of the mob api code. It provides a chance of capturing
+-- the mob by hand, using the net, or magic lasso items. It can
+-- also have the player take the mob by force if tamed and replace
+-- it with another item entirely.
 --
 -- @function umobs.mobsCaptureMob
--- @param self
--- @param clicker
--- @param chance_hand
--- @param chance_net
--- @param chance_lasso
--- @param force_take
--- @param replacewith
+-- @param self Mob information.
+-- @param clicker Player information.
+-- @tparam int chance_hand
+-- - Chance of capturing mob by hand.
+-- - ***0*** to disable.
+-- - Min: ***0***
+-- - Max: ***100***
+--
+-- @tparam int chance_net
+-- - Chance of capturing mob with net.
+-- - ***0*** to disable.
+-- - Min: ***0***
+-- - Max: ***100***
+--
+-- @tparam int chance_lasso
+-- - Chance of capturing mob with magic lasso.
+-- - ***0*** to disable.
+-- - Min: ***0***
+-- - Max: ***100***
+--
+-- @tparam bool force_take If ***true***, takes mob by force even if tamed by another player.
+-- @tparam string replacewith On capture, place this item in inventory instead of mob (overrides new mob eggs with saved information).
 function umobs.mobsCaptureMob(self, clicker, chance_hand, chance_net, chance_lasso, force_take, replacewith)
 	return mobs:capture_mob(self, clicker, chance_hand, chance_net, chance_lasso, force_take, replacewith)
 end
 
 
----
+--- Allows feeding items to mobs.
+--
+-- This function allows the mob to be fed the item inside ***self.follow***
+-- a set number of times to be tamed or bred as a result. Will return
+-- ***true*** when mob is fed with item it likes.
 --
 -- @function umobs.mobsFeedTame
--- @param self
--- @param clicker
--- @param feed_count
--- @param breed
--- @param tame
+-- @param table self Mob information.
+-- @param clicker Player information.
+-- @tparam int feed_count Number of times mob must be fed to tame or breed.
+-- @tparam bool breed If ***true***, mob can be bred and a child created afterwards.
+-- @tparam bool tame If ***true***, mob can be tamed so player can pick them up.
 function umobs.mobsFeedTame(self, clicker, feed_count, breed, tame)
 	return mobs:feed_tame(self, clicker, feed_count, breed, tame)
 end
 
 
----
+--- Protects mobs from being attacked by other players.
+--
+-- This function can be used to right-click any tamed mob with
+-- ***mobs:protector*** item. This will protect the mob from harm
+-- inside a protected area from other players. Will return ***true***
+-- when mob right-clicked with ***mobs:protector*** item.
 --
 -- @function umobs.mobsProtect
--- @param self
--- @param clicker
+-- @param self Mob information.
+-- @param clicker Player information.
 function umobs.mobsProtect(self, clicker)
 	return mobs:protect(self, clicker)
 end
 
 
----
+--- Attaches a player to the mob so it can be ridden.
 --
 -- @function umobs.mobsAttach
--- @param self
--- @param player
+-- @param self Mob information.
+-- @param player Player information.
 function umobs.mobsAttach(self, player)
 	return mobs:attach(self, player)
 end
 
 
----
+--- Detaches player from riding mob.
+--
+-- Detaches the player currently riding a mob to an offset position.
 --
 -- @function umobs.mobsDetach
--- @param player
--- @param offset
+-- @param player Player information.
+-- @tparam pos offset Position table containing offset values.
 function umobs.mobsDetach(player, offset)
 	return mobs:detach(player, offset)
 end
 
 
----
+--- Controls mob movement with player.
+--
+-- Allows an attached player to move the mob around and animate it at same time.
 --
 -- @function umobs.mobsDrive
--- @param self
--- @param move_animation
--- @param stand_animation
--- @param can_fly
--- @param dtime
+-- @param self Mob information.
+-- @tparam string move_animation Pre-defined movement state animation (e.g. "***walk***").
+-- @tparam string stand_animation Pre-defined standing state animation (e.g. "***stand***").
+-- @tparam bool can_fly If ***true***, jump and sneak controls will allow mob to fly up and down.
+-- @param dtime Tick time used inside function.
 function umobs.mobsDrive(self, move_animation, stand_animation, can_fly, dtime)
 	return mobs:drive(self, move_animation, stand_animation, can_fly, dtime)
 end
 
 
----
+--- Controls mob flight with player.
+--
+-- Allows the attached player to fly the mob around using directional controls.
+-- 
+-- **NOTE:** animation names are from the *pre-defined* animation lists inside mob registry without extensions.
 --
 -- @function umobs.mobsFly
--- @param self
--- @param dtime
--- @param speed
--- @param can_shoot
--- @param arrow_entity
--- @param move_animation
--- @param stand_animation
+-- @param self Mob information.
+-- @param dtime Tick time used inside function.
+-- @tparam int speed Speed at which mob moves in flight.
+-- @tparam bool can_shoot If ***true***, player can fire arrow with mob (sneak and left mouse button fires).
+-- @tparam string arrow_entity Name of item used for firing ranged attack.
+-- @tparam string move_animation Pre-defined movement state animation (e.g. "***walk***", "***fly***", etc.).
+-- @tparam string stand_animation Pre-defined standing state animation (e.g. "***stand***", "***blink***", etc.).
 function umobs.mobsFly(self, dtime, speed, can_shoot, arrow_entity, move_animation, stand_animation)
 	return mobs:fly(self, dtime, speed, can_shoot, arrow_entity, move_animation, stand_animation)
 end
 
 
----
+--- Sets current animation for mob.
+--
+-- Default: "***stand***"
 --
 -- @function umobs.mobsSetAnimation
--- @param self
--- @param name
+-- @param self Mob information.
+-- @tparam string name Name of animation (e.g. "***stand***", "***walk***", "***fly***", etc.).
 function umobs.mobsSetAnimation(self, name)
 	return mobs:set_animation(self, name)
 end
@@ -260,8 +315,8 @@ end
 -- - Example:
 -- <pre>
 -- immune_to = {
---     {"default:sword_wood", 0},  -- immune to sword
---     {"default:gold_lump", -10},  -- gold lump heals
+--     {"default:sword_wood", 0},  \-- immune to sword
+--     {"default:gold_lump", -10},  \-- gold lump heals
 -- }
 -- </pre>
 --
@@ -408,13 +463,6 @@ end
 --   - ***die_start, die_end, die_speed:*** When mob dies.
 
 
---- Definition table for [umobs.mobsSpawn](#umobs.mobsSpawn).
---
--- For field values, see [umobs.mobsRegisterSpawnSpecific](umobs.mobsRegisterSpawnSpecific) parameters.
---
--- @table umobs.mobsSpawn.def
-
-
 --- Definition table for [umobs.mobsRegisterArrow](#umobs.mobsRegisterArrow).
 --
 -- @table umobs.mobsRegisterArrow.def
@@ -522,3 +570,138 @@ end
 -- @setting mob_show_health
 -- - Type: ***bool***
 -- - Default: ***true***
+
+
+--- Mobs Redo Notes.
+--
+-- @section mobs_redo_notes
+
+
+--- These variables need to be set before using the mobs functions:
+--
+-- - `self.v2:` Toggle switch used to define below values for the first time.
+-- - `self.max_speed_forward:` Max speed mob can move forward.
+-- - `self.max_speed_reverse:` Max speed mob can move backwards.
+-- - `self.accel:` Acceleration speed.
+-- - `self.terrain_type:` Integer containing terrain mob can walk on:
+--   - ***1:*** water
+--   - ***2:*** water/land???
+--   - ***3:*** land
+-- - `self.driver_attach_at:` Position offset for attaching player to mob.
+-- - `self.driver_eye_offset:` Position offset for attached player view.
+-- - `self.driver_scale:` Sets driver scale for mobs larger than {x=1, y=1}.
+--
+-- @notes Variables
+
+
+--- Mobs Redo Examples.
+--
+-- @section mobs_redo_examples
+
+
+--- Rideable horse.
+--
+-- Example of how to register a rideable horse:
+-- <pre>
+-- mobs:register_mob("mob_horse:horse", {
+--     type = "animal",
+--     visual = "mesh",
+--     visual_size = {x = 1.20, y = 1.20},
+--     mesh = "mobs_horse.x",
+--     collisionbox = {-0.4, -0.01, -0.4, 0.4, 1.25, 0.4},
+--     animation = { 
+--         speed_normal = 15,
+--         speed_run = 30,
+--         stand_start = 25,
+--         stand_end = 75,
+--         walk_start = 75,
+--         walk_end = 100,
+--         run_start = 75,
+--         run_end = 100,
+--     },
+--     textures = {
+--         {"mobs_horse.png"},
+--         {"mobs_horsepeg.png"},
+--         {"mobs_horseara.png"}
+--     },
+--     fear_height = 3,
+--     runaway = true,
+--     fly = false,
+--     walk_chance = 60,
+--     view_range = 5,
+--     follow = {"farming:wheat"},
+--     passive = true,
+--     hp_min = 12,
+--     hp_max = 16,
+--     armor = 200,
+--     lava_damage = 5,
+--     fall_damage = 5,
+--     water_damage = 1,
+--     makes_footstep_sound = true,
+--     drops = {
+--         {name = "mobs:meat_raw", chance = 1, min = 2, max = 3}
+--     },
+--     do_custom = function(self, dtime)
+--         \-- set needed values if not already present
+--         if not self.v2 then
+--         \-- elf.v2 = 0
+--             self.max_speed_forward = 6
+--             self.max_speed_reverse = 2
+--             self.accel = 6
+--             self.terrain_type = 3
+--             self.driver_attach_at = {x = 0, y = 20, z = -2}
+--             self.driver_eye_offset = {x = 0, y = 3, z = 0}
+--             self.driver_scale = {x = 1, y = 1}
+--         end
+--         \-- if driver present allow control of horse
+--         if self.driver then
+--             mobs.drive(self, "walk", "stand", false, dtime)
+--            return false \-- skip rest of mob functions
+--         end
+--          return true
+--     end,
+--     on_die = function(self, pos)
+--         \-- drop saddle when horse is killed while riding
+--         \-- also detach from horse properly
+--         if self.driver then
+--             minetest.add_item(pos, "mobs:saddle")
+--             mobs.detach(self.driver, {x = 1, y = 0, z = 1})
+--         end
+--     end,
+--     on_rightclick = function(self, clicker)
+--         \-- make sure player is clicking
+--         if not clicker or not clicker:is_player() then
+--             return
+--         end
+--         \-- feed, tame or heal horse
+--         if mobs:feed_tame(self, clicker, 10, true, true) then
+--             return
+--         end
+--         \-- make sure tamed horse is being clicked by owner only
+--         if self.tamed and self.owner == clicker:get_player_name() then
+--             local inv = clicker:get_inventory()
+--             \-- detatch player already riding horse
+--             if self.driver and clicker == self.driver then
+--                 mobs.detach(clicker, {x = 1, y = 0, z = 1})
+--                 \-- add saddle back to inventory
+--                 if inv:room_for_item("main", "mobs:saddle") then
+--                     inv:add_item("main", "mobs:saddle")
+--                 else
+--                     minetest.add_item(clicker.getpos(), "mobs:saddle")
+--                 end
+--             \-- attach player to horse
+--             elseif not self.driver
+--             and clicker:get_wielded_item():get_name() == "mobs:saddle" then
+--                 self.object:set_properties({stepheight = 1.1})
+--                 mobs.attach(self, clicker)
+--                 \-- take saddle from inventory
+--                 inv:remove_item("main", "mobs:saddle")
+--             end
+--         end
+--         \-- used to capture horse with magic lasso
+--         mobs:capture_mob(self, clicker, 0, 0, 80, false, nil)
+--     end
+-- })
+-- </pre>
+--
+-- @examples Horse
